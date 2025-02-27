@@ -1,8 +1,6 @@
--- Tabla administradores
 CREATE TABLE administradores (
     id SERIAL PRIMARY KEY,
-    usuario VARCHAR(50) UNIQUE NOT NULL,  -- Nombre de usuario
-    contraseña VARCHAR(100) NOT NULL      -- Contraseña (se almacenará encriptada)
+    user_id UUID REFERENCES auth.users(id) NOT NULL UNIQUE
 );
 
 -- Tabla laboratorios
