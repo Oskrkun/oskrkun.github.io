@@ -144,7 +144,14 @@ async function cargarProductos() {
     console.log('Cargando productos...'); // Depuración
     const { data, error } = await supabaseClient
         .from('productos')
-        .select('*, laboratorios(nombre), tipos_lentes(nombre), materiales(nombre), indices_refraccion(valor)');
+        .select(`
+            *,
+            laboratorios(nombre),
+            tipos_lentes(nombre),
+            materiales(nombre),
+            indices_refraccion(valor),
+            productos_tratamientos(tratamientos(nombre))
+        `);
 
     if (error) {
         console.error('Error al cargar productos:', error); // Depuración
@@ -155,6 +162,7 @@ async function cargarProductos() {
 
         data.forEach(producto => {
             const row = document.createElement('tr');
+            const tratamientos = producto.productos_tratamientos.map(pt => pt.tratamientos.nombre).join(', ');
             row.innerHTML = `
                 <td>${producto.laboratorios.nombre}</td>
                 <td>${producto.nombre}</td>
@@ -163,7 +171,7 @@ async function cargarProductos() {
                 <td>${formatearNumeroConSigno(producto.esf_min)}</td>
                 <td>${formatearNumeroConSigno(producto.esf_max)}</td>
                 <td>${formatearNumeroConSigno(producto.cilindrico)}</td>
-                <td>${/* Tratamientos aquí si es necesario */}</td>
+                <td>${tratamientos}</td>
                 <td>${producto.precio.toFixed(2)}</td>
             `;
             tbody.appendChild(row);
