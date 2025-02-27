@@ -4,16 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABM</title>
-	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <h1>Bienvenido</h1>
     <p>Has iniciado sesión correctamente.</p>
     <p id="sessionInfo"></p>
 
-    <!-- Incluir Supabase y el script abm.js -->
-    
+    <!-- Contenedor para mostrar si el usuario es administrador o no -->
+    <div id="adminStatus"></div>
+
+    <!-- Contenedor para las opciones de ABM (solo visible para administradores) -->
+    <div id="abmOptions" style="display: none;">
+        <h2>Opciones de ABM</h2>
+        <p>Aquí puedes gestionar las opciones de ABM.</p>
+    </div>
+
+    <!-- Incluir el script abm.js -->
     <script src="js/abm.js"></script>
 </body>
-
 </html>
