@@ -14,6 +14,10 @@ if (supabaseAuthToken) {
             } else {
                 console.log('Sesión configurada correctamente');
             }
+        })
+        .catch(error => {
+            console.error('Error al configurar la sesión:', error);
+            window.location.href = 'Index.html'; // Redirigir si hay un error
         });
 }
 
