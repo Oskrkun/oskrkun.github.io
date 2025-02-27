@@ -150,7 +150,7 @@ async function cargarProductos() {
             tipos_lentes(nombre),
             materiales(nombre),
             indices_refraccion(valor),
-            productos_tratamientos(tratamientos(nombre))
+            producto_tratamiento(tratamientos(nombre))
         `);
 
     if (error) {
@@ -162,7 +162,8 @@ async function cargarProductos() {
 
         data.forEach(producto => {
             const row = document.createElement('tr');
-            const tratamientos = producto.productos_tratamientos.map(pt => pt.tratamientos.nombre).join(', ');
+            // Obtener los nombres de los tratamientos asociados al producto
+            const tratamientos = producto.producto_tratamiento.map(pt => pt.tratamientos.nombre).join(', ');
             row.innerHTML = `
                 <td>${producto.laboratorios.nombre}</td>
                 <td>${producto.nombre}</td>
