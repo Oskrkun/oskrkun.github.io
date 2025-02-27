@@ -6,12 +6,11 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 // Configurar el token de autenticación si está disponible
 const supabaseAuthToken = localStorage.getItem('supabaseAuthToken');
 if (supabaseAuthToken) {
-    // En versiones recientes de Supabase, no es necesario usar setAuth
-    // Simplemente puedes iniciar sesión con el token si es necesario
     supabaseClient.auth.setSession(supabaseAuthToken)
         .then(response => {
             if (response.error) {
                 console.error('Error al configurar la sesión:', response.error);
+                window.location.href = 'Index.html'; // Redirigir si hay un error
             } else {
                 console.log('Sesión configurada correctamente');
             }
@@ -25,11 +24,57 @@ async function verificarAutenticacion() {
 
     if (error || !user) {
         console.error('Usuario no autenticado:', error); // Depuración
-        window.location.href = 'Index.html';
+        window.location.href = 'Index.html'; // Redirigir si no está autenticado
     } else {
         console.log('Usuario autenticado:', user); // Depuración
     }
 }
+
+// Variables para manejar los pasos del formulario
+let currentStep = 1;
+
+function nextStep(step) {
+    if (step < 1 || step > 5) return; // Asegurarse de que el paso esté en el rango válido
+
+    // Ocultar el paso actual
+    document.getElementById(`step${currentStep}`).style.display = 'none';
+
+    // Mostrar el siguiente paso
+    document.getElementById(`step${step}`).style.display = 'block';
+
+    // Actualizar el paso actual
+    currentStep = step;
+}
+
+function prevStep(step) {
+    if (step < 1 || step > 5) return; // Asegurarse de que el paso esté en el rango válido
+
+    // Ocultar el paso actual
+    document.getElementById(`step${currentStep}`).style.display = 'none';
+
+    // Mostrar el paso anterior
+    document.getElementById(`step${step}`).style.display = 'block';
+
+    // Actualizar el paso actual
+    currentStep = step;
+}
+
+// Inicializar el formulario para mostrar el primer paso
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM completamente cargado'); // Depuración
+    verificarAutenticacion();
+    cargarLaboratorios();
+    cargarTiposLentes();
+    cargarMateriales();
+    cargarIndicesRefraccion();
+    cargarTratamientos();
+    cargarProductos();
+
+    // Ocultar todos los pasos excepto el primero
+    for (let i = 2; i <= 5; i++) {
+        document.getElementById(`step${i}`).style.display = 'none';
+    }
+});
 
 // Función para cargar laboratorios en el menú desplegable
 async function cargarLaboratorios() {
