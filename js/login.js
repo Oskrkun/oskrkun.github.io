@@ -1,31 +1,47 @@
+// Configura Supabase
 const supabaseUrl = 'https://hmuxfooqxceoocacmkiv.supabase.co';
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
-const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-const loginForm = document.getElementById('login-form');
+// Obtén el formulario de login
+const loginForm = document.getElementById('loginForm');
 
-loginForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
+if (!loginForm) {
+    console.error('Error: No se encontró el formulario de login.');
+    alert('Error en la página. Por favor, recarga.');
+} else {
+    // Escucha el evento de envío del formulario
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Evita que el formulario se envíe de forma tradicional
 
-  const email = loginForm.email.value;
-  const password = loginForm.password.value;
+        // Obtén los valores del formulario
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-  try {
-    const { user, error, session } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+        console.log('Intentando iniciar sesión con:', email); // Depuración
+
+        try {
+            // Intenta iniciar sesión con Supabase
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                console.error('Error al iniciar sesión:', error.message); // Depuración
+                alert(`Error al iniciar sesión: ${error.message}`);
+            } else {
+                console.log('Inicio de sesión exitoso:', data); // Depuración
+
+                // Guarda el token de sesión en localStorage
+                localStorage.setItem('supabaseAuthToken', data.session.access_token);
+
+                // Redirige a la página abm.html
+                window.location.href = 'abm.html';
+            }
+        } catch (err) {
+            console.error('Error inesperado:', err); // Depuración
+            alert('Ocurrió un error inesperado. Por favor, intenta de nuevo.');
+        }
     });
-
-    if (error) {
-      console.error('Error de inicio de sesión:', error.message);
-      alert('Error de inicio de sesión: ' + error.message);
-    } else {
-      console.log('Inicio de sesión exitoso:', user);
-      // Redirigir a abm.html
-      window.location.href = 'abm.html';
-    }
-  } catch (error) {
-    console.error('Error inesperado:', error.message);
-    alert('Ocurrió un error inesperado. Inténtalo de nuevo.');
-  }
-});
+}
