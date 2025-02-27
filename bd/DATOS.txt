@@ -1,0 +1,56 @@
+
+-- Insertar un administrador por defecto (usuario: admin, contraseña: admin)
+INSERT INTO administradores (usuario, contraseña)
+VALUES ('admin', crypt('admin', gen_salt('bf')));  -- Encriptamos la contraseña
+
+
+-- Insertar laboratorios en la tabla laboratorios
+INSERT INTO laboratorios (rut, nombre, direccion, telefono) VALUES
+('11111111-1', 'JIKI S.A', 'Dirección JIKI S.A', '+56 2 1111 1111'),  -- Ejemplo de RUT y datos
+('22222222-2', 'VIDALTEC', 'Dirección VIDALTEC', '+56 2 2222 2222'),
+('33333333-3', 'ALTAVISTA', 'Dirección ALTAVISTA', '+56 2 3333 3333'),
+('44444444-4', 'RODENSTOCK', 'Dirección RODENSTOCK', '+56 2 4444 4444'),
+('55555555-5', 'OPTISOL', 'Dirección OPTISOL', '+56 2 5555 5555'),
+('66666666-6', 'GARESSE', 'Dirección GARESSE', '+56 2 6666 6666'),
+('77777777-7', 'ANTIRREFLEJOS', 'Dirección ANTIRREFLEJOS', '+56 2 7777 7777'),
+('88888888-8', 'ARCOS', 'Dirección ARCOS', '+56 2 8888 8888');
+
+
+-- Insertar tipos de lentes en la tabla tipos_lentes
+INSERT INTO tipos_lentes (nombre) VALUES
+    ('Monofocales'),
+    ('Bifocales'),
+    ('Multifocales'),
+    ('Ocupacionales'),
+    ('Lentes de contacto');
+	
+-- Insertar los valores de índices de refracción
+INSERT INTO indices_refraccion (valor) VALUES
+    (1.49),
+    (1.50),
+    (1.53),
+    (1.56),
+    (1.60),
+    (1.67),
+    (1.70);
+	
+-- Insertar materiales en la tabla materiales
+INSERT INTO materiales (nombre) VALUES
+    ('Orgánico'),
+    ('Alto Índice'),
+    ('Policarbonato'),
+    ('Mineral'),
+    ('Titanio');
+	
+-- Insertar tratamientos
+INSERT INTO tratamientos (nombre) VALUES
+('Antirreflejo'),
+('Color Tinte 1'),
+('Color Tinte 2'),
+('Color Tinte 3'),
+('Color Tinte 4'),
+('Endurecido'),
+('Fotocromatico'),
+('BlueCut'),
+('Polarizado');
+

@@ -1,0 +1,48 @@
+-- Políticas para la tabla laboratorios
+CREATE POLICY "Permitir acceso a administradores en laboratorios"
+ON public.laboratorios
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla tipos_lentes
+CREATE POLICY "Permitir acceso a administradores en tipos_lentes"
+ON public.tipos_lentes
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla materiales
+CREATE POLICY "Permitir acceso a administradores en materiales"
+ON public.materiales
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla indices_refraccion
+CREATE POLICY "Permitir acceso a administradores en indices_refraccion"
+ON public.indices_refraccion
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla tratamientos
+CREATE POLICY "Permitir acceso a administradores en tratamientos"
+ON public.tratamientos
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla productos
+CREATE POLICY "Permitir acceso a administradores en productos"
+ON public.productos
+FOR ALL
+TO authenticated
+USING (true);
+
+-- Políticas para la tabla producto_tratamiento
+CREATE POLICY "Permitir acceso a administradores en producto_tratamiento"
+ON public.producto_tratamiento
+FOR ALL
+TO authenticated
+USING (true);

@@ -1,0 +1,175 @@
+// Configura Supabase
+const supabaseUrl = 'https://hmuxfooqxceoocacmkiv.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+// Función para validar el inicio de sesión
+async function validarLogin() {
+    const usuario = document.getElementById('usuario').value;
+    const contraseña = document.getElementById('contraseña').value;
+
+    // Validar que los campos no estén vacíos
+    if (!usuario || !contraseña) {
+        mostrarError('Por favor, ingrese usuario y contraseña.');
+        return;
+    }
+
+    // Consultar la base de datos para validar las credenciales
+    const { data, error } = await supabaseClient
+        .from('administradores')
+        .select('*')
+        .eq('usuario', usuario);
+
+    if (error) {
+        console.error('Error al validar credenciales:', error);
+        mostrarError('Error al validar credenciales. Intente nuevamente.');
+        return;
+    }
+
+    if (data.length === 0) {
+        mostrarError('Usuario no encontrado.');
+        return;
+    }
+
+    // Verificar la contraseña usando una función de PostgreSQL
+    const admin = data[0];
+    const { data: validacion, error: errorValidacion } = await supabaseClient
+        .rpc('verificar_contraseña', {
+            contraseña_ingresada: contraseña,
+            contraseña_hash: admin.contraseña
+        });
+
+    if (errorValidacion) {
+        console.error('Error al verificar contraseña:', errorValidacion);
+        mostrarError('Error al verificar contraseña. Intente nuevamente.');
+        return;
+    }
+
+    if (!validacion) {
+        mostrarError('Contraseña incorrecta.');
+        return;
+    }
+
+    // Si las credenciales son correctas, almacenar el token y redirigir al ABM
+    const { data: { session }, error: authError } = await supabaseClient.auth.signInWithPassword({
+        email: usuario, // Asumiendo que el usuario es un email
+        password: contraseña
+    });
+
+    if (authError) {
+        console.error('Error al iniciar sesión:', authError);
+        mostrarError('Error al iniciar sesión. Intente nuevamente.');
+        return;
+    }
+
+    localStorage.setItem('supabaseAuthToken', session.access_token);
+    window.location.href = 'ABM.html';
+}
+
+// Función para mostrar mensajes de error
+function mostrarError(mensaje) {
+    const mensajeError = document.getElementById('mensaje-error');
+    mensajeError.textContent = mensaje;
+}
+
+
+-- Tabla administradores
+CREATE TABLE administradores (
+    id SERIAL PRIMARY KEY,
+    usuario VARCHAR(50) UNIQUE NOT NULL,  -- Nombre de usuario
+    contraseña VARCHAR(100) NOT NULL      -- Contraseña (se almacenará encriptada)
+);
+
+-- Tabla laboratorios
+CREATE TABLE laboratorios (
+    id SERIAL PRIMARY KEY,
+    rut VARCHAR(20) UNIQUE NOT NULL,  -- RUT de la empresa
+    nombre VARCHAR(100) NOT NULL,     -- Nombre del laboratorio
+    direccion TEXT,                   -- Dirección del laboratorio
+    telefono VARCHAR(20)              -- Teléfono del laboratorio
+);
+
+-- Tabla tipos_lentes
+CREATE TABLE tipos_lentes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL  -- Nombre del tipo de lente (ej: Monofocales, Bifocales, etc.)
+);
+
+-- Tabla materiales
+CREATE TABLE materiales (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL  -- Nombre del material (ej: Orgánicos, Minerales, Titanio, etc.)
+);
+
+-- Tabla indices_refraccion
+CREATE TABLE indices_refraccion (
+    id SERIAL PRIMARY KEY,
+    valor NUMERIC(3,2) UNIQUE NOT NULL  -- Valor del índice de refracción (ej: 1.49, 1.50, etc.)
+);
+
+CREATE TABLE productos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    tipo_lente_id INTEGER REFERENCES tipos_lentes(id),
+    material_id INTEGER REFERENCES materiales(id),
+    indice_refraccion_id INTEGER REFERENCES indices_refraccion(id),
+    laboratorio_id INTEGER REFERENCES laboratorios(id),
+    esf_min NUMERIC(5,2),
+    esf_max NUMERIC(5,2),
+    cilindrico NUMERIC(5,2),  -- Asegúrate de que esta columna exista
+    precio NUMERIC(10,2)
+);
+
+-- Tabla tratamientos
+CREATE TABLE tratamientos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL  -- Nombre del tratamiento (ej: Antirreflejo)
+);
+
+-- Tabla intermedia para la relación muchos a muchos entre productos y tratamientos
+CREATE TABLE producto_tratamiento (
+    id SERIAL PRIMARY KEY,
+    producto_id INTEGER REFERENCES productos(id),  -- Clave foránea al producto
+    tratamiento_id INTEGER REFERENCES tratamientos(id)  -- Clave foránea al tratamiento
+);
+
+-- Tabla clientes
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    cedula VARCHAR(20) UNIQUE NOT NULL,  -- Cédula del cliente
+    nombre VARCHAR(100) NOT NULL,        -- Nombre del cliente
+    email VARCHAR(100),                  -- Correo electrónico del cliente
+    telefono VARCHAR(20)                 -- Teléfono del cliente
+);
+
+-- Tabla vendedores
+CREATE TABLE vendedores (
+    id SERIAL PRIMARY KEY,
+    numero_vendedor VARCHAR(20) UNIQUE NOT NULL,  -- Número único del vendedor
+    nombre VARCHAR(100) NOT NULL,                -- Nombre del vendedor
+    email VARCHAR(100),                          -- Correo electrónico del vendedor
+    telefono VARCHAR(20)                         -- Teléfono del vendedor
+);
+
+-- Tabla recetas
+CREATE TABLE recetas (
+    id SERIAL PRIMARY KEY,
+    clientes INTEGER REFERENCES clientes(id),           -- Clave foránea al cliente
+    fecha DATE NOT NULL,                                     -- Fecha de la receta
+    od_esfera NUMERIC(5,2) CHECK (od_esfera >= -30.00 AND od_esfera <= 30.00),  -- Esfera ojo derecho
+    od_cilindro NUMERIC(5,2) CHECK (od_cilindro >= -30.00 AND od_cilindro <= 30.00),  -- Cilindro ojo derecho
+    od_eje INTEGER CHECK (od_eje >= 0 AND od_eje <= 180),    -- Eje ojo derecho
+    od_di NUMERIC(5,2),                                      -- Diámetro ojo derecho
+    od_altp NUMERIC(5,2),                                    -- Altura pupilar ojo derecho
+    od_add NUMERIC(5,2),                                     -- Adición ojo derecho
+    od_prisma NUMERIC(5,2),                                  -- Prisma ojo derecho
+    oi_esfera NUMERIC(5,2) CHECK (oi_esfera >= -30.00 AND oi_esfera <= 30.00),  -- Esfera ojo izquierdo
+    oi_cilindro NUMERIC(5,2) CHECK (oi_cilindro >= -30.00 AND oi_cilindro <= 30.00),  -- Cilindro ojo izquierdo
+    oi_eje INTEGER CHECK (oi_eje >= 0 AND oi_eje <= 180),    -- Eje ojo izquierdo
+    oi_di NUMERIC(5,2),                                      -- Diámetro ojo izquierdo
+    oi_altp NUMERIC(5,2),                                    -- Altura pupilar ojo izquierdo
+    oi_add NUMERIC(5,2),                                     -- Adición ojo izquierdo
+    oi_prisma NUMERIC(5,2),                                  -- Prisma ojo izquierdo
+    observaciones TEXT,                                      -- Observaciones adicionales
+    detalles TEXT                                            -- Detalles adicionales
+);
