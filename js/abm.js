@@ -49,9 +49,3 @@ function mostrarOpcionesABM() {
     document.getElementById('abmOptions').style.display = 'block'; // Mostrar el contenedor de ABM
 }
 
-// Ejecutar la verificación de autenticación y si es administrador al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    verificarAutenticacion().then(() => {
-        verificarSiEsAdmin();
-    });
-});
