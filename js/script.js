@@ -331,8 +331,31 @@ function formatearNumeroConSigno(valor) {
     }
 }
 
-// Función para cargar y mostrar los productos
 async function cargarProductos() {
     const { data, error } = await supabaseClient
         .from('productos')
-        .select('*, laboratorios(nombre),
+        .select('*, laboratorios(nombre), tipos_lentes(nombre), materiales(nombre), indices_refraccion(valor)');
+
+    if (error) {
+        console.error('Error al cargar productos:', error);
+    } else {
+        const tbody = document.querySelector('#productos-table tbody');
+        tbody.innerHTML = ''; // Clear existing rows
+
+        data.forEach(producto => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${producto.laboratorios.nombre}</td>
+                <td>${producto.nombre}</td>
+                <td>${producto.materiales.nombre}</td>
+                <td>${producto.indices_refraccion.valor}</td>
+                <td>${formatearNumeroConSigno(producto.esf_min)}</td>
+                <td>${formatearNumeroConSigno(producto.esf_max)}</td>
+                <td>${formatearNumeroConSigno(producto.cilindrico)}</td>
+                <td>${/* Add treatments here if needed */}</td>
+                <td>${producto.precio.toFixed(2)}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+}
