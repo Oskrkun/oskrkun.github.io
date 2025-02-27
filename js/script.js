@@ -10,7 +10,7 @@ if (supabaseAuthToken) {
         .then(response => {
             if (response.error) {
                 console.error('Error al configurar la sesión:', response.error);
-                window.location.href = 'Index.html'; // Redirigir si hay un error
+                window.location.href = '/Index.html'; // Redirigir si hay un error
             } else {
                 console.log('Sesión configurada correctamente');
             }
