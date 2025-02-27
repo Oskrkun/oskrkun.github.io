@@ -5,7 +5,7 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Función para validar el inicio de sesión
 async function validarLogin() {
-    const usuario = document.getElementById('usuario').value;
+    const usuario = document.getElementById('usuario').value; // Asegúrate de que sea un correo electrónico
     const contraseña = document.getElementById('contraseña').value;
 
     // Validar que los campos no estén vacíos
@@ -14,55 +14,20 @@ async function validarLogin() {
         return;
     }
 
-    // Consultar la base de datos para validar las credenciales
-    const { data, error } = await supabaseClient
-        .from('administradores')
-        .select('*')
-        .eq('usuario', usuario);
-
-    if (error) {
-        console.error('Error al validar credenciales:', error);
-        mostrarError('Error al validar credenciales. Intente nuevamente.');
-        return;
-    }
-
-    if (data.length === 0) {
-        mostrarError('Usuario no encontrado.');
-        return;
-    }
-
-    // Verificar la contraseña usando una función de PostgreSQL
-    const admin = data[0];
-    const { data: validacion, error: errorValidacion } = await supabaseClient
-        .rpc('verificar_contraseña', {
-            contraseña_ingresada: contraseña,
-            contraseña_hash: admin.contraseña
-        });
-
-    if (errorValidacion) {
-        console.error('Error al verificar contraseña:', errorValidacion);
-        mostrarError('Error al verificar contraseña. Intente nuevamente.');
-        return;
-    }
-
-    if (!validacion) {
-        mostrarError('Contraseña incorrecta.');
-        return;
-    }
-
-    // Si las credenciales son correctas, almacenar el token y redirigir al ABM
-    const { data: { session }, error: authError } = await supabaseClient.auth.signInWithPassword({
-        email: usuario, // Asumiendo que el usuario es un email
+    // Intentar iniciar sesión con Supabase
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: usuario, // Asegúrate de que esto sea un correo electrónico
         password: contraseña
     });
 
-    if (authError) {
-        console.error('Error al iniciar sesión:', authError);
-        mostrarError('Error al iniciar sesión. Intente nuevamente.');
+    if (error) {
+        console.error('Error al iniciar sesión:', error);
+        mostrarError('Error al iniciar sesión. Verifique sus credenciales.');
         return;
     }
 
-    localStorage.setItem('supabaseAuthToken', session.access_token);
+    // Si el inicio de sesión es exitoso, redirigir al ABM
+    localStorage.setItem('supabaseAuthToken', data.session.access_token);
     window.location.href = 'ABM.html';
 }
 
