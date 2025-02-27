@@ -3,14 +3,9 @@ const supabaseUrl = 'https://hmuxfooqxceoocacmkiv.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Configurar el token de autenticación si está disponible
-const supabaseAuthToken = localStorage.getItem('supabaseAuthToken');
-if (supabaseAuthToken) {
-    supabaseClient.auth.setAuth(supabaseAuthToken);
-}
-
 // Verificar si el usuario está autenticado
 async function verificarAutenticacion() {
+    // Obtener la sesión actual
     const { data: { user }, error } = await supabaseClient.auth.getUser();
 
     if (error || !user) {
