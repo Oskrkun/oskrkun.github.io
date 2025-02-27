@@ -5,13 +5,9 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Configurar el token de autenticación si está disponible
 const supabaseAuthToken = localStorage.getItem('supabaseAuthToken');
-console.log('Token de autenticación de Supabase:', supabaseAuthToken); // Depuración
-
 if (supabaseAuthToken) {
-    console.log('Configurando sesión con token...'); // Depuración
     supabaseClient.auth.setSession(supabaseAuthToken)
         .then(response => {
-            console.log('Respuesta de setSession:', response); // Depuración
             if (response.error) {
                 console.error('Error al configurar la sesión:', response.error);
                 window.location.href = 'Index.html'; // Redirigir si hay un error
@@ -23,8 +19,6 @@ if (supabaseAuthToken) {
             console.error('Error al configurar la sesión:', error);
             window.location.href = 'Index.html'; // Redirigir si hay un error
         });
-} else {
-    console.log('No se encontró token de autenticación.'); // Depuración
 }
 
 // Verificar si el usuario está autenticado
