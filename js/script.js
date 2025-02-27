@@ -19,308 +19,45 @@ async function verificarAutenticacion() {
     }
 }
 
-// Función para cargar laboratorios en el menú desplegable
-async function cargarLaboratorios() {
+// Función para cargar los productos en la tabla
+async function cargarProductos() {
     const { data, error } = await supabaseClient
-        .from('laboratorios')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar laboratorios:', error);
-    } else {
-        const select = document.getElementById('laboratorio');
-        select.innerHTML = '<option value="">Seleccione un laboratorio</option>';
-        data.forEach(lab => {
-            const option = document.createElement('option');
-            option.value = lab.id;
-            option.textContent = lab.nombre;
-            select.appendChild(option);
-        });
-    }
-}
-
-// Función para cargar tipos de lentes en el menú desplegable
-async function cargarTiposLentes() {
-    const { data, error } = await supabaseClient
-        .from('tipos_lentes')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar tipos de lentes:', error);
-    } else {
-        const select = document.getElementById('tipo-cristal');
-        select.innerHTML = '<option value="">Seleccione un tipo de cristal</option>';
-        data.forEach(tipo => {
-            const option = document.createElement('option');
-            option.value = tipo.id;
-            option.textContent = tipo.nombre;
-            select.appendChild(option);
-        });
-    }
-}
-
-// Función para cargar materiales en el menú desplegable
-async function cargarMateriales() {
-    const { data, error } = await supabaseClient
-        .from('materiales')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar materiales:', error);
-    } else {
-        const select = document.getElementById('material');
-        select.innerHTML = '<option value="">Seleccione un material</option>';
-        data.forEach(material => {
-            const option = document.createElement('option');
-            option.value = material.id;
-            option.textContent = material.nombre;
-            select.appendChild(option);
-        });
-    }
-}
-
-// Función para cargar índices de refracción en el menú desplegable
-async function cargarIndicesRefraccion() {
-    const { data, error } = await supabaseClient
-        .from('indices_refraccion')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar índices de refracción:', error);
-    } else {
-        const select = document.getElementById('indice-refraccion');
-        select.innerHTML = '<option value="">Seleccione un índice de refracción</option>';
-        data.forEach(indice => {
-            const option = document.createElement('option');
-            option.value = indice.id;
-            option.textContent = indice.valor;
-            select.appendChild(option);
-        });
-    }
-}
-
-// Función para cargar tratamientos como checkboxes
-async function cargarTratamientos() {
-    const { data, error } = await supabaseClient
-        .from('tratamientos')
-        .select('*');
-
-    if (error) {
-        console.error('Error al cargar tratamientos:', error);
-    } else {
-        const container = document.getElementById('tratamientos-container');
-        container.innerHTML = '';
-        data.forEach(tratamiento => {
-            const div = document.createElement('div');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.id = `tratamiento-${tratamiento.id}`;
-            checkbox.value = tratamiento.id;
-            const label = document.createElement('label');
-            label.htmlFor = `tratamiento-${tratamiento.id}`;
-            label.textContent = tratamiento.nombre;
-            div.appendChild(checkbox);
-            div.appendChild(label);
-            container.appendChild(div);
-        });
-    }
-}
-
-// Función para cambiar entre pasos
-function nextStep(step) {
-    document.querySelectorAll('form > div').forEach(div => div.style.display = 'none');
-    document.getElementById(`step${step}`).style.display = 'block';
-}
-
-function prevStep(step) {
-    document.querySelectorAll('form > div').forEach(div => div.style.display = 'none');
-    document.getElementById(`step${step}`).style.display = 'block';
-}
-
-// Función para mostrar la vista previa
-function showPreview() {
-    const laboratorio = document.getElementById('laboratorio').selectedOptions[0].text;
-    const nombreCristal = document.getElementById('nombre-cristal').value;
-    const material = document.getElementById('material').selectedOptions[0].text;
-    const indiceRefraccion = document.getElementById('indice-refraccion').selectedOptions[0].text;
-    const esfMin = document.getElementById('esf-min').value;
-    const esfMax = document.getElementById('esf-max').value;
-    const cilindrico = document.getElementById('cilindrico').value;
-    const tratamientos = Array.from(document.querySelectorAll('#tratamientos-container input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.nextElementSibling.textContent)
-        .join(', ');
-    const precio = document.getElementById('precio').value;
-
-    document.getElementById('preview-lab').textContent = laboratorio;
-    document.getElementById('preview-nombre').textContent = nombreCristal;
-    document.getElementById('preview-material').textContent = material;
-    document.getElementById('preview-indice').textContent = indiceRefraccion;
-    document.getElementById('preview-esf-min').textContent = esfMin;
-    document.getElementById('preview-esf-max').textContent = esfMax;
-    document.getElementById('preview-cilindrico').textContent = cilindrico;
-    document.getElementById('preview-tratamientos').textContent = tratamientos;
-    document.getElementById('preview-precio').textContent = precio;
-
-    document.getElementById('preview').style.display = 'block';
-}
-
-function esMultiploDe025(valor) {
-    // Verifica si el valor es un múltiplo de 0.25
-    return (valor * 100) % 25 === 0;
-}
-
-function reiniciarFormulario() {
-    // Limpiar todos los campos del formulario
-    document.getElementById('laboratorio').value = '';
-    document.getElementById('tipo-cristal').value = '';
-    document.getElementById('nombre-cristal').value = '';
-    document.getElementById('material').value = '';
-    document.getElementById('indice-refraccion').value = '';
-    document.getElementById('esf-min').value = '';
-    document.getElementById('esf-max').value = '';
-    document.getElementById('cilindrico').value = '';
-    document.getElementById('precio').value = '';
-
-    // Desmarcar todos los checkboxes de tratamientos
-    document.querySelectorAll('#tratamientos-container input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    // Ocultar todos los pasos excepto el primero
-    document.querySelectorAll('form > div').forEach(div => div.style.display = 'none');
-    document.getElementById('step1').style.display = 'block';
-
-    // Ocultar la vista previa
-    document.getElementById('preview').style.display = 'none';
-}
-
-async function agregarProducto() {
-    const laboratorioId = document.getElementById('laboratorio').value;
-    const tipoLenteId = document.getElementById('tipo-cristal').value;
-    const nombreCristal = document.getElementById('nombre-cristal').value;
-    const materialId = document.getElementById('material').value;
-    const indiceRefraccionId = document.getElementById('indice-refraccion').value;
-    const esfMin = parseFloat(document.getElementById('esf-min').value);
-    const esfMax = parseFloat(document.getElementById('esf-max').value);
-    const cilindrico = parseFloat(document.getElementById('cilindrico').value);
-    const precio = parseFloat(document.getElementById('precio').value);
-
-    // Validar que los campos obligatorios no estén vacíos
-    if (!laboratorioId) {
-        alert('Por favor, seleccione un laboratorio.');
-        return;
-    }
-    if (!tipoLenteId) {
-        alert('Por favor, seleccione un tipo de cristal.');
-        return;
-    }
-    if (!materialId) {
-        alert('Por favor, seleccione un material.');
-        return;
-    }
-    if (!indiceRefraccionId) {
-        alert('Por favor, seleccione un índice de refracción.');
-        return;
-    }
-
-    // Validar que los campos numéricos sean números válidos
-    if (isNaN(esfMin)) {
-        alert('Por favor, ingrese un valor válido para la esfera mínima.');
-        return;
-    }
-    if (isNaN(esfMax)) {
-        alert('Por favor, ingrese un valor válido para la esfera máxima.');
-        return;
-    }
-    if (isNaN(cilindrico)) {
-        alert('Por favor, ingrese un valor válido para el cilíndrico.');
-        return;
-    }
-    if (isNaN(precio)) {
-        alert('Por favor, ingrese un valor válido para el precio.');
-        return;
-    }
-
-    // Validar que los valores estén en incrementos de 0.25
-    if (!esMultiploDe025(esfMin)) {
-        alert('La esfera mínima debe ser un múltiplo de 0.25 (ej: 0.00, 0.25, 0.50, etc.).');
-        return;
-    }
-    if (!esMultiploDe025(esfMax)) {
-        alert('La esfera máxima debe ser un múltiplo de 0.25 (ej: 0.00, 0.25, 0.50, etc.).');
-        return;
-    }
-    if (!esMultiploDe025(cilindrico)) {
-        alert('El cilíndrico debe ser un múltiplo de 0.25 (ej: 0.00, 0.25, 0.50, etc.).');
-        return;
-    }
-
-    // Validar que la esfera mínima sea negativa
-    if (esfMin >= 0) {
-        alert('La esfera mínima debe ser un valor negativo (ej: -4.00, -2.25, etc.).');
-        return;
-    }
-
-    // Validar que la esfera máxima sea positiva
-    if (esfMax <= 0) {
-        alert('La esfera máxima debe ser un valor positivo (ej: 4.00, 2.25, etc.).');
-        return;
-    }
-
-    // Validar que el cilíndrico sea negativo
-    if (cilindrico >= 0) {
-        alert('El cilíndrico debe ser un valor negativo (ej: -2.00, -1.25, etc.).');
-        return;
-    }
-
-    // Obtener los tratamientos seleccionados
-    const tratamientos = Array.from(document.querySelectorAll('#tratamientos-container input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-
-    // Insertar el producto en la tabla 'productos'
-    const { data: producto, error: productoError } = await supabaseClient
         .from('productos')
-        .insert([{
-            nombre: nombreCristal,
-            tipo_lente_id: tipoLenteId,
-            material_id: materialId,
-            indice_refraccion_id: indiceRefraccionId,
-            laboratorio_id: laboratorioId,
-            esf_min: esfMin,
-            esf_max: esfMax,
-            cilindrico: cilindrico,
-            precio: precio
-        }])
-        .select();
+        .select('*, laboratorios(nombre), tipos_lentes(nombre), materiales(nombre), indices_refraccion(valor)');
 
-    if (productoError) {
-        console.error('Error al agregar producto:', productoError);
-        alert('Error al agregar producto. Verifique los datos e intente nuevamente.');
+    if (error) {
+        console.error('Error al cargar productos:', error.message);
+        alert('No se pudieron cargar los productos. Verifique la conexión con Supabase.');
         return;
     }
 
-    // Insertar los tratamientos en la tabla 'producto_tratamiento'
-    const productoId = producto[0].id;
-    for (const tratamientoId of tratamientos) {
-        const { error: tratamientoError } = await supabaseClient
-            .from('producto_tratamiento')
-            .insert([{
-                producto_id: productoId,
-                tratamiento_id: tratamientoId
-            }]);
-
-        if (tratamientoError) {
-            console.error('Error al agregar tratamiento:', tratamientoError);
-            alert('Error al agregar tratamiento. Verifique los datos e intente nuevamente.');
-            return;
-        }
+    if (!data || data.length === 0) {
+        console.warn('No se encontraron productos.');
+        alert('No hay productos disponibles para mostrar.');
+        return;
     }
 
-    alert('Producto agregado correctamente');
-    await cargarProductos(); // Recargar la lista de productos
-    reiniciarFormulario(); // Reiniciar el formulario
+    const tbody = document.querySelector('#productos-table tbody');
+    tbody.innerHTML = ''; // Limpiar las filas existentes
+
+    data.forEach(producto => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${producto.laboratorios?.nombre || 'Sin laboratorio'}</td>
+            <td>${producto.nombre}</td>
+            <td>${producto.materiales?.nombre || 'Sin material'}</td>
+            <td>${producto.indices_refraccion?.valor || 'Sin índice'}</td>
+            <td>${formatearNumeroConSigno(producto.esf_min)}</td>
+            <td>${formatearNumeroConSigno(producto.esf_max)}</td>
+            <td>${formatearNumeroConSigno(producto.cilindrico)}</td>
+            <td></td> <!-- Tratamientos -->
+            <td>${producto.precio?.toFixed(2) || '0.00'}</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
 
+// Función para mostrar los números con un signo (+/-)
 function formatearNumeroConSigno(valor) {
     if (valor === null || valor === undefined) return ''; // Manejar valores nulos o indefinidos
     const numero = parseFloat(valor);
@@ -331,31 +68,8 @@ function formatearNumeroConSigno(valor) {
     }
 }
 
-async function cargarProductos() {
-    const { data, error } = await supabaseClient
-        .from('productos')
-        .select('*, laboratorios(nombre), tipos_lentes(nombre), materiales(nombre), indices_refraccion(valor)');
-
-    if (error) {
-        console.error('Error al cargar productos:', error);
-    } else {
-        const tbody = document.querySelector('#productos-table tbody');
-        tbody.innerHTML = ''; // Clear existing rows
-
-        data.forEach(producto => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${producto.laboratorios.nombre}</td>
-                <td>${producto.nombre}</td>
-                <td>${producto.materiales.nombre}</td>
-                <td>${producto.indices_refraccion.valor}</td>
-                <td>${formatearNumeroConSigno(producto.esf_min)}</td>
-                <td>${formatearNumeroConSigno(producto.esf_max)}</td>
-                <td>${formatearNumeroConSigno(producto.cilindrico)}</td>
-                <td>${/* Add treatments here if needed */}</td>
-                <td>${producto.precio.toFixed(2)}</td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-}
+// Llamar a la función principal de autenticación y cargar productos
+document.addEventListener('DOMContentLoaded', async () => {
+    await verificarAutenticacion();
+    await cargarProductos();
+});
