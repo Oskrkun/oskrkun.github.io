@@ -13,30 +13,29 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
     text-align: center;
-}
-
-h1 {
     margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
 }
 
-label {
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
 }
 
-input {
+.input-group input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
 }
 
 button {
@@ -46,7 +45,6 @@ button {
     color: #fff;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
     cursor: pointer;
 }
 
@@ -54,8 +52,16 @@ button:hover {
     background-color: #0056b3;
 }
 
-.mensaje-error {
-    color: red;
-    margin-top: 10px;
-    font-size: 14px;
+@media (max-width: 480px) {
+    .login-container {
+        padding: 15px;
+    }
+
+    .input-group input {
+        padding: 8px;
+    }
+
+    button {
+        padding: 8px;
+    }
 }
