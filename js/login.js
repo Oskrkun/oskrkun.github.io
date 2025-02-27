@@ -5,14 +5,16 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // Función para validar el inicio de sesión
 async function validarLogin() {
-    const usuario = document.getElementById('usuario').value.trim(); // Asegúrate de que sea un correo electrónico
-    const contraseña = document.getElementById('contraseña').value.trim();
+    const usuario = document.getElementById('usuario').value; // Asegúrate de que sea un correo electrónico
+    const contraseña = document.getElementById('contraseña').value;
 
     // Validar que los campos no estén vacíos
     if (!usuario || !contraseña) {
         mostrarError('Por favor, ingrese usuario y contraseña.');
         return;
     }
+
+    console.log('Intentando iniciar sesión con:', usuario); // Depuración
 
     // Intentar iniciar sesión con Supabase
     const { data, error } = await supabaseClient.auth.signInWithPassword({
@@ -21,12 +23,14 @@ async function validarLogin() {
     });
 
     if (error) {
-        console.error('Error al iniciar sesión:', error.message);
+        console.error('Error al iniciar sesión:', error); // Depuración
         mostrarError('Error al iniciar sesión. Verifique sus credenciales.');
         return;
     }
 
-    // Si el inicio de sesión es exitoso, guardar el token y redirigir al ABM
+    console.log('Inicio de sesión exitoso:', data); // Depuración
+
+    // Si el inicio de sesión es exitoso, redirigir al ABM
     localStorage.setItem('supabaseAuthToken', data.session.access_token);
     window.location.href = 'ABM.html';
 }
@@ -36,9 +40,3 @@ function mostrarError(mensaje) {
     const mensajeError = document.getElementById('mensaje-error');
     mensajeError.textContent = mensaje;
 }
-
-// Llamar a la función validarLogin al hacer clic en el botón
-document.getElementById('btn-login').addEventListener('click', async (e) => {
-    e.preventDefault(); // Evitar que recargue la página
-    await validarLogin();
-});
