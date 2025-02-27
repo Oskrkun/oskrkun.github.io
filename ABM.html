@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABM de Productos</title>
+    <link rel="stylesheet" href="css/abm.css">
+</head>
+<body>
+    <h1>ABM de Productos</h1>
+    <form id="productoForm">
+        <!-- Paso 1: Seleccionar laboratorio -->
+        <div id="step1">
+            <label for="laboratorio">Laboratorio:</label>
+            <select id="laboratorio" required>
+                <option value="">Seleccione un laboratorio</option>
+            </select>
+            <button type="button" onclick="nextStep(2)">Siguiente</button>
+        </div>
+
+        <!-- Paso 2: Seleccionar tipo de cristal -->
+        <div id="step2">
+            <label for="tipo-cristal">Tipo de Cristal:</label>
+            <select id="tipo-cristal" required>
+                <option value="">Seleccione un tipo de cristal</option>
+            </select>
+            <button type="button" onclick="prevStep(1)">Anterior</button>
+            <button type="button" onclick="nextStep(3)">Siguiente</button>
+        </div>
+
+        <!-- Paso 3: Nombre del cristal y material -->
+        <div id="step3">
+            <label for="nombre-cristal">Nombre del Cristal:</label>
+            <input type="text" id="nombre-cristal" required>
+            <label for="material">Material:</label>
+            <select id="material" required>
+                <option value="">Seleccione un material</option>
+            </select>
+            <button type="button" onclick="prevStep(2)">Anterior</button>
+            <button type="button" onclick="nextStep(4)">Siguiente</button>
+        </div>
+
+        <!-- Paso 4: Índice de refracción, esfera y cilíndrico -->
+        <div id="step4">
+            <label for="indice-refraccion">Índice de Refracción:</label>
+            <select id="indice-refraccion" required>
+                <option value="">Seleccione un índice de refracción</option>
+            </select>
+            <label for="esf-min">Esfera Mínima:</label>
+            <input type="number" step="0.01" id="esf-min" required>
+            <label for="esf-max">Esfera Máxima:</label>
+            <input type="number" step="0.01" id="esf-max" required>
+            <label for="cilindrico">Cilíndrico:</label>
+            <input type="number" step="0.01" id="cilindrico" required>
+            <button type="button" onclick="prevStep(3)">Anterior</button>
+            <button type="button" onclick="nextStep(5)">Siguiente</button>
+        </div>
+
+        <!-- Paso 5: Tratamientos y precio -->
+        <div id="step5">
+            <label>Tratamientos:</label>
+            <div id="tratamientos-container">
+                <!-- Los checkboxes de tratamientos se cargarán dinámicamente -->
+            </div>
+            <label for="precio">Precio:</label>
+            <input type="number" step="0.01" id="precio" required>
+            <button type="button" onclick="prevStep(4)">Anterior</button>
+            <button type="button" onclick="showPreview()">Vista Previa</button>
+        </div>
+
+        <!-- Vista previa del producto -->
+        <div id="preview" class="preview">
+            <h2>Vista Previa</h2>
+            <p><strong>Laboratorio:</strong> <span id="preview-lab"></span></p>
+            <p><strong>Nombre del Cristal:</strong> <span id="preview-nombre"></span></p>
+            <p><strong>Material:</strong> <span id="preview-material"></span></p>
+            <p><strong>Índice de Refracción:</strong> <span id="preview-indice"></span></p>
+            <p><strong>Esfera Mínima:</strong> <span id="preview-esf-min"></span></p>
+            <p><strong>Esfera Máxima:</strong> <span id="preview-esf-max"></span></p>
+            <p><strong>Cilíndrico:</strong> <span id="preview-cilindrico"></span></p>
+            <p><strong>Tratamientos:</strong> <span id="preview-tratamientos"></span></p>
+            <p><strong>Precio:</strong> <span id="preview-precio"></span></p>
+            <button type="button" onclick="prevStep(5)">Anterior</button>
+            <button type="button" onclick="agregarProducto()">Agregar Producto</button>
+        </div>
+    </form>
+
+    <!-- Lista de productos -->
+    <h2>Lista de Productos</h2>
+    <table id="productos-table">
+        <thead>
+            <tr>
+                <th>Laboratorio</th>
+                <th>Nombre</th>
+                <th>Material</th>
+                <th>Índice de Refracción</th>
+                <th>Esfera Mínima</th>
+                <th>Esfera Máxima</th>
+                <th>Cilíndrico</th>
+                <th>Tratamientos</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los productos se cargarán aquí -->
+        </tbody>
+    </table>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
