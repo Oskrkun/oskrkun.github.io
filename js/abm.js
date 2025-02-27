@@ -1,24 +1,17 @@
-// Configura Supabase
 const supabaseUrl = 'https://hmuxfooqxceoocacmkiv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiueiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
+const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-// Verificar la sesión
-const sessionToken = localStorage.getItem('supabase_session_token');
+async function checkSession() {
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-if (!sessionToken) {
-    // Si no hay token, redirigir al login
+  if (user) {
+    console.log('Sesión activa:', user);
+  } else {
+    console.log('No hay sesión activa:', error);
+    // Redirigir a index.html si no hay sesión
     window.location.href = 'index.html';
-} else {
-    // Verificar el token con Supabase
-    supabase.auth.getUser(sessionToken).then(({ data, error }) => {
-        if (error) {
-            // Si hay un error, redirigir al login
-            console.error('Error al verificar la sesión:', error.message);
-            window.location.href = 'index.html';
-        } else {
-            // Mostrar la información del usuario
-            document.getElementById('sessionInfo').innerText = `Sesión activa para el usuario: ${data.user.email}`;
-        }
-    });
+  }
 }
+
+checkSession();
