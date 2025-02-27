@@ -6,7 +6,8 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 // Configurar el token de autenticación si está disponible
 const supabaseAuthToken = localStorage.getItem('supabaseAuthToken');
 if (supabaseAuthToken) {
-    supabaseClient.auth.setAuth(supabaseAuthToken);
+    // Corregido: Usar setSession en lugar de setAuth
+    supabaseClient.auth.setSession({ access_token: supabaseAuthToken });
 }
 
 // Verificar si el usuario está autenticado
