@@ -50,5 +50,8 @@ function mostrarOpcionesABM() {
 }
 
 // Ejecutar la verificación de autenticación y si es administrador al cargar la página
-verificarAutenticacion();
-verificarSiEsAdmin();
+document.addEventListener('DOMContentLoaded', () => {
+    verificarAutenticacion().then(() => {
+        verificarSiEsAdmin();
+    });
+});
