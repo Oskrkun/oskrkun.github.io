@@ -37,6 +37,7 @@ CREATE TABLE productos (
     material_id INTEGER REFERENCES materiales(id),
     indice_refraccion_id INTEGER REFERENCES indices_refraccion(id),
     laboratorio_id INTEGER REFERENCES laboratorios(id),
+	user_id UUID REFERENCES auth.users(id),
     esf_min NUMERIC(5,2),
     esf_max NUMERIC(5,2),
     cilindrico NUMERIC(5,2),  -- Asegúrate de que esta columna exista
