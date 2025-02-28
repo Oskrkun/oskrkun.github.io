@@ -38,10 +38,7 @@ if (typeof supabase === 'undefined') {
                 } else {
                     console.log('Inicio de sesión exitoso:', data); // Depuración
 
-                    // Guarda el token de sesión en localStorage
-                    localStorage.setItem('supabaseAuthToken', data.session.access_token);
-
-                    // Redirige a la página abm.html
+                    // Redirige a la página abm.html sin guardar el token en localStorage
                     window.location.href = 'abm.html';
                 }
             } catch (err) {
