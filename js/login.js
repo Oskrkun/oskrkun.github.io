@@ -40,7 +40,8 @@ if (!loginForm) {
         console.log('Inicio de sesión exitoso:', data); // Depuración
 
         // Redirige a la página abm.html sin guardar el token en localStorage
-        window.location.href = 'abm.html';
+		window.location.assign('abm.html');
+        //window.location.href = 'abm.html';
       }
     } catch (err) {
       console.error('Error inesperado:', err); // Depuración
