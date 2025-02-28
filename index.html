@@ -9,18 +9,21 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Iniciar Sesión</h2>
+        <h2>Welcome!</h2>
+        <p>Create your account.</p>
         <form id="loginForm">
             <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" autocomplete="email" required>
+                <label for="email">Username/Email address*</label>
+                <input type="email" id="email" name="email" autocomplete="email" placeholder="Username or Email" required>
             </div>
             <div class="input-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" autocomplete="current-password" required>
+                <label for="password">Password*</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Password" required>
             </div>
-            <button type="submit">Iniciar Sesión</button>
+            <button type="submit">Sign In</button>
+            <p class="forgot-password">Forgot password?</p>
         </form>
+        <p class="sign-up">Don't have an account? <a href="#">Sign Up</a></p>
     </div>
     <script src="js/login.js" type="module"></script>
 </body>
