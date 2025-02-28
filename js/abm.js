@@ -22,7 +22,7 @@ async function verificarSiEsAdmin() {
 
   if (error || !user) {
     console.error('Usuario no autenticado:', error ? error.message : 'No hay usuario');
-    window.location.href = 'index.html'; // Redirigir al login si no hay sesión
+    window.location.href = '/'; // Redirigir al login si no hay sesión
     return;
   }
 
