@@ -1,79 +1,104 @@
+/* ====================
+   Variables de colores
+   ==================== */
+:root {
+    --color-primary: #4CAF50; /* Verde principal */
+    --color-secondary: #007bff; /* Azul para botones */
+    --color-background: #f4f4f4; /* Color de fondo */
+    --color-text: #333; /* Color de texto principal */
+    --color-text-light: #666; /* Color de texto secundario */
+    --color-white: #fff; /* Blanco */
+    --color-shadow: rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* ====================
+   Estilos generales
+   ==================== */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: var(--color-background);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    padding: 20px; /* Espacio alrededor del contenedor en móviles */
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    padding: 20px;
+    box-sizing: border-box;
 }
 
+/* ====================
+   Contenedor principal
+   ==================== */
 .login-container {
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ocupa el 100% del ancho disponible */
-    max-width: 800px; /* Limita el ancho máximo */
+    box-shadow: 0 0 10px var(--color-shadow);
+    width: 100%;
+    max-width: 800px;
     display: flex;
-    flex-direction: column; /* Cambiado a columna en móviles */
+    flex-direction: column;
     overflow: hidden;
-    margin: 0 20px; /* Márgenes laterales para móviles */
+    margin: 0 20px;
 }
 
+/* ====================
+   Sección de bienvenida
+   ==================== */
 .welcome-section {
-    background: linear-gradient(to bottom right, #4CAF50 50%, white 50%);
-    width: 100%; /* Ocupa el 100% en móviles */
-    padding: 20px; /* Reducido para móviles */
-    color: white;
+    background: linear-gradient(to bottom right, var(--color-primary) 50%, var(--color-white) 50%);
+    width: 100%;
+    padding: 20px;
+    color: var(--color-white);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
 .welcome-section h1 {
-    font-size: 2rem; /* Reducido para móviles */
+    font-size: 2rem;
     margin-bottom: 10px;
 }
 
 .welcome-section p {
-    font-size: 1rem; /* Reducido para móviles */
-    color: #e0e0e0;
+    font-size: 1rem;
+    color: #e0e0e0; /* Color claro para el texto secundario */
 }
 
+/* ====================
+   Sección del formulario
+   ==================== */
 .form-section {
-    width: 100%; /* Ocupa el 100% en móviles */
-    padding: 20px; /* Reducido para móviles */
-    background-color: white;
+    width: 100%;
+    padding: 20px;
+    background-color: var(--color-white);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Centra el contenido horizontalmente */
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .form-section h2 {
-    font-size: 1.5rem; /* Reducido para móviles */
+    font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #333;
-    text-align: center; /* Centra el texto */
+    color: var(--color-text);
+    text-align: center;
 }
 
 .input-group {
     margin-bottom: 15px;
     text-align: left;
-    width: 100%; /* Asegura que los inputs ocupen el ancho disponible */
-    max-width: 400px; /* Limita el ancho máximo de los inputs */
+    width: 100%;
+    max-width: 400px;
 }
 
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    color: #333;
+    color: var(--color-text);
 }
 
 .input-group input {
@@ -82,53 +107,58 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
+/* ====================
+   Botón de inicio de sesión
+   ==================== */
 button {
     width: 100%;
-    max-width: 400px; /* Limita el ancho máximo del botón */
+    max-width: 400px;
     padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: var(--color-secondary);
+    color: var(--color-white);
     border: none;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Color más oscuro al hacer hover */
 }
 
-/* Estilos para pantallas más grandes (tablets y escritorio) */
+/* ====================
+   Media Queries para pantallas grandes
+   ==================== */
 @media (min-width: 768px) {
     .login-container {
-        flex-direction: row; /* Volver a fila en pantallas grandes */
-        width: 90%; /* Ajustado para tablets y escritorio */
-        margin: 0 auto; /* Centra el contenedor en pantallas grandes */
+        flex-direction: row;
+        width: 90%;
+        margin: 0 auto;
     }
 
     .welcome-section {
-        width: 40%; /* Ocupa el 40% en pantallas grandes */
-        padding: 40px; /* Aumentado para pantallas grandes */
+        width: 40%;
+        padding: 40px;
     }
 
     .welcome-section h1 {
-        font-size: 2.5rem; /* Tamaño original para pantallas grandes */
+        font-size: 2.5rem;
     }
 
     .welcome-section p {
-        font-size: 1.2rem; /* Tamaño original para pantallas grandes */
+        font-size: 1.2rem;
     }
 
     .form-section {
-        width: 60%; /* Ocupa el 60% en pantallas grandes */
-        padding: 40px; /* Aumentado para pantallas grandes */
+        width: 60%;
+        padding: 40px;
     }
 
     .form-section h2 {
-        font-size: 2rem; /* Tamaño original para pantallas grandes */
+        font-size: 2rem;
     }
 }
