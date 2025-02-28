@@ -45,50 +45,35 @@ async function verificarSiEsAdmin() {
 
 // Cargar datos para los selectores del formulario
 async function cargarDatosFormulario() {
-    const { data: tiposLentes, error: errorTiposLentes } = await supabaseClient
-        .from('tipos_lentes')
-        .select('*');
+    try {
+        const tiposLentes = await supabaseClient.rpc('cargar_tipos_lentes');
+        const materiales = await supabaseClient.rpc('cargar_materiales');
+        const indicesRefraccion = await supabaseClient.rpc('cargar_indices_refraccion');
+        const laboratorios = await supabaseClient.rpc('cargar_laboratorios');
+        const tratamientos = await supabaseClient.rpc('cargar_tratamientos');
 
-    const { data: materiales, error: errorMateriales } = await supabaseClient
-        .from('materiales')
-        .select('*');
+        // Llenar los selectores
+        llenarSelector('tipo_lente', tiposLentes.data);
+        llenarSelector('material', materiales.data);
+        llenarSelector('indice_refraccion', indicesRefraccion.data);
+        llenarSelector('laboratorio', laboratorios.data);
 
-    const { data: indicesRefraccion, error: errorIndicesRefraccion } = await supabaseClient
-        .from('indices_refraccion')  // Asegúrate de que el nombre de la tabla sea correcto
-        .select('*');
+        // Llenar los tratamientos como checkboxes
+        const tratamientosContainer = document.getElementById('tratamientos');
+        tratamientos.data.forEach(tratamiento => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
+                <label for="tratamiento_${tratamiento.id}">${tratamiento.nombre}</label>
+            `;
+            tratamientosContainer.appendChild(div);
+        });
 
-    const { data: laboratorios, error: errorLaboratorios } = await supabaseClient
-        .from('laboratorios')
-        .select('*');
-
-    const { data: tratamientos, error: errorTratamientos } = await supabaseClient
-        .from('tratamientos')
-        .select('*');
-
-    if (errorTiposLentes || errorMateriales || errorIndicesRefraccion || errorLaboratorios || errorTratamientos) {
-        console.error('Error cargando datos:', errorTiposLentes || errorMateriales || errorIndicesRefraccion || errorLaboratorios || errorTratamientos);
-        return;
+        // Agregar evento para mostrar la vista previa
+        document.getElementById('productForm').addEventListener('input', mostrarVistaPrevia);
+    } catch (error) {
+        console.error('Error cargando datos del formulario:', error);
     }
-
-    // Llenar los selectores
-    llenarSelector('tipo_lente', tiposLentes);
-    llenarSelector('material', materiales);
-    llenarSelector('indice_refraccion', indicesRefraccion);
-    llenarSelector('laboratorio', laboratorios);
-
-    // Llenar los tratamientos como checkboxes
-    const tratamientosContainer = document.getElementById('tratamientos');
-    tratamientos.forEach(tratamiento => {
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
-            <label for="tratamiento_${tratamiento.id}">${tratamiento.nombre}</label>
-        `;
-        tratamientosContainer.appendChild(div);
-    });
-
-    // Agregar evento para mostrar la vista previa
-    document.getElementById('productForm').addEventListener('input', mostrarVistaPrevia);
 }
 
 // Llenar un selector con datos
@@ -133,97 +118,31 @@ function mostrarVistaPrevia() {
 
 // Cargar productos en la tabla
 async function cargarProductos() {
-    const { data: productos, error } = await supabaseClient
-        .from('productos')
-        .select(`
-            id,
-            nombre,
-            tipos_lentes (nombre),
-            materiales (nombre),
-            indices_refraccion (valor),
-            laboratorios (nombre),
-            min_esf,
-            max_esf,
-            cil,
-            historico_precios (precio),
-            producto_tratamiento (tratamientos (nombre))
-        `);
+    try {
+        const { data: productos, error } = await supabaseClient.rpc('cargar_productos');
 
-    if (error) {
-        console.error('Error cargando productos:', error);
-        return;
-    }
+        if (error) throw error;
 
-    const tbody = document.querySelector('#productTable tbody');
-    tbody.innerHTML = '';
+        const tbody = document.querySelector('#productTable tbody');
+        tbody.innerHTML = '';
 
-    productos.forEach(producto => {
-        const tratamientos = producto.producto_tratamiento.map(pt => pt.tratamientos.nombre).join(', ');
-        const precio = producto.historico_precios.length > 0 ? producto.historico_precios[0].precio : 'N/A'; // Obtener el precio más reciente
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${producto.nombre}</td>
-            <td>${producto.tipos_lentes.nombre}</td>
-            <td>${producto.materiales.nombre}</td>
-            <td>${producto.indices_refraccion.valor}</td>
-            <td>${producto.laboratorios.nombre}</td>
-            <td>${producto.min_esf}</td>
-            <td>${producto.max_esf}</td>
-            <td>${producto.cil}</td>
-            <td>${precio}</td>
-            <td>${tratamientos}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-// Manejar el envío del formulario
-document.getElementById('productForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const nombre = document.getElementById('nombre').value;
-    const tipo_lente_id = document.getElementById('tipo_lente').value;
-    const material_id = document.getElementById('material').value;
-    const indice_refraccion_id = document.getElementById('indice_refraccion').value;
-    const laboratorio_id = document.getElementById('laboratorio').value;
-    const min_esf = parseFloat(document.getElementById('min_esf').value);
-    const max_esf = parseFloat(document.getElementById('max_esf').value);
-    const cil = parseFloat(document.getElementById('cil').value);
-    const precio = parseFloat(document.getElementById('precio').value);
-    const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
-
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-    if (userError || !user) {
-        console.error('Usuario no autenticado:', userError ? userError.message : 'No hay usuario');
-        return;
-    }
-
-    const response = await supabaseClient.rpc('crear_producto', {
-        p_nombre: nombre,
-        p_tipo_lente_id: tipo_lente_id,
-        p_material_id: material_id,
-        p_indice_refraccion_id: indice_refraccion_id,
-        p_laboratorio_id: laboratorio_id,
-        p_user_id: user.id,
-        p_min_esf: min_esf,
-        p_max_esf: max_esf,
-        p_cil: cil,
-        p_precio: precio,
-        p_tratamientos: tratamientos
-    });
-
-    if (response.error) {
-        console.error('Error creando producto:', response.error);
-        alert('Error al crear el producto: ' + response.error.message);
-    } else {
-        alert('Producto creado correctamente.');
-        cargarProductos(); // Recargar la tabla de productos
-    }
-});
-
-// Ejecutar la verificación de autenticación y si es administrador al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    verificarAutenticacion().then(() => {
-        verificarSiEsAdmin();
-    });
-});
+        productos.forEach(producto => {
+            const tratamientos = producto.tratamientos.join(', ');
+            const precio = producto.precio || 'N/A'; // Obtener el precio más reciente
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${producto.nombre}</td>
+                <td>${producto.tipo_lente}</td>
+                <td>${producto.material}</td>
+                <td>${producto.indice_refraccion}</td>
+                <td>${producto.laboratorio}</td>
+                <td>${producto.min_esf}</td>
+                <td>${producto.max_esf}</td>
+                <td>${producto.cil}</td>
+                <td>${precio}</td>
+                <td>${tratamientos}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error

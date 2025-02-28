@@ -43,6 +43,11 @@ BEGIN
         RETURN json_build_object('error', 'Los valores de ESF y CIL deben estar en pasos de 0.25.');
     END IF;
 
+    -- Validar que el índice de refracción no sea nulo
+    IF p_indice_refraccion_id IS NULL THEN
+        RETURN json_build_object('error', 'El índice de refracción no puede ser nulo.');
+    END IF;
+
     -- Validar claves foráneas
     IF NOT EXISTS (SELECT 1 FROM tipos_lentes WHERE id = p_tipo_lente_id) THEN
         RETURN json_build_object('error', 'El tipo de lente con ID ' || p_tipo_lente_id || ' no existe.');
