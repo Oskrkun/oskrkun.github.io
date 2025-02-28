@@ -127,7 +127,8 @@ async function cargarProductos() {
         tbody.innerHTML = '';
 
         productos.forEach(producto => {
-            const tratamientos = producto.tratamientos.join(', ');
+            //const tratamientos = producto.tratamientos.join(', ');
+			const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
             const precio = producto.precio || 'N/A'; // Obtener el precio más reciente
             const row = document.createElement('tr');
             row.innerHTML = `
