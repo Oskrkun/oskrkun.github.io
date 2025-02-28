@@ -100,7 +100,15 @@ function mostrarVistaPrevia() {
     const max_esf = document.getElementById('max_esf').value;
     const cil = document.getElementById('cil').value;
     const precio = document.getElementById('precio').value;
-    const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => checkbox.nextElementSibling.textContent).join(', ');
+
+    // Obtener los tratamientos seleccionados
+    const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => {
+        // Obtener la fila (tr) que contiene el checkbox
+        const fila = checkbox.closest('tr');
+        // Obtener el nombre del tratamiento desde la primera celda (td) de la fila
+        const nombreTratamiento = fila.querySelector('td:first-child').textContent;
+        return nombreTratamiento;
+    }).join(', ');
 
     const vistaPrevia = document.getElementById('vistaPrevia');
     vistaPrevia.innerHTML = `
@@ -110,9 +118,9 @@ function mostrarVistaPrevia() {
         <p><strong>Material:</strong> ${material}</p>
         <p><strong>Índice de Refracción:</strong> ${indice_refraccion}</p>
         <p><strong>Laboratorio:</strong> ${laboratorio}</p>
-        <p><strong>ESF Mínimo:</strong> ${min_esf}</p>
-        <p><strong>ESF Máximo:</strong> ${max_esf}</p>
-        <p><strong>CIL:</strong> ${cil}</p>
+        <p><strong>ESF Mínimo:</strong> ${formatearNumero(min_esf)}</p>
+        <p><strong>ESF Máximo:</strong> ${formatearNumero(max_esf)}</p>
+        <p><strong>CIL:</strong> ${formatearNumero(cil)}</p>
         <p><strong>Precio:</strong> ${precio}</p>
         <p><strong>Tratamientos:</strong> ${tratamientos}</p>
     `;
@@ -131,6 +139,12 @@ async function cargarProductos() {
         productos.forEach(producto => {
             const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
             const precio = producto.precio || 'N/A'; // Obtener el precio más reciente
+
+            // Formatear ESF Mínimo, ESF Máximo y CIL
+            const min_esf = formatearNumero(producto.min_esf);
+            const max_esf = formatearNumero(producto.max_esf);
+            const cil = formatearNumero(producto.cil);
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${producto.nombre}</td>
@@ -138,9 +152,9 @@ async function cargarProductos() {
                 <td>${producto.material}</td>
                 <td>${producto.indice_refraccion}</td>
                 <td>${producto.laboratorio}</td>
-                <td>${producto.min_esf}</td>
-                <td>${producto.max_esf}</td>
-                <td>${producto.cil}</td>
+                <td>${min_esf}</td>
+                <td>${max_esf}</td>
+                <td>${cil}</td>
                 <td>${precio}</td>
                 <td>${tratamientos}</td>
             `;
@@ -149,6 +163,24 @@ async function cargarProductos() {
     } catch (error) {
         console.error('Error cargando productos:', error);
     }
+}
+
+// Función para formatear números con signo y dos decimales
+function formatearNumero(numero) {
+    if (numero === null || numero === undefined || numero === '') return 'N/A'; // Manejar valores nulos o indefinidos
+
+    // Convertir a número si es una cadena
+    const num = parseFloat(numero);
+
+    // Verificar si el número es válido
+    if (isNaN(num)) return 'N/A';
+
+    // Formatear el número con signo y dos decimales
+    return num.toLocaleString('es-AR', {
+        minimumFractionDigits: 2, // Siempre mostrar 2 decimales
+        maximumFractionDigits: 2, // Nunca mostrar más de 2 decimales
+        signDisplay: 'always',   // Mostrar siempre el signo (+ o -)
+    });
 }
 
 // Manejar el envío del formulario
