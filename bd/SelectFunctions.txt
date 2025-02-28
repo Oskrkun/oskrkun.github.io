@@ -70,7 +70,13 @@ BEGIN
                 'min_esf', p.min_esf,
                 'max_esf', p.max_esf,
                 'cil', p.cil,
-                'precio', hp.precio,
+                'precio', (
+                    SELECT hp.precio
+                    FROM historico_precios hp
+                    WHERE hp.producto_id = p.id
+                    ORDER BY hp.fecha DESC
+                    LIMIT 1
+                ),
                 'tratamientos', (
                     SELECT json_agg(t.nombre)
                     FROM producto_tratamiento pt
@@ -84,7 +90,6 @@ BEGIN
         LEFT JOIN materiales m ON p.material_id = m.id
         LEFT JOIN indices_refraccion ir ON p.indice_refraccion_id = ir.id
         LEFT JOIN laboratorios l ON p.laboratorio_id = l.id
-        LEFT JOIN historico_precios hp ON p.id = hp.producto_id
     );
 END;
 $$ LANGUAGE plpgsql;
