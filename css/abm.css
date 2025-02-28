@@ -11,10 +11,13 @@
 }
 
 /* Estilos generales */
-body {
-    font-family: Arial, sans-serif;
+body, html {
     margin: 0;
     padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Evita el scroll horizontal */
+    font-family: Arial, sans-serif;
     background-color: var(--color-fondo);
     color: var(--color-texto);
 }
@@ -28,6 +31,7 @@ header {
     align-items: center;
     width: 100%; /* Asegura que el header ocupe todo el ancho */
     box-sizing: border-box; /* Incluye el padding en el ancho total */
+    margin: 0; /* Asegura que no haya margen */
 }
 
 header #userBar {
@@ -40,6 +44,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 h1, h2, h3 {
@@ -52,6 +57,8 @@ h1, h2, h3 {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 #productForm .form-group {
@@ -148,6 +155,8 @@ h1, h2, h3 {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 #vistaPrevia h3 {
@@ -165,18 +174,22 @@ h1, h2, h3 {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 .table-container {
     width: 100%;
     overflow-x: auto;
+    margin: 0; /* Asegura que no haya margen */
+    padding: 0; /* Asegura que no haya padding */
 }
 
 #productTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px; /* Espacio vertical entre filas */
-	white-space: nowrap;
+    white-space: nowrap;
 }
 
 #productTable th {
@@ -209,6 +222,7 @@ h1, h2, h3 {
     #formSection, #previewSection, #productListSection {
         width: 100%;
         padding: 15px;
+        box-sizing: border-box; /* Incluye el padding en el ancho total */
     }
 
     #productForm .form-group {
