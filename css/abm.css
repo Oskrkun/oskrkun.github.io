@@ -176,6 +176,7 @@ h1, h2, h3 {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px; /* Espacio vertical entre filas */
+	white-space: nowrap;
 }
 
 #productTable th {
