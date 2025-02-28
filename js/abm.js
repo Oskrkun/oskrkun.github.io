@@ -99,7 +99,7 @@ function mostrarVistaPrevia() {
     const min_esf = document.getElementById('min_esf').value;
     const max_esf = document.getElementById('max_esf').value;
     const cil = document.getElementById('cil').value;
-    const precio = document.getElementById('precio').value;
+    const precio = formatearPrecio(document.getElementById('precio').value); // Formatear el precio
 
     // Obtener los tratamientos seleccionados
     const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => {
@@ -138,7 +138,7 @@ async function cargarProductos() {
 
         productos.forEach(producto => {
             const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
-            const precio = producto.precio || 'N/A'; // Obtener el precio más reciente
+            const precio = formatearPrecio(producto.precio); // Formatear el precio
 
             // Formatear ESF Mínimo, ESF Máximo y CIL
             const min_esf = formatearNumero(producto.min_esf);
@@ -181,6 +181,23 @@ function formatearNumero(numero) {
         maximumFractionDigits: 2, // Nunca mostrar más de 2 decimales
         signDisplay: 'always',   // Mostrar siempre el signo (+ o -)
     });
+}
+
+// Función para formatear el precio con el símbolo $
+function formatearPrecio(precio) {
+    if (precio === null || precio === undefined || precio === '') return 'N/A'; // Manejar valores nulos o indefinidos
+
+    // Convertir a número si es una cadena
+    const num = parseFloat(precio);
+
+    // Verificar si el número es válido
+    if (isNaN(num)) return 'N/A';
+
+    // Formatear el precio con el símbolo $ y dos decimales
+    return `$ ${num.toLocaleString('es-AR', {
+        minimumFractionDigits: 2, // Siempre mostrar 2 decimales
+        maximumFractionDigits: 2, // Nunca mostrar más de 2 decimales
+    })}`;
 }
 
 // Manejar el envío del formulario
