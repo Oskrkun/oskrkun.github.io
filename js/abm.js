@@ -73,7 +73,7 @@ async function cargarDatosFormulario() {
     // Llenar los selectores
     llenarSelector('tipo_lente', tiposLentes);
     llenarSelector('material', materiales);
-    llenarSelector('indice_refraccion', indicesRefraccion);
+    llenarSelector('indices_refraccion', indicesRefraccion);
     llenarSelector('laboratorio', laboratorios);
 
     // Llenar los tratamientos como checkboxes
