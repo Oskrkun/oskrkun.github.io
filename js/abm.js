@@ -54,7 +54,7 @@ async function cargarDatosFormulario() {
         .select('*');
 
     const { data: indicesRefraccion, error: errorIndicesRefraccion } = await supabaseClient
-        .from('indices_refraccion')
+        .from('indices_refraccion')  // Asegúrate de que el nombre de la tabla sea correcto
         .select('*');
 
     const { data: laboratorios, error: errorLaboratorios } = await supabaseClient
@@ -73,7 +73,7 @@ async function cargarDatosFormulario() {
     // Llenar los selectores
     llenarSelector('tipo_lente', tiposLentes);
     llenarSelector('material', materiales);
-    llenarSelector('indices_refraccion', indicesRefraccion);
+    llenarSelector('indice_refraccion', indicesRefraccion);  // Asegúrate de que el ID del selector sea correcto
     llenarSelector('laboratorio', laboratorios);
 
     // Llenar los tratamientos como checkboxes
@@ -86,6 +86,9 @@ async function cargarDatosFormulario() {
         `;
         tratamientosContainer.appendChild(div);
     });
+
+    // Agregar evento para mostrar la vista previa
+    document.getElementById('productForm').addEventListener('input', mostrarVistaPrevia);
 }
 
 // Llenar un selector con datos
