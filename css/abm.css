@@ -1,14 +1,26 @@
+/* Variables de colores */
+:root {
+    --color-primario: #524FE6; /* Color principal (azul) */
+    --color-secundario: #3a37b3; /* Color secundario (azul más oscuro) */
+    --color-fondo: #f9f9f9; /* Color de fondo */
+    --color-texto: #333; /* Color de texto principal */
+    --color-texto-tabla: white; /* Color de texto en la tabla */
+    --color-fondo-tabla: #f2f2f2; /* Color de fondo de la tabla */
+    --color-fondo-fila: #e0e0e0; /* Color de fondo de las filas */
+    --color-fondo-hover: #d0d0d0; /* Color de fondo al pasar el ratón */
+}
+
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
 }
 
 header {
-    background-color: #524FE6;
+    background-color: var(--color-primario);
     color: white;
     padding: 10px 20px;
     display: flex;
@@ -23,14 +35,17 @@ header #userBar {
 
 main {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 h1, h2 {
-    color: #524FE6;
+    color: var(--color-primario);
 }
 
-/* Estilos para el formulario de creación de productos */
-form {
+/* Sección: Crear Producto */
+#productForm {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
@@ -56,7 +71,6 @@ form {
     font-size: 16px;
 }
 
-/* Estilos para los tratamientos (checkboxes) */
 #tratamientos {
     margin-top: 10px;
 }
@@ -75,11 +89,11 @@ form {
     margin: 0;
 }
 
-/* Estilos para la vista previa del producto */
+/* Sección: Vista Previa */
 #vistaPrevia {
     margin-top: 20px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: var(--color-fondo);
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -87,59 +101,54 @@ form {
 
 #vistaPrevia h3 {
     margin-top: 0;
-    color: #524FE6;
+    color: var(--color-primario);
 }
 
 #vistaPrevia p {
     margin: 5px 0;
 }
 
-/* Estilos para la tabla de productos */
-table {
+/* Sección: Lista de Productos */
+#productTable {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Espacio entre filas */
     margin-top: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
+#productTable th {
+    background-color: var(--color-primario);
+    color: var(--color-texto-tabla);
     padding: 12px;
     text-align: left;
+    border-radius: 8px 8px 0 0;
 }
 
-th {
-    background-color: #524FE6;
-    color: white;
+#productTable td {
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto-tabla);
+    padding: 12px;
+    text-align: left;
+    border-radius: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+#productTable tr {
+    margin-bottom: 10px; /* Espacio entre filas */
 }
 
-/* Estilos para botones */
-button {
-    background-color: #524FE6;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
+#productTable tr:hover td {
+    background-color: var(--color-fondo-hover);
     cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #3a37b3;
 }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-    form, table {
+    main {
+        flex-direction: column;
+    }
+
+    #productForm, #vistaPrevia, #productTable {
         width: 100%;
         overflow-x: auto;
     }
