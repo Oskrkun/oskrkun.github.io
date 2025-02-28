@@ -6,58 +6,68 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding: 20px; /* Espacio alrededor del contenedor en móviles */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
 }
 
 .login-container {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
+    width: 100%; /* Ocupa el 100% del ancho disponible */
+    max-width: 800px; /* Limita el ancho máximo */
     display: flex;
+    flex-direction: column; /* Cambiado a columna en móviles */
     overflow: hidden;
+    margin: 0 20px; /* Márgenes laterales para móviles */
 }
 
 .welcome-section {
     background: linear-gradient(to bottom right, #4CAF50 50%, white 50%);
-    width: 40%;
-    padding: 40px;
+    width: 100%; /* Ocupa el 100% en móviles */
+    padding: 20px; /* Reducido para móviles */
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
 }
 
 .welcome-section h1 {
-    font-size: 2.5rem;
+    font-size: 2rem; /* Reducido para móviles */
     margin-bottom: 10px;
 }
 
 .welcome-section p {
-    font-size: 1.2rem;
+    font-size: 1rem; /* Reducido para móviles */
     color: #e0e0e0;
 }
 
 .form-section {
-    width: 60%;
-    padding: 40px;
+    width: 100%; /* Ocupa el 100% en móviles */
+    padding: 20px; /* Reducido para móviles */
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center; /* Centra el contenido horizontalmente */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
 }
 
 .form-section h2 {
-    font-size: 2rem;
+    font-size: 1.5rem; /* Reducido para móviles */
     margin-bottom: 20px;
     color: #333;
+    text-align: center; /* Centra el texto */
 }
 
 .input-group {
     margin-bottom: 15px;
     text-align: left;
+    width: 100%; /* Asegura que los inputs ocupen el ancho disponible */
+    max-width: 400px; /* Limita el ancho máximo de los inputs */
 }
 
 .input-group label {
@@ -72,11 +82,53 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
 }
 
 button {
     width: 100%;
+    max-width: 400px; /* Limita el ancho máximo del botón */
     padding: 10px;
     background-color: #007bff;
     color: #fff;
-    border:
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para pantallas más grandes (tablets y escritorio) */
+@media (min-width: 768px) {
+    .login-container {
+        flex-direction: row; /* Volver a fila en pantallas grandes */
+        width: 90%; /* Ajustado para tablets y escritorio */
+        margin: 0 auto; /* Centra el contenedor en pantallas grandes */
+    }
+
+    .welcome-section {
+        width: 40%; /* Ocupa el 40% en pantallas grandes */
+        padding: 40px; /* Aumentado para pantallas grandes */
+    }
+
+    .welcome-section h1 {
+        font-size: 2.5rem; /* Tamaño original para pantallas grandes */
+    }
+
+    .welcome-section p {
+        font-size: 1.2rem; /* Tamaño original para pantallas grandes */
+    }
+
+    .form-section {
+        width: 60%; /* Ocupa el 60% en pantallas grandes */
+        padding: 40px; /* Aumentado para pantallas grandes */
+    }
+
+    .form-section h2 {
+        font-size: 2rem; /* Tamaño original para pantallas grandes */
+    }
+}
