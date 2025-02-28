@@ -73,7 +73,7 @@ async function cargarDatosFormulario() {
     // Llenar los selectores
     llenarSelector('tipo_lente', tiposLentes);
     llenarSelector('material', materiales);
-    llenarSelector('indice_refraccion', indicesRefraccion);  // Asegúrate de que el ID del selector sea correcto
+    llenarSelector('indice_refraccion', indicesRefraccion);
     llenarSelector('laboratorio', laboratorios);
 
     // Llenar los tratamientos como checkboxes
@@ -97,9 +97,38 @@ function llenarSelector(id, datos) {
     datos.forEach(item => {
         const option = document.createElement('option');
         option.value = item.id;
-        option.textContent = item.nombre;
+        option.textContent = item.nombre || item.valor;  // Usar 'valor' para índices de refracción
         selector.appendChild(option);
     });
+}
+
+// Mostrar vista previa del producto
+function mostrarVistaPrevia() {
+    const nombre = document.getElementById('nombre').value;
+    const tipo_lente = document.getElementById('tipo_lente').options[document.getElementById('tipo_lente').selectedIndex].text;
+    const material = document.getElementById('material').options[document.getElementById('material').selectedIndex].text;
+    const indice_refraccion = document.getElementById('indice_refraccion').options[document.getElementById('indice_refraccion').selectedIndex].text;
+    const laboratorio = document.getElementById('laboratorio').options[document.getElementById('laboratorio').selectedIndex].text;
+    const min_esf = document.getElementById('min_esf').value;
+    const max_esf = document.getElementById('max_esf').value;
+    const cil = document.getElementById('cil').value;
+    const precio = document.getElementById('precio').value;
+    const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => checkbox.nextElementSibling.textContent).join(', ');
+
+    const vistaPrevia = document.getElementById('vistaPrevia');
+    vistaPrevia.innerHTML = `
+        <h3>Vista Previa del Producto</h3>
+        <p><strong>Nombre:</strong> ${nombre}</p>
+        <p><strong>Tipo de Lente:</strong> ${tipo_lente}</p>
+        <p><strong>Material:</strong> ${material}</p>
+        <p><strong>Índice de Refracción:</strong> ${indice_refraccion}</p>
+        <p><strong>Laboratorio:</strong> ${laboratorio}</p>
+        <p><strong>ESF Mínimo:</strong> ${min_esf}</p>
+        <p><strong>ESF Máximo:</strong> ${max_esf}</p>
+        <p><strong>CIL:</strong> ${cil}</p>
+        <p><strong>Precio:</strong> ${precio}</p>
+        <p><strong>Tratamientos:</strong> ${tratamientos}</p>
+    `;
 }
 
 // Cargar productos en la tabla
@@ -116,7 +145,7 @@ async function cargarProductos() {
             min_esf,
             max_esf,
             cil,
-            precio,
+            historico_precios (precio),
             producto_tratamiento (tratamientos (nombre))
         `);
 
@@ -130,6 +159,7 @@ async function cargarProductos() {
 
     productos.forEach(producto => {
         const tratamientos = producto.producto_tratamiento.map(pt => pt.tratamientos.nombre).join(', ');
+        const precio = producto.historico_precios.length > 0 ? producto.historico_precios[0].precio : 'N/A'; // Obtener el precio más reciente
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${producto.nombre}</td>
@@ -140,7 +170,7 @@ async function cargarProductos() {
             <td>${producto.min_esf}</td>
             <td>${producto.max_esf}</td>
             <td>${producto.cil}</td>
-            <td>${producto.precio}</td>
+            <td>${precio}</td>
             <td>${tratamientos}</td>
         `;
         tbody.appendChild(row);
