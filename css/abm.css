@@ -2,12 +2,12 @@
 :root {
     --color-primario: #524FE6; /* Color principal (azul) */
     --color-secundario: #3a37b3; /* Color secundario (azul más oscuro) */
-    --color-fondo: #f9f9f9; /* Color de fondo */
-    --color-texto: #333; /* Color de texto principal */
-    --color-texto-tabla: white; /* Color de texto en la tabla */
-    --color-fondo-tabla: #f2f2f2; /* Color de fondo de la tabla */
-    --color-fondo-fila: #e0e0e0; /* Color de fondo de las filas */
-    --color-fondo-hover: #d0d0d0; /* Color de fondo al pasar el ratón */
+    --color-fondo: #333; /* Fondo oscuro */
+    --color-texto: #fff; /* Texto blanco */
+    --color-fondo-contenedor: #444; /* Fondo del contenedor */
+    --color-fondo-fila: #484848; /* Fondo de las filas */
+    --color-fondo-hover: #505050; /* Fondo al pasar el ratón */
+    --color-borde: #555; /* Color de bordes */
 }
 
 /* Estilos generales */
@@ -21,7 +21,7 @@ body {
 
 header {
     background-color: var(--color-primario);
-    color: white;
+    color: var(--color-texto);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -40,62 +40,57 @@ main {
     gap: 20px;
 }
 
-h1, h2 {
+h1, h2, h3 {
     color: var(--color-primario);
 }
 
-/* Sección: Crear Producto */
-#productForm {
-    background-color: white;
+/* Sección: Formulario de creación de producto */
+#formSection {
+    background-color: var(--color-fondo-contenedor);
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
 }
 
-.form-group {
+#productForm .form-group {
     margin-bottom: 15px;
 }
 
-.form-group label {
+#productForm label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-.form-group input, .form-group select {
+#productForm input, #productForm select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-borde);
     border-radius: 4px;
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto);
     font-size: 16px;
 }
 
-#tratamientos {
-    margin-top: 10px;
+#productForm button {
+    background-color: var(--color-primario);
+    color: var(--color-texto);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-#tratamientos div {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+#productForm button:hover {
+    background-color: var(--color-secundario);
 }
 
-#tratamientos input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-#tratamientos label {
-    margin: 0;
-}
-
-/* Sección: Vista Previa */
-#vistaPrevia {
-    margin-top: 20px;
+/* Sección: Vista previa del producto */
+#previewSection {
+    background-color: var(--color-fondo-contenedor);
     padding: 20px;
-    background-color: var(--color-fondo);
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -108,33 +103,39 @@ h1, h2 {
     margin: 5px 0;
 }
 
-/* Sección: Lista de Productos */
+/* Sección: Lista de productos */
+#productListSection {
+    background-color: var(--color-fondo-contenedor);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
 #productTable {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* Espacio entre filas */
-    margin-top: 20px;
-    background-color: transparent;
+    border-spacing: 0 10px; /* Espacio vertical entre filas */
 }
 
 #productTable th {
-    background-color: var(--color-primario);
-    color: var(--color-texto-tabla);
-    padding: 12px;
+    background-color: var(--color-borde);
+    color: var(--color-texto);
+    padding: 12px 15px;
     text-align: left;
-    border-radius: 8px 8px 0 0;
+    font-weight: 600;
 }
 
 #productTable td {
     background-color: var(--color-fondo-fila);
-    color: var(--color-texto-tabla);
-    padding: 12px;
+    color: var(--color-texto);
+    padding: 12px 15px;
     text-align: left;
-    border-radius: 8px;
-}
-
-#productTable tr {
-    margin-bottom: 10px; /* Espacio entre filas */
+    border-radius: 5px;
 }
 
 #productTable tr:hover td {
@@ -148,18 +149,7 @@ h1, h2 {
         flex-direction: column;
     }
 
-    #productForm, #vistaPrevia, #productTable {
+    #formSection, #previewSection, #productListSection {
         width: 100%;
-        overflow-x: auto;
-    }
-
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    header #userBar {
-        flex-direction: column;
-        gap: 10px;
     }
 }
