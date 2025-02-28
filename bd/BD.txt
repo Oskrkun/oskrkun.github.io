@@ -38,10 +38,16 @@ CREATE TABLE productos (
     indice_refraccion_id INTEGER REFERENCES indices_refraccion(id),
     laboratorio_id INTEGER REFERENCES laboratorios(id),
 	user_id UUID REFERENCES auth.users(id),
-    esf_min NUMERIC(5,2),
-    esf_max NUMERIC(5,2),
-    cilindrico NUMERIC(5,2),  -- Asegúrate de que esta columna exista
-    precio NUMERIC(10,2)
+    min_esf NUMERIC(5,2),
+    max_esf NUMERIC(5,2),
+    cil NUMERIC(5,2),  -- Asegúrate de que esta columna exista
+);
+
+CREATE TABLE historico_precios (
+    id SERIAL PRIMARY KEY,
+    producto_id INTEGER REFERENCES productos(id) ON DELETE CASCADE,
+    precio NUMERIC(10,2) NOT NULL,
+    fecha TIMESTAMP DEFAULT NOW()
 );
 
 -- Tabla tratamientos
