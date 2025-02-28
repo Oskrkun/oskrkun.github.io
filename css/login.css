@@ -2,13 +2,14 @@
    Variables de colores
    ==================== */
 :root {
-    --color-primary: #4CAF50; /* Verde principal */
+    --color-primary: #007BFF; /* Verde principal */
     --color-secondary: #007bff; /* Azul para botones */
     --color-background: #f4f4f4; /* Color de fondo */
     --color-text: #333; /* Color de texto principal */
     --color-text-light: #666; /* Color de texto secundario */
     --color-white: #fff; /* Blanco */
     --color-shadow: rgba(0, 0, 0, 0.1); /* Sombra suave */
+	--color-Title: #373434;
 }
 
 /* ====================
@@ -48,7 +49,7 @@ body {
     background: linear-gradient(to bottom right, var(--color-primary) 50%, var(--color-white) 50%);
     width: 100%;
     padding: 20px;
-    color: var(--color-white);
+    color: var(--color-Title);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -64,7 +65,7 @@ body {
 
 .welcome-section p {
     font-size: 1rem;
-    color: #e0e0e0; /* Color claro para el texto secundario */
+    color: #686464; /* Color claro para el texto secundario */
 }
 
 /* ====================
