@@ -58,15 +58,17 @@ async function cargarDatosFormulario() {
         llenarSelector('indice_refraccion', indicesRefraccion.data);
         llenarSelector('laboratorio', laboratorios.data);
 
-        // Llenar los tratamientos como checkboxes
+        // Llenar los tratamientos como filas de la tabla
         const tratamientosContainer = document.getElementById('tratamientos');
         tratamientos.data.forEach(tratamiento => {
-            const div = document.createElement('div');
-            div.innerHTML = `
-                <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
-                <label for="tratamiento_${tratamiento.id}">${tratamiento.nombre}</label>
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${tratamiento.nombre}</td> <!-- Columna para el nombre del tratamiento -->
+                <td>
+                    <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
+                </td> <!-- Columna para el checkbox -->
             `;
-            tratamientosContainer.appendChild(div);
+            tratamientosContainer.appendChild(row);
         });
 
         // Agregar evento para mostrar la vista previa
@@ -127,8 +129,7 @@ async function cargarProductos() {
         tbody.innerHTML = '';
 
         productos.forEach(producto => {
-            //const tratamientos = producto.tratamientos.join(', ');
-			const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
+            const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
             const precio = producto.precio || 'N/A'; // Obtener el precio más reciente
             const row = document.createElement('tr');
             row.innerHTML = `
