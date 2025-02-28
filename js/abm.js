@@ -145,4 +145,57 @@ async function cargarProductos() {
             tbody.appendChild(row);
         });
     } catch (error) {
-        console.error('Error
+        console.error('Error cargando productos:', error);
+    }
+}
+
+// Manejar el envío del formulario
+document.getElementById('productForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value;
+    const tipo_lente_id = document.getElementById('tipo_lente').value;
+    const material_id = document.getElementById('material').value;
+    const indice_refraccion_id = document.getElementById('indice_refraccion').value;
+    const laboratorio_id = document.getElementById('laboratorio').value;
+    const min_esf = parseFloat(document.getElementById('min_esf').value);
+    const max_esf = parseFloat(document.getElementById('max_esf').value);
+    const cil = parseFloat(document.getElementById('cil').value);
+    const precio = parseFloat(document.getElementById('precio').value);
+    const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+        console.error('Usuario no autenticado:', userError ? userError.message : 'No hay usuario');
+        return;
+    }
+
+    const response = await supabaseClient.rpc('crear_producto', {
+        p_nombre: nombre,
+        p_tipo_lente_id: tipo_lente_id,
+        p_material_id: material_id,
+        p_indice_refraccion_id: indice_refraccion_id,
+        p_laboratorio_id: laboratorio_id,
+        p_user_id: user.id,
+        p_min_esf: min_esf,
+        p_max_esf: max_esf,
+        p_cil: cil,
+        p_precio: precio,
+        p_tratamientos: tratamientos
+    });
+
+    if (response.error) {
+        console.error('Error creando producto:', response.error);
+        alert('Error al crear el producto: ' + response.error.message);
+    } else {
+        alert('Producto creado correctamente.');
+        cargarProductos(); // Recargar la tabla de productos
+    }
+});
+
+// Ejecutar la verificación de autenticación y si es administrador al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    verificarAutenticacion().then(() => {
+        verificarSiEsAdmin();
+    });
+});

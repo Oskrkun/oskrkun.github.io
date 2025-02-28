@@ -1,0 +1,91 @@
+SELECT cargar_tipos_lentes();
+SELECT cargar_materiales();
+SELECT cargar_indices_refraccion();
+SELECT cargar_laboratorios();
+SELECT cargar_tratamientos();
+SELECT cargar_productos();
+
+CREATE OR REPLACE FUNCTION cargar_tipos_lentes()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(tipos_lentes)
+        FROM tipos_lentes
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cargar_materiales()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(materiales)
+        FROM materiales
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cargar_indices_refraccion()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(indices_refraccion)
+        FROM indices_refraccion
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cargar_laboratorios()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(laboratorios)
+        FROM laboratorios
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cargar_tratamientos()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(tratamientos)
+        FROM tratamientos
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION cargar_productos()
+RETURNS JSON AS $$
+BEGIN
+    RETURN (
+        SELECT json_agg(
+            json_build_object(
+                'id', p.id,
+                'nombre', p.nombre,
+                'tipo_lente', tl.nombre,
+                'material', m.nombre,
+                'indice_refraccion', ir.valor,
+                'laboratorio', l.nombre,
+                'min_esf', p.min_esf,
+                'max_esf', p.max_esf,
+                'cil', p.cil,
+                'precio', hp.precio,
+                'tratamientos', (
+                    SELECT json_agg(t.nombre)
+                    FROM producto_tratamiento pt
+                    JOIN tratamientos t ON pt.tratamiento_id = t.id
+                    WHERE pt.producto_id = p.id
+                )
+            )
+        )
+        FROM productos p
+        LEFT JOIN tipos_lentes tl ON p.tipo_lente_id = tl.id
+        LEFT JOIN materiales m ON p.material_id = m.id
+        LEFT JOIN indices_refraccion ir ON p.indice_refraccion_id = ir.id
+        LEFT JOIN laboratorios l ON p.laboratorio_id = l.id
+        LEFT JOIN historico_precios hp ON p.id = hp.producto_id
+    );
+END;
+$$ LANGUAGE plpgsql;
+
