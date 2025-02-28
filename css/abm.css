@@ -26,6 +26,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%; /* Asegura que el header ocupe todo el ancho */
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 header #userBar {
@@ -73,6 +75,7 @@ h1, h2, h3 {
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
     font-size: 16px;
+    box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 #productForm button {
@@ -219,6 +222,7 @@ h1, h2, h3 {
 
     #productForm input, #productForm select {
         width: 100%; /* Campos de entrada ocupan el 100% del ancho */
+        font-size: 14px; /* Tamaño de fuente más pequeño en móviles */
     }
 
     #productForm button {
