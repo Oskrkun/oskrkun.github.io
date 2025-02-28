@@ -39,6 +39,7 @@ if (typeof supabase === 'undefined') {
                     console.log('Inicio de sesión exitoso:', data); // Depuración
 
                     // Redirige a la página abm.html sin guardar el token en localStorage
+					//quite el token
                     window.location.href = 'abm.html';
                 }
             } catch (err) {
