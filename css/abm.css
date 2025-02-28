@@ -106,12 +106,27 @@ h1, h2, h3 {
     font-weight: 600;
 }
 
+#tratamientosTable th:nth-child(2) {
+    text-align: center; /* Centrar el encabezado "Seleccionar" */
+}
+
 #tratamientosTable td {
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
     padding: 12px 15px;
     text-align: left;
-    border-radius: 0; /* Bordes rectos */
+    border-radius: 0; /* Bordes rectos por defecto */
+}
+
+#tratamientosTable td:first-child {
+    border-top-left-radius: 8px; /* Redondea la esquina superior izquierda */
+    border-bottom-left-radius: 8px; /* Redondea la esquina inferior izquierda */
+}
+
+#tratamientosTable td:last-child {
+    border-top-right-radius: 8px; /* Redondea la esquina superior derecha */
+    border-bottom-right-radius: 8px; /* Redondea la esquina inferior derecha */
+    text-align: center; /* Centrar el contenido de la segunda columna */
 }
 
 #tratamientosTable tr:hover td {
@@ -121,6 +136,7 @@ h1, h2, h3 {
 
 #tratamientosTable input[type="checkbox"] {
     margin: 0; /* Elimina el margen del checkbox */
+    transform: scale(1.2); /* Aumenta el tamaño del checkbox */
 }
 
 /* Sección: Vista previa del producto */
