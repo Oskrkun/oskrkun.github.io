@@ -1,0 +1,109 @@
+CREATE OR REPLACE FUNCTION crear_producto(
+    p_nombre VARCHAR(50),
+    p_tipo_lente_id INTEGER,
+    p_material_id INTEGER,
+    p_indice_refraccion_id INTEGER,
+    p_laboratorio_id INTEGER,
+    p_user_id UUID,
+    p_min_esf NUMERIC(5,2),
+    p_max_esf NUMERIC(5,2),
+    p_cil NUMERIC(5,2),
+    p_precio NUMERIC(10,2),
+    p_tratamientos INTEGER[]  -- Array de IDs de tratamientos
+) RETURNS JSON AS $$
+DECLARE
+    producto_id INTEGER;
+    tratamiento_id INTEGER;
+    es_administrador BOOLEAN;
+    producto_existente BOOLEAN;
+BEGIN
+    -- Verificar si el usuario es administrador
+    SELECT EXISTS (
+        SELECT 1
+        FROM administradores
+        WHERE user_id = p_user_id
+    ) INTO es_administrador;
+
+    IF NOT es_administrador THEN
+        RETURN json_build_object('error', 'El usuario con ID ' || p_user_id || ' no tiene permisos de administrador.');
+    END IF;
+
+    -- Validar que el nombre del producto no esté vacío
+    IF p_nombre IS NULL OR p_nombre = '' THEN
+        RETURN json_build_object('error', 'El nombre del producto no puede estar vacío.');
+    END IF;
+
+    -- Validar que el precio no sea negativo
+    IF p_precio < 0 THEN
+        RETURN json_build_object('error', 'El precio del producto no puede ser negativo.');
+    END IF;
+
+    -- Validar que los valores de ESF y CIL estén en pasos de 0.25
+    IF (p_min_esf * 4) % 1 != 0 OR (p_max_esf * 4) % 1 != 0 OR (p_cil * 4) % 1 != 0 THEN
+        RETURN json_build_object('error', 'Los valores de ESF y CIL deben estar en pasos de 0.25.');
+    END IF;
+
+    -- Validar claves foráneas
+    IF NOT EXISTS (SELECT 1 FROM tipos_lentes WHERE id = p_tipo_lente_id) THEN
+        RETURN json_build_object('error', 'El tipo de lente con ID ' || p_tipo_lente_id || ' no existe.');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM materiales WHERE id = p_material_id) THEN
+        RETURN json_build_object('error', 'El material con ID ' || p_material_id || ' no existe.');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM indices_refraccion WHERE id = p_indice_refraccion_id) THEN
+        RETURN json_build_object('error', 'El índice de refracción con ID ' || p_indice_refraccion_id || ' no existe.');
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM laboratorios WHERE id = p_laboratorio_id) THEN
+        RETURN json_build_object('error', 'El laboratorio con ID ' || p_laboratorio_id || ' no existe.');
+    END IF;
+
+    -- Validar que los tratamientos existan
+    IF p_tratamientos IS NOT NULL THEN
+        FOREACH tratamiento_id IN ARRAY p_tratamientos LOOP
+            IF NOT EXISTS (SELECT 1 FROM tratamientos WHERE id = tratamiento_id) THEN
+                RETURN json_build_object('error', 'El tratamiento con ID ' || tratamiento_id || ' no existe.');
+            END IF;
+        END LOOP;
+    END IF;
+
+    -- Validar que no exista un producto con el mismo nombre y mismos tratamientos
+    SELECT EXISTS (
+        SELECT 1
+        FROM productos p
+        JOIN producto_tratamiento pt ON p.id = pt.producto_id
+        WHERE p.nombre = p_nombre
+        AND pt.tratamiento_id = ANY(p_tratamientos)
+    ) INTO producto_existente;
+
+    IF producto_existente THEN
+        RETURN json_build_object('error', 'Ya existe un producto con el mismo nombre y los mismos tratamientos.');
+    END IF;
+
+    -- Insertar el producto en la tabla productos (sin precio)
+    INSERT INTO productos (
+        nombre, tipo_lente_id, material_id, indice_refraccion_id,
+        laboratorio_id, user_id, min_esf, max_esf, cil
+    ) VALUES (
+        p_nombre, p_tipo_lente_id, p_material_id, p_indice_refraccion_id,
+        p_laboratorio_id, p_user_id, p_min_esf, p_max_esf, p_cil
+    ) RETURNING id INTO producto_id;
+
+    -- Insertar el precio en la tabla historico_precios
+    INSERT INTO historico_precios (producto_id, precio)
+    VALUES (producto_id, p_precio);
+
+    -- Insertar los tratamientos en la tabla producto_tratamiento (si hay tratamientos seleccionados)
+    IF array_length(p_tratamientos, 1) > 0 THEN
+        FOREACH tratamiento_id IN ARRAY p_tratamientos LOOP
+            INSERT INTO producto_tratamiento (producto_id, tratamiento_id)
+            VALUES (producto_id, tratamiento_id);
+        END LOOP;
+    END IF;
+
+    -- Devolver éxito
+    RETURN json_build_object('success', 'Producto creado correctamente.', 'producto_id', producto_id);
+END;
+$$ LANGUAGE plpgsql;
