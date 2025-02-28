@@ -3,8 +3,9 @@ const supabaseUrl = 'https://hmuxfooqxceoocacmkiv.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtdXhmb29xeGNlb29jYWNta2l2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1Nzk2MTksImV4cCI6MjA1NjE1NTYxOX0.IsUfkP-R-T-jSTpR3UOiaGyWFunhknHXTASaH7w35QM';
 const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey, {
   auth: {
-    autoRefreshToken: false, // Desactiva la actualización automática del token
-    persistSession: false,  // Evita que la sesión se guarde en localStorage
+    autoRefreshToken: false,
+    persistSession: true, // Permitir sesión temporalmente
+    storage: sessionStorage, // Guardar sesión solo en sessionStorage
   },
 });
 
