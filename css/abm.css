@@ -53,17 +53,20 @@ h1, h2, h3 {
 }
 
 #productForm .form-group {
+    display: flex;
+    align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
     margin-bottom: 15px;
 }
 
 #productForm label {
-    display: block;
-    margin-bottom: 5px;
+    flex: 0 0 150px; /* Ancho fijo para las etiquetas */
+    margin-bottom: 0; /* Elimina el margen inferior */
     font-weight: bold;
+    color: var(--color-texto);
 }
 
 #productForm input, #productForm select {
-    width: 100%;
+    flex: 1; /* Ocupa el espacio restante */
     padding: 8px;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
@@ -80,10 +83,44 @@ h1, h2, h3 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    margin-top: 10px; /* Espacio arriba del botón */
 }
 
 #productForm button:hover {
     background-color: var(--color-secundario);
+}
+
+/* Subsección: Tratamientos */
+#tratamientosTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Espacio vertical entre filas */
+    margin-top: 10px;
+}
+
+#tratamientosTable th {
+    background-color: var(--color-primario);
+    color: var(--color-texto);
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#tratamientosTable td {
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto);
+    padding: 12px 15px;
+    text-align: left;
+    border-radius: 0; /* Bordes rectos */
+}
+
+#tratamientosTable tr:hover td {
+    background-color: var(--color-fondo-hover);
+    cursor: pointer;
+}
+
+#tratamientosTable input[type="checkbox"] {
+    margin: 0; /* Elimina el margen del checkbox */
 }
 
 /* Sección: Vista previa del producto */
@@ -135,8 +172,7 @@ h1, h2, h3 {
     color: var(--color-texto);
     padding: 12px 15px;
     text-align: left;
-    /* Bordes rectos (sin redondeo) */
-    border-radius: 0;
+    border-radius: 0; /* Bordes rectos */
 }
 
 #productTable tr:hover td {
@@ -155,8 +191,22 @@ h1, h2, h3 {
         padding: 15px;
     }
 
+    #productForm .form-group {
+        flex-direction: column; /* Cambia a disposición vertical en móviles */
+        align-items: flex-start; /* Alinea las etiquetas a la izquierda */
+    }
+
+    #productForm label {
+        flex: 1; /* Ocupa todo el ancho disponible */
+        margin-bottom: 5px; /* Espacio entre etiqueta y campo */
+    }
+
     #productForm input, #productForm select {
-        font-size: 14px; /* Tamaño de fuente más pequeño en móviles */
+        width: 100%; /* Campos de entrada ocupan el 100% del ancho */
+    }
+
+    #productForm button {
+        width: 100%; /* Botón de ancho completo en móviles */
     }
 
     #productTable th, #productTable td {
