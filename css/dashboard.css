@@ -5,7 +5,7 @@
     --text-color: #333; /* Texto oscuro */
     --container-background: #fff; /* Fondo del contenedor */
     --row-background: #f9f9f9; /* Fondo de las filas */
-    --hover-background: #e0e0e0; /* Fondo al pasar el ratón */
+    --hover-background: rgba(255, 255, 255, 0.2); /* Fondo más claro al pasar el ratón */
     --border-color: #ddd; /* Color de bordes */
 }
 
@@ -60,6 +60,13 @@ body {
 .sidebar-menu li {
     padding: 15px 20px;
     border-bottom: 1px solid var(--secondary-color);
+    display: flex;
+    align-items: center; /* Alinea los íconos y textos verticalmente al centro */
+    transition: background-color 0.3s ease; /* Transición suave para el hover */
+}
+
+.sidebar-menu li:hover {
+    background-color: var(--hover-background); /* Fondo más claro al pasar el ratón */
 }
 
 .sidebar-menu li a {
@@ -67,24 +74,23 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
+    width: 100%; /* Asegura que el enlace ocupe todo el ancho del li */
 }
 
 .sidebar-menu li a i {
     margin-right: 10px;
+    font-size: 1.2em; /* Tamaño de los íconos */
+    width: 24px; /* Ancho fijo para los íconos */
+    text-align: center; /* Centra los íconos horizontalmente */
 }
 
 .sidebar-menu li a span {
     white-space: nowrap;
+    flex-grow: 1; /* Hace que el texto ocupe el espacio restante */
+    text-align: left; /* Alinea el texto a la izquierda */
 }
 
-.content-container {
-    flex-grow: 1;
-    padding: 5px;
-    background-color: var(--background-color);
-    height: 100vh;
-    overflow-y: auto;
-}
-
+/* Estilos para el menú en modo móvil */
 @media (max-width: 768px) {
     .dashboard-container {
         flex-direction: column; /* Cambia a disposición vertical en móviles */
@@ -117,6 +123,18 @@ body {
         display: flex;
         flex-direction: column;
     }
+
+    .sidebar-menu li {
+        padding: 10px 20px; /* Ajusta el padding para móviles */
+    }
+
+    .sidebar-menu li a i {
+        margin-right: 10px; /* Espacio entre íconos y texto */
+    }
+
+    .sidebar-menu li a span {
+        text-align: left; /* Alinea el texto a la izquierda en móviles */
+    }
 }
 
 @media (max-width: 480px) {
@@ -126,8 +144,8 @@ body {
     }
 
     .sidebar-menu {
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column; /* Menú vertical en móviles */
+        justify-content: flex-start; /* Alinea los elementos al inicio */
     }
 
     .sidebar-menu li {
@@ -135,10 +153,10 @@ body {
     }
 
     .sidebar-menu li a span {
-        display: none;
+        display: inline; /* Muestra el texto en móviles */
     }
 
     .sidebar-menu li a i {
-        margin-right: 0;
+        margin-right: 10px; /* Espacio entre íconos y texto */
     }
 }
