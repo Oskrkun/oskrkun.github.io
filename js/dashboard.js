@@ -1,6 +1,7 @@
 // dashboard.js
 
 import { supabaseClient } from './supabaseConfig.js';
+import { initABM } from './abm.js'; // Importar la función de inicialización del ABM
 
 // Verificar si el usuario está autenticado
 async function verificarAutenticacion() {
@@ -55,29 +56,35 @@ async function cargarContenido(seccion) {
             // Cargar el HTML de ABM
             contenidoPrincipal.innerHTML = await fetch('abm.html').then(res => res.text());
 
-            // Cargar el JS de ABM
-            await import('./abm.js');
+            // Inicializar el ABM después de cargar el contenido
+            initABM(); // Llamar a la función de inicialización del ABM
             break;
+
         case 'agenda':
             contenidoPrincipal.innerHTML = await fetch('agenda.html').then(res => res.text());
             await import('./agenda.js');
             break;
+
         case 'presupuesto':
             contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
             await import('./presupuesto.js');
             break;
+
         case 'clientes':
             contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());
             await import('./clientes.js');
             break;
+
         case 'armazones':
             contenidoPrincipal.innerHTML = await fetch('armazones.html').then(res => res.text());
             await import('./armazones.js');
             break;
+
         case 'config':
             contenidoPrincipal.innerHTML = await fetch('config.html').then(res => res.text());
             await import('./config.js');
             break;
+
         default:
             contenidoPrincipal.innerHTML = '<p>Selecciona una opción del menú.</p>';
     }
