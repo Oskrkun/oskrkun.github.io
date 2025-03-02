@@ -43,14 +43,23 @@ function ocultarBotonesAdmin() {
 // Actualizar el texto del usuario en el logo
 function actualizarTextoUsuario(user) {
     const logoElement = document.querySelector('.logo');
-    if (logoElement) {
+    const userIcon = document.getElementById('userIcon');
+    const userRole = document.getElementById('userRole');
+    const userEmail = document.getElementById('userEmail');
+
+    if (logoElement && userIcon && userRole && userEmail) {
         // Verificar si el usuario es administrador
         const esAdmin = document.getElementById('abmButton').style.display !== 'none'; // Si el botón ABM está visible, es admin
+
         if (esAdmin) {
-            logoElement.textContent = `Admin: ${user.email}`; // Mostrar "Admin: usuario"
+            userIcon.className = 'fas fa-user-shield'; // Ícono para administrador
+            userRole.textContent = 'Admin:';
         } else {
-            logoElement.textContent = `Bienvenido @${user.email}`; // Mostrar "Bienvenido @usuario"
+            userIcon.className = 'fas fa-user'; // Ícono para usuario común
+            userRole.textContent = 'Bienvenido:';
         }
+
+        userEmail.textContent = user.email; // Mostrar el correo del usuario
     }
 }
 

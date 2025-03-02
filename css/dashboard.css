@@ -21,11 +21,12 @@ body {
 }
 
 .menu-container {
-    width: var(--sidebar-width);
+    width: 250px; /* Ancho fijo para el menú */
     background-color: var(--primary-color);
     color: var(--text-color);
     transition: width 0.3s ease;
     height: 100vh;
+    overflow: hidden; /* Evita que el contenido se desborde */
 }
 
 .sidebar-header {
@@ -40,6 +41,30 @@ body {
 .logo {
     font-size: 1.5em;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.logo i {
+    font-size: 1.5em; /* Tamaño del ícono */
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.user-role {
+    font-size: 0.9em; /* Tamaño más pequeño para el rol */
+    font-weight: bold;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+.user-email {
+    font-size: 0.8em; /* Tamaño más pequeño para el correo */
+    word-break: break-word; /* Rompe el texto si es demasiado largo */
 }
 
 .menu-toggle {
