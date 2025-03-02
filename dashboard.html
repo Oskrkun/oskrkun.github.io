@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Menú lateral -->
+    <aside id="menuLateral">
+        <div id="userBar">
+            <span id="sessionInfo"></span>
+            <span id="adminStatus"></span>
+        </div>
+        <nav>
+            <button id="abmButton">ABM</button>
+            <button id="agendaButton">AGENDA</button>
+            <button id="presupuestoButton">PRESUPUESTO</button>
+            <button id="clientesButton">CLIENTES</button>
+            <button id="armazonesButton">ARMAZONES</button>
+            <button id="configButton">CONFIG</button>
+        </nav>
+    </aside>
+
+    <!-- Área de contenido -->
+    <main id="contenidoPrincipal">
+        <!-- Aquí se cargará dinámicamente el contenido de cada sección -->
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/dashboard.js" type="module"></script>
+</body>
+</html>
