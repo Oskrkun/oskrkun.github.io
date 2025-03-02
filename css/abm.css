@@ -12,42 +12,6 @@
     --color-borde: #ddd; /* Color de bordes */
 }
 
-#abm-content body, #abm-content html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden; /* Evita el scroll horizontal */
-    font-family: Arial, sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-}
-
-#abm-content header {
-    background-color: var(--color-primario);
-    color: var(--color-texto);
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; /* Asegura que el header ocupe todo el ancho */
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
-    margin: 0; /* Asegura que no haya margen */
-}
-
-#abm-content header #userBar {
-    display: flex;
-    gap: 20px;
-}
-
-#abm-content main {
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
-}
-
 #abm-content h1, #abm-content h2, #abm-content h3 {
     color: var(--color-primario);
 }
@@ -59,31 +23,31 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
+    box-sizing: border-box;
 }
 
 #abm-content #productForm .form-group {
     display: flex;
-    align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
+    align-items: center;
     margin-bottom: 15px;
 }
 
 #abm-content #productForm label {
-    flex: 0 0 150px; /* Ancho fijo para las etiquetas */
-    margin-bottom: 0; /* Elimina el margen inferior */
+    flex: 0 0 150px;
+    margin-bottom: 0;
     font-weight: bold;
     color: var(--color-texto);
 }
 
 #abm-content #productForm input, #abm-content #productForm select {
-    flex: 1; /* Ocupa el espacio restante */
+    flex: 1;
     padding: 8px;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
     font-size: 16px;
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
+    box-sizing: border-box;
 }
 
 #abm-content #productForm button {
@@ -94,7 +58,7 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 10px; /* Espacio arriba del botón */
+    margin-top: 10px;
 }
 
 #abm-content #productForm button:hover {
@@ -105,7 +69,7 @@
 #abm-content #tratamientosTable {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* Espacio vertical entre filas */
+    border-spacing: 0 10px;
     margin-top: 10px;
 }
 
@@ -118,7 +82,7 @@
 }
 
 #abm-content #tratamientosTable th:nth-child(2) {
-    text-align: center; /* Centrar el encabezado "Seleccionar" */
+    text-align: center;
 }
 
 #abm-content #tratamientosTable td {
@@ -126,18 +90,18 @@
     color: var(--color-texto);
     padding: 12px 15px;
     text-align: left;
-    border-radius: 0; /* Bordes rectos por defecto */
+    border-radius: 0;
 }
 
 #abm-content #tratamientosTable td:first-child {
-    border-top-left-radius: 8px; /* Redondea la esquina superior izquierda */
-    border-bottom-left-radius: 8px; /* Redondea la esquina inferior izquierda */
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
 #abm-content #tratamientosTable td:last-child {
-    border-top-right-radius: 8px; /* Redondea la esquina superior derecha */
-    border-bottom-right-radius: 8px; /* Redondea la esquina inferior derecha */
-    text-align: center; /* Centrar el contenido de la segunda columna */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
 }
 
 #abm-content #tratamientosTable tr:hover td {
@@ -146,8 +110,8 @@
 }
 
 #abm-content #tratamientosTable input[type="checkbox"] {
-    margin: 0; /* Elimina el margen del checkbox */
-    transform: scale(1.2); /* Aumenta el tamaño del checkbox */
+    margin: 0;
+    transform: scale(1.2);
 }
 
 /* Sección: Vista previa del producto */
@@ -157,7 +121,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
+    box-sizing: border-box;
 }
 
 #abm-content #vistaPrevia h3 {
@@ -176,20 +140,20 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
+    box-sizing: border-box;
 }
 
 #abm-content .table-container {
     width: 100%;
     overflow-x: auto;
-    margin: 0; /* Asegura que no haya margen */
-    padding: 0; /* Asegura que no haya padding */
+    margin: 0;
+    padding: 0;
 }
 
 #abm-content #productTable {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* Espacio vertical entre filas */
+    border-spacing: 0 10px;
     white-space: nowrap;
 }
 
@@ -206,7 +170,7 @@
     color: var(--color-texto);
     padding: 12px 15px;
     text-align: left;
-    border-radius: 0; /* Bordes rectos */
+    border-radius: 0;
 }
 
 #abm-content #productTable tr:hover td {
@@ -216,56 +180,26 @@
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-    #abm-content main {
-        flex-direction: column;
-    }
-
-    #abm-content #formSection, #abm-content #previewSection, #abm-content #productListSection {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box; /* Incluye el padding en el ancho total */
-    }
-
     #abm-content #productForm .form-group {
-        flex-direction: column; /* Cambia a disposición vertical en móviles */
-        align-items: flex-start; /* Alinea las etiquetas a la izquierda */
-    }
-
-    #abm-content #productForm label {
-        flex: 1; /* Ocupa todo el ancho disponible */
-        margin-bottom: 5px; /* Espacio entre etiqueta y campo */
-    }
-
-    #abm-content #productForm input, #abm-content #productForm select {
-        width: 100%; /* Campos de entrada ocupan el 100% del ancho */
-        font-size: 14px; /* Tamaño de fuente más pequeño en móviles */
-    }
-
-    #abm-content #productForm button {
-        width: 100%; /* Botón de ancho completo en móviles */
-    }
-
-    #abm-content #productTable th, #abm-content #productTable td {
-        padding: 10px; /* Padding más pequeño en móviles */
-    }
-
-    #abm-content .table-container {
-        overflow-x: auto; /* Permite desplazamiento horizontal en móviles */
-    }
-}
-
-@media (max-width: 480px) {
-    #abm-content header {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    #abm-content header #userBar {
-        flex-direction: column;
-        gap: 10px;
+    #abm-content #productForm label {
+        flex: 1;
+        margin-bottom: 5px;
+    }
+
+    #abm-content #productForm input, #abm-content #productForm select {
+        width: 100%;
+        font-size: 14px;
     }
 
     #abm-content #productForm button {
-        width: 100%; /* Botón de ancho completo en móviles */
+        width: 100%;
+    }
+
+    #abm-content #productTable th, #abm-content #productTable td {
+        padding: 10px;
     }
 }

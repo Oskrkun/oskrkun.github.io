@@ -3,11 +3,7 @@
 import { supabaseClient } from './supabaseConfig.js';
 
 // Función para inicializar el ABM
-async function inicializarABM() {
-    // Verificar autenticación y permisos de administrador
-    await verificarAutenticacion();
-    await verificarSiEsAdmin();
-
+export async function initABM() {
     // Cargar datos del formulario
     await cargarDatosFormulario();
 
@@ -62,42 +58,6 @@ async function inicializarABM() {
                 await cargarProductos(); // Recargar la tabla de productos
             }
         });
-    }
-}
-
-// Verificar si el usuario está autenticado
-async function verificarAutenticacion() {
-    const { data: { user }, error } = await supabaseClient.auth.getUser();
-
-    if (error || !user) {
-        console.error('Usuario no autenticado:', error ? error.message : 'No hay usuario');
-        window.location.href = 'index.html'; // Redirigir al login si no hay sesión
-    } else {
-        console.log('Usuario autenticado:', user);
-    }
-}
-
-// Verificar si el usuario es administrador
-async function verificarSiEsAdmin() {
-    const { data: { user }, error } = await supabaseClient.auth.getUser();
-
-    if (error || !user) {
-        console.error('Usuario no autenticado:', error ? error.message : 'No hay usuario');
-        window.location.href = '/'; // Redirigir al login si no hay sesión
-        return;
-    }
-
-    // Verificar si el usuario es un administrador
-    const { data: admin, error: adminError } = await supabaseClient
-        .from('administradores')
-        .select('user_id')
-        .eq('user_id', user.id)
-        .single();
-
-    if (adminError || !admin) {
-        console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador');
-    } else {
-        console.log('Usuario es administrador:', admin);
     }
 }
 
@@ -245,9 +205,4 @@ function formatearPrecio(precio) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     })}`;
-}
-
-// Exportar la función de inicialización para que pueda ser llamada desde dashboard.js
-export function initABM() {
-    inicializarABM();
 }
