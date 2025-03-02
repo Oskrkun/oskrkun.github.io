@@ -9,29 +9,31 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="menu-container">
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <span class="logo">TulvajorWeb</span>
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-            <ul class="sidebar-menu">
-                <li id="abmButton"><a href="#"><i class="fas fa-box"></i><span>ABM</span></a></li>
-                <li id="agendaButton"><a href="#"><i class="fas fa-calendar"></i><span>AGENDA</span></a></li>
-                <li id="presupuestoButton"><a href="#"><i class="fas fa-dollar-sign"></i><span>PRESUPUESTO</span></a></li>
-                <li id="clientesButton"><a href="#"><i class="fas fa-users"></i><span>CLIENTES</span></a></li>
-                <li id="armazonesButton"><a href="#"><i class="fas fa-glasses"></i><span>ARMAZONES</span></a></li>
-                <li id="configButton"><a href="#"><i class="fas fa-cog"></i><span>CONFIG</span></a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="content-container">
-        <main class="content" id="contenidoPrincipal">
-            <h1>Contenido Principal</h1>
-            <p>Bienvenido al dashboard.</p>
-        </main>
+    <div class="dashboard-container"> <!-- Contenedor principal agregado -->
+        <div class="menu-container">
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <span class="logo">TulvajorWeb</span>
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <ul class="sidebar-menu">
+                    <li id="abmButton"><a href="#"><i class="fas fa-box"></i><span>ABM</span></a></li>
+                    <li id="agendaButton"><a href="#"><i class="fas fa-calendar"></i><span>AGENDA</span></a></li>
+                    <li id="presupuestoButton"><a href="#"><i class="fas fa-dollar-sign"></i><span>PRESUPUESTO</span></a></li>
+                    <li id="clientesButton"><a href="#"><i class="fas fa-users"></i><span>CLIENTES</span></a></li>
+                    <li id="armazonesButton"><a href="#"><i class="fas fa-glasses"></i><span>ARMAZONES</span></a></li>
+                    <li id="configButton"><a href="#"><i class="fas fa-cog"></i><span>CONFIG</span></a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="content-container">
+            <main class="content" id="contenidoPrincipal">
+                <h1>Contenido Principal</h1>
+                <p>Bienvenido al dashboard.</p>
+            </main>
+        </div>
     </div>
     <script src="js/dashboard.js" type="module"></script>
 </body>

@@ -13,6 +13,11 @@ body {
     background-color: var(--background-color);
 }
 
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
 .menu-container {
     width: var(--sidebar-width);
     background-color: var(--primary-color);
@@ -79,6 +84,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column; /* Cambia a disposición vertical en móviles */
+    }
+
     .menu-container {
         width: 100%;
         height: auto;
