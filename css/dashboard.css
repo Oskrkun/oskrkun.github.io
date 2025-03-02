@@ -31,7 +31,7 @@ body {
 
 .content-container {
     flex: 1; /* El contenido principal ocupa el espacio restante */
-    padding: 20px; /* Espaciado interno */
+    padding: 10px; /* Espaciado interno */
     overflow-y: auto; /* Permite el desplazamiento vertical */
 }
 
