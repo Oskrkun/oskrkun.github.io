@@ -79,7 +79,7 @@ body {
 
 .content-container {
     flex-grow: 1;
-    padding: 20px;
+    padding: 5px;
     background-color: var(--background-color);
     height: 100vh;
     overflow-y: auto;

@@ -20,6 +20,7 @@
 #abm-content #formSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
+	margin-bottom: 5px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -118,6 +119,7 @@
 #abm-content #previewSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
+	margin-bottom: 5px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -137,6 +139,7 @@
 #abm-content #productListSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
+	margin-bottom: 5px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
