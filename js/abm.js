@@ -50,6 +50,8 @@ export async function initABM() {
                 p_tratamientos: tratamientos
             });
 
+            console.log('Respuesta completa de Supabase:', response); // Depuración
+
             if (response.error) {
                 console.error('Error creando producto:', response.error);
                 alert('Error al crear el producto: ' + response.error.message);
