@@ -2,20 +2,20 @@
 
 import { supabaseClient } from './supabaseConfig.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+// Función para inicializar el ABM
+async function inicializarABM() {
     // Verificar autenticación y permisos de administrador
-    verificarAutenticacion().then(() => {
-        verificarSiEsAdmin();
-    });
+    await verificarAutenticacion();
+    await verificarSiEsAdmin();
 
     // Cargar datos del formulario
-    cargarDatosFormulario();
+    await cargarDatosFormulario();
 
     // Mostrar vista previa del producto
     mostrarVistaPrevia();
 
     // Cargar productos en la tabla
-    cargarProductos();
+    await cargarProductos();
 
     // Manejar el envío del formulario
     const productForm = document.getElementById('productForm');
@@ -59,11 +59,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Error al crear el producto: ' + response.error.message);
             } else {
                 alert('Producto creado correctamente.');
-                cargarProductos(); // Recargar la tabla de productos
+                await cargarProductos(); // Recargar la tabla de productos
             }
         });
     }
-});
+}
 
 // Verificar si el usuario está autenticado
 async function verificarAutenticacion() {
@@ -74,7 +74,6 @@ async function verificarAutenticacion() {
         window.location.href = 'index.html'; // Redirigir al login si no hay sesión
     } else {
         console.log('Usuario autenticado:', user);
-        document.getElementById('sessionInfo').innerText = `Sesión activa para el usuario: ${user.email}`;
     }
 }
 
@@ -97,10 +96,8 @@ async function verificarSiEsAdmin() {
 
     if (adminError || !admin) {
         console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador');
-        document.getElementById('adminStatus').innerText = 'No tienes permisos de administrador.';
     } else {
         console.log('Usuario es administrador:', admin);
-        document.getElementById('adminStatus').innerText = 'Eres un administrador.';
     }
 }
 
@@ -124,10 +121,10 @@ async function cargarDatosFormulario() {
         tratamientos.data.forEach(tratamiento => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${tratamiento.nombre}</td> <!-- Columna para el nombre del tratamiento -->
+                <td>${tratamiento.nombre}</td>
                 <td>
                     <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
-                </td> <!-- Columna para el checkbox -->
+                </td>
             `;
             tratamientosContainer.appendChild(row);
         });
@@ -164,9 +161,7 @@ function mostrarVistaPrevia() {
 
     // Obtener los tratamientos seleccionados
     const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => {
-        // Obtener la fila (tr) que contiene el checkbox
         const fila = checkbox.closest('tr');
-        // Obtener el nombre del tratamiento desde la primera celda (td) de la fila
         const nombreTratamiento = fila.querySelector('td:first-child').textContent;
         return nombreTratamiento;
     }).join(', ');
@@ -201,7 +196,6 @@ async function cargarProductos() {
             const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
             const precio = formatearPrecio(producto.precio); // Formatear el precio
 
-            // Formatear ESF Mínimo, ESF Máximo y CIL
             const min_esf = formatearNumero(producto.min_esf);
             const max_esf = formatearNumero(producto.max_esf);
             const cil = formatearNumero(producto.cil);
@@ -228,35 +222,32 @@ async function cargarProductos() {
 
 // Función para formatear números con signo y dos decimales
 function formatearNumero(numero) {
-    if (numero === null || numero === undefined || numero === '') return 'N/A'; // Manejar valores nulos o indefinidos
+    if (numero === null || numero === undefined || numero === '') return 'N/A';
 
-    // Convertir a número si es una cadena
     const num = parseFloat(numero);
-
-    // Verificar si el número es válido
     if (isNaN(num)) return 'N/A';
 
-    // Formatear el número con signo y dos decimales
     return num.toLocaleString('es-AR', {
-        minimumFractionDigits: 2, // Siempre mostrar 2 decimales
-        maximumFractionDigits: 2, // Nunca mostrar más de 2 decimales
-        signDisplay: 'always',   // Mostrar siempre el signo (+ o -)
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        signDisplay: 'always',
     });
 }
 
 // Función para formatear el precio con el símbolo $
 function formatearPrecio(precio) {
-    if (precio === null || precio === undefined || precio === '') return 'N/A'; // Manejar valores nulos o indefinidos
+    if (precio === null || precio === undefined || precio === '') return 'N/A';
 
-    // Convertir a número si es una cadena
     const num = parseFloat(precio);
-
-    // Verificar si el número es válido
     if (isNaN(num)) return 'N/A';
 
-    // Formatear el precio con el símbolo $ y dos decimales
     return `$ ${num.toLocaleString('es-AR', {
-        minimumFractionDigits: 2, // Siempre mostrar 2 decimales
-        maximumFractionDigits: 2, // Nunca mostrar más de 2 decimales
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     })}`;
+}
+
+// Exportar la función de inicialización para que pueda ser llamada desde dashboard.js
+export function initABM() {
+    inicializarABM();
 }
