@@ -1,130 +1,137 @@
-/* Variables de colores */
 :root {
-    --color-primario: #4A90E2;
-    --color-secundario: #357ABD;
-    --color-fondo: #f5f5f5;
-    --color-texto: #333;
-    --color-fondo-contenedor: #fff;
-    --color-fondo-fila: #f9f9f9;
-    --color-fondo-hover: #e0e0e0;
-    --color-borde: #ddd;
+    --primary-color: #4CAF50;
+    --secondary-color: #45a049;
+    --text-color: #fff;
+    --background-color: #f4f4f4;
+    --sidebar-width: 250px;
+    --sidebar-collapsed-width: 60px;
 }
 
-/* Estilos generales */
-body, html {
+body {
     margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
     font-family: Arial, sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
-    display: flex;
-    flex-direction: column;
+    background-color: var(--background-color);
 }
 
-/* Menú lateral */
-#menuLateral {
-    width: 250px;
+.menu-container {
+    width: var(--sidebar-width);
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    transition: width 0.3s ease;
     height: 100vh;
-    background-color: var(--color-primario);
+}
+
+.sidebar-header {
     padding: 20px;
-    box-sizing: border-box;
-    transition: transform 0.3s ease;
+    text-align: center;
+    border-bottom: 1px solid var(--secondary-color);
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#menuLateral nav {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    flex-grow: 1;
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-#menuLateral button {
-    padding: 10px;
-    background-color: var(--color-secundario);
-    color: white;
+.menu-toggle {
+    display: none;
+    background: none;
     border: none;
+    color: var(--text-color);
+    font-size: 1.5em;
     cursor: pointer;
-    text-align: left;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+.sidebar-menu li a {
+    color: var(--text-color);
+    text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
-#menuLateral button:hover {
-    background-color: var(--color-fondo-hover);
+.sidebar-menu li a i {
+    margin-right: 10px;
 }
 
-#menuLateral .menu-text {
-    display: inline;
+.sidebar-menu li a span {
+    white-space: nowrap;
 }
 
-/* Botón de hamburguesa */
-#hamburguesaButton {
-    display: none; /* Oculto por defecto */
-    padding: 10px;
-    background-color: var(--color-primario);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1001;
-}
-
-/* Área de contenido */
-#contenidoPrincipal {
+.content-container {
     flex-grow: 1;
     padding: 20px;
-    box-sizing: border-box;
-    margin-left: 250px; /* Espacio para el menú lateral */
-    transition: margin-left 0.3s ease;
-}
-
-/* Estilos responsivos */
-@media (max-width: 1024px) {
-    #menuLateral {
-        position: fixed;
-        top: 0;
-        left: -250px;
-        z-index: 1000;
-        transform: translateX(-100%);
-    }
-
-    #menuLateral.abierto {
-        transform: translateX(0);
-    }
-
-    #hamburguesaButton {
-        display: block;
-    }
-
-    #contenidoPrincipal {
-        margin-left: 0;
-    }
-
-    #menuLateral .menu-text {
-        display: none;
-    }
+    background-color: var(--background-color);
+    height: 100vh;
+    overflow-y: auto;
 }
 
 @media (max-width: 768px) {
-    #menuLateral {
+    .menu-container {
         width: 100%;
-        left: -100%;
+        height: auto;
+        position: relative;
     }
 
-    #menuLateral.abierto {
-        transform: translateX(0);
+    .sidebar-header {
+        padding: 10px;
     }
 
-    #menuLateral button {
-        justify-content: center;
+    .logo {
+        display: inline;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .sidebar-menu {
+        display: none;
+        width: 100%;
+    }
+
+    .sidebar-menu.active {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content-container {
+        margin-top: 60px; /* Ajuste para la barra de menú superior */
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .sidebar-menu {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .sidebar-menu li {
+        border-bottom: none;
+    }
+
+    .sidebar-menu li a span {
+        display: none;
+    }
+
+    .sidebar-menu li a i {
+        margin-right: 0;
     }
 }

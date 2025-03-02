@@ -9,7 +9,6 @@ async function verificarAutenticacion() {
         window.location.href = 'index.html'; // Redirigir al login si no hay sesión
     } else {
         console.log('Usuario autenticado:', user);
-        document.getElementById('sessionInfo').innerText = `Sesión activa para el usuario: ${user.email}`;
         verificarSiEsAdmin(user);
     }
 }
@@ -24,11 +23,9 @@ async function verificarSiEsAdmin(user) {
 
     if (adminError || !admin) {
         console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador');
-        document.getElementById('adminStatus').innerText = 'No tienes permisos de administrador.';
-        ocultarBotonesAdmin();
+        ocultarBotonesAdmin(); // Ocultar botones de administrador
     } else {
         console.log('Usuario es administrador:', admin);
-        document.getElementById('adminStatus').innerText = 'Eres un administrador.';
     }
 }
 
@@ -77,8 +74,8 @@ async function cargarContenido(seccion) {
 
 // Manejar el menú de hamburguesa
 function toggleMenu() {
-    const menuLateral = document.getElementById('menuLateral');
-    menuLateral.classList.toggle('abierto');
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    sidebarMenu.classList.toggle('active');
 }
 
 // Escuchar clics en los botones del menú
@@ -93,5 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('configButton').addEventListener('click', () => cargarContenido('config'));
 
     // Manejar el botón de hamburguesa
-    document.getElementById('hamburguesaButton').addEventListener('click', toggleMenu);
+    document.getElementById('menuToggle').addEventListener('click', toggleMenu);
+
+    // Ajustar el menú al redimensionar la pantalla
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            document.querySelector('.sidebar-menu').classList.remove('active');
+        }
+    });
 });
