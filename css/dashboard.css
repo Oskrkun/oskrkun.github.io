@@ -31,40 +31,43 @@ body {
 
 .sidebar-header {
     padding: 20px;
-    text-align: center;
+    text-align: left; /* Alinear el contenido a la izquierda */
     border-bottom: 1px solid var(--secondary-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espacio entre el ícono y el texto */
-}
-
-.logo i {
-    font-size: 1.5em; /* Tamaño del ícono */
-}
-
 .user-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 5px; /* Espacio entre el contenedor de ícono+rol y el correo */
+}
+
+.icon-role-container {
+    display: flex;
+    align-items: center; /* Alinear ícono y rol verticalmente */
+    gap: 15px; /* Espacio entre el ícono y el rol */
+}
+
+.icon-role-container i {
+    font-size: 1.5em; /* Tamaño del ícono */
+    width: 24px; /* Ancho fijo para el ícono */
+    text-align: center; /* Centrar el ícono */
 }
 
 .user-role {
-    font-size: 0.9em; /* Tamaño más pequeño para el rol */
+    font-size: 1em; /* Tamaño del texto del rol */
     font-weight: bold;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
 }
 
-.user-email {
+.user-email-container {
     font-size: 0.8em; /* Tamaño más pequeño para el correo */
-    word-break: break-word; /* Rompe el texto si es demasiado largo */
+    word-break: break-word; /* Romper el texto si es demasiado largo */
+    max-width: 200px; /* Ancho máximo para el correo */
+    overflow: hidden; /* Evitar que el texto se desborde */
+    text-overflow: ellipsis; /* Mostrar puntos suspensivos si el texto es demasiado largo */
 }
 
 .menu-toggle {
@@ -129,10 +132,6 @@ body {
 
     .sidebar-header {
         padding: 10px;
-    }
-
-    .logo {
-        display: inline;
     }
 
     .menu-toggle {
