@@ -13,6 +13,7 @@ async function verificarAutenticacion() {
     } else {
         console.log('Usuario autenticado:', user);
         verificarSiEsAdmin(user);
+        actualizarTextoUsuario(user); // Actualizar el texto del usuario en el logo
     }
 }
 
@@ -37,6 +38,20 @@ function ocultarBotonesAdmin() {
     document.getElementById('abmButton').style.display = 'none';
     document.getElementById('agendaButton').style.display = 'none';
     document.getElementById('configButton').style.display = 'none';
+}
+
+// Actualizar el texto del usuario en el logo
+function actualizarTextoUsuario(user) {
+    const logoElement = document.querySelector('.logo');
+    if (logoElement) {
+        // Verificar si el usuario es administrador
+        const esAdmin = document.getElementById('abmButton').style.display !== 'none'; // Si el botón ABM está visible, es admin
+        if (esAdmin) {
+            logoElement.textContent = `Admin: ${user.email}`; // Mostrar "Admin: usuario"
+        } else {
+            logoElement.textContent = `Bienvenido @${user.email}`; // Mostrar "Bienvenido @usuario"
+        }
+    }
 }
 
 // Cargar contenido dinámico
