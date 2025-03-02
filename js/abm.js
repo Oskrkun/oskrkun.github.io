@@ -229,18 +229,55 @@ async function cargarProductos() {
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                    <td>${producto.id}</td> <!-- Mostrar el ID del producto -->
                     <td>${producto.nombre}</td>
                     <td>${producto.tipo_lente}</td>
                     <td>${producto.material}</td>
-                    <td>${producto.indice_refraccion}</td>
                     <td>${producto.laboratorio}</td>
                     <td>${min_esf}</td>
                     <td>${max_esf}</td>
                     <td>${cil}</td>
                     <td>${precio}</td>
                     <td>${tratamientos}</td>
+                    <td>
+                        <i class="fas fa-trash-alt" style="color: red; cursor: pointer;" data-producto-id="${producto.id}"></i>
+                    </td>
                 `;
                 tbody.appendChild(row);
+            });
+
+            // Agregar evento para eliminar productos
+            tbody.querySelectorAll('.fa-trash-alt').forEach(icon => {
+                icon.addEventListener('click', async (e) => {
+                    const productoId = e.target.getAttribute('data-producto-id');
+                    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+                    if (userError || !user) {
+                        console.error('Usuario no autenticado:', userError ? userError.message : 'No hay usuario');
+                        alert('Error: Usuario no autenticado.');
+                        return;
+                    }
+
+                    const confirmacion = confirm('¿Estás seguro de que deseas eliminar este producto?');
+                    if (confirmacion) {
+                        const response = await supabaseClient.rpc('eliminar_producto', {
+                            p_producto_id: productoId,
+                            p_user_id: user.id
+                        });
+
+                        if (response.data && response.data.error) {
+                            console.error('Error eliminando producto:', response.data.error);
+                            alert('Error al eliminar el producto: ' + response.data.error);
+                        } else if (response.error) {
+                            console.error('Error de Supabase:', response.error);
+                            alert('Error de Supabase: ' + response.error.message);
+                        } else {
+                            console.log('Producto eliminado correctamente.');
+                            alert('Producto eliminado correctamente.');
+                            await cargarProductos(); // Recargar la tabla de productos
+                        }
+                    }
+                });
             });
         } else {
             console.error('Cuerpo de la tabla de productos no encontrado.');
@@ -276,3 +313,6 @@ function formatearPrecio(precio) {
         maximumFractionDigits: 2,
     })}`;
 }
+
+// Inicializar el ABM cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', initABM);

@@ -1,21 +1,10 @@
-CREATE OR REPLACE FUNCTION crear_producto(
-    p_nombre VARCHAR(50),
-    p_tipo_lente_id INTEGER,
-    p_material_id INTEGER,
-    p_indice_refraccion_id INTEGER,
-    p_laboratorio_id INTEGER,
-    p_user_id UUID,
-    p_min_esf NUMERIC(5,2),
-    p_max_esf NUMERIC(5,2),
-    p_cil NUMERIC(5,2),
-    p_precio NUMERIC(10,2),
-    p_tratamientos INTEGER[]  -- Array de IDs de tratamientos
-) RETURNS JSON AS $$
+
 DECLARE
     producto_id INTEGER;
     tratamiento_id INTEGER;
     es_administrador BOOLEAN;
     producto_existente BOOLEAN;
+    mismos_tratamientos BOOLEAN;
 BEGIN
     -- Verificar si el usuario es administrador
     SELECT EXISTS (
@@ -41,6 +30,21 @@ BEGIN
     -- Validar que los valores de ESF y CIL estén en pasos de 0.25
     IF (p_min_esf * 4) % 1 != 0 OR (p_max_esf * 4) % 1 != 0 OR (p_cil * 4) % 1 != 0 THEN
         RETURN json_build_object('error', 'Los valores de ESF y CIL deben estar en pasos de 0.25.');
+    END IF;
+
+    -- Validar que el ESF máximo sea positivo
+    IF p_max_esf <= 0 THEN
+        RETURN json_build_object('error', 'El valor de ESF máximo debe ser positivo.');
+    END IF;
+
+    -- Validar que el ESF mínimo sea negativo
+    IF p_min_esf >= 0 THEN
+        RETURN json_build_object('error', 'El valor de ESF mínimo debe ser negativo.');
+    END IF;
+
+    -- Validar que el CIL sea negativo
+    IF p_cil >= 0 THEN
+        RETURN json_build_object('error', 'El valor de CIL debe ser negativo.');
     END IF;
 
     -- Validar que el índice de refracción no sea nulo
@@ -74,17 +78,49 @@ BEGIN
         END LOOP;
     END IF;
 
-    -- Validar que no exista un producto con el mismo nombre y mismos tratamientos
+    -- Validar que no exista un producto con los mismos atributos
     SELECT EXISTS (
         SELECT 1
-        FROM productos p
-        JOIN producto_tratamiento pt ON p.id = pt.producto_id
-        WHERE p.nombre = p_nombre
-        AND pt.tratamiento_id = ANY(p_tratamientos)
+        FROM productos
+        WHERE nombre = p_nombre
+        AND tipo_lente_id = p_tipo_lente_id
+        AND material_id = p_material_id
+        AND indice_refraccion_id = p_indice_refraccion_id
+        AND laboratorio_id = p_laboratorio_id
+        AND min_esf = p_min_esf
+        AND max_esf = p_max_esf
+        AND cil = p_cil
     ) INTO producto_existente;
 
+    -- Si existe un producto con los mismos atributos, validar que tenga los mismos tratamientos
     IF producto_existente THEN
-        RETURN json_build_object('error', 'Ya existe un producto con el mismo nombre y los mismos tratamientos.');
+        SELECT EXISTS (
+            SELECT 1
+            FROM (
+                -- Tratamientos del nuevo producto
+                SELECT unnest(p_tratamientos) AS tratamiento_id
+                EXCEPT
+                -- Tratamientos del producto existente
+                SELECT tratamiento_id
+                FROM producto_tratamiento
+                WHERE producto_id = (
+                    SELECT id
+                    FROM productos
+                    WHERE nombre = p_nombre
+                    AND tipo_lente_id = p_tipo_lente_id
+                    AND material_id = p_material_id
+                    AND indice_refraccion_id = p_indice_refraccion_id
+                    AND laboratorio_id = p_laboratorio_id
+                    AND min_esf = p_min_esf
+                    AND max_esf = p_max_esf
+                    AND cil = p_cil
+                )
+            ) AS tratamientos_faltantes
+        ) INTO mismos_tratamientos;
+
+        IF NOT mismos_tratamientos THEN
+            RETURN json_build_object('error', 'Ya existe un producto con los mismos atributos y tratamientos.');
+        END IF;
     END IF;
 
     -- Insertar el producto en la tabla productos (sin precio)
@@ -111,4 +147,3 @@ BEGIN
     -- Devolver éxito
     RETURN json_build_object('success', 'Producto creado correctamente.', 'producto_id', producto_id);
 END;
-$$ LANGUAGE plpgsql;

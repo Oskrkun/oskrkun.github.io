@@ -1,106 +1,117 @@
 <!-- abm.html -->
-<div id="abm-content"> <!-- Contenedor específico para el ABM -->
-    <section id="formSection">
-        <h1>Crear Producto</h1>
-        <form id="productForm">
-            <!-- Campos del formulario -->
-            <div class="form-group">
-                <label for="nombre">Nombre del Producto:</label>
-                <input type="text" id="nombre" name="nombre" required>
-            </div>
-
-            <div class="form-group">
-                <label for="tipo_lente">Tipo de Lente:</label>
-                <select id="tipo_lente" name="tipo_lente" required></select>
-            </div>
-
-            <div class="form-group">
-                <label for="material">Material:</label>
-                <select id="material" name="material" required></select>
-            </div>
-
-            <div class="form-group">
-                <label for="indice_refraccion">Índice de Refracción:</label>
-                <select id="indice_refraccion" name="indice_refraccion" required></select>
-            </div>
-
-            <div class="form-group">
-                <label for="laboratorio">Laboratorio:</label>
-                <select id="laboratorio" name="laboratorio" required></select>
-            </div>
-
-            <div class="form-group">
-                <label for="min_esf">ESF Mínimo:</label>
-                <input type="number" step="0.25" id="min_esf" name="min_esf" required>
-            </div>
-
-            <div class="form-group">
-                <label for="max_esf">ESF Máximo:</label>
-                <input type="number" step="0.25" id="max_esf" name="max_esf" required>
-            </div>
-
-            <div class="form-group">
-                <label for="cil">CIL:</label>
-                <input type="number" step="0.25" id="cil" name="cil" required>
-            </div>
-
-            <div class="form-group">
-                <label for="precio">Precio:</label>
-                <input type="number" step="0.01" id="precio" name="precio" required>
-            </div>
-
-            <!-- Subsección: Tratamientos -->
-            <div class="form-group">
-                <div class="table-container">
-                    <table id="tratamientosTable">
-                        <thead>
-                            <tr>
-                                <th>Tratamiento</th>
-                                <th>Seleccionar</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tratamientos">
-                            <!-- Los tratamientos se cargarán aquí -->
-                        </tbody>
-                    </table>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABM de Productos</title>
+    <link rel="stylesheet" href="abm.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div id="abm-content">
+        <section id="formSection">
+            <h1>Crear Producto</h1>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre del Producto:</label>
+                    <input type="text" id="nombre" name="nombre" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="tipo_lente">Tipo de Lente:</label>
+                    <select id="tipo_lente" name="tipo_lente" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="material">Material:</label>
+                    <select id="material" name="material" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="indice_refraccion">Índice de Refracción:</label>
+                    <select id="indice_refraccion" name="indice_refraccion" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="laboratorio">Laboratorio:</label>
+                    <select id="laboratorio" name="laboratorio" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="min_esf">ESF Mínimo:</label>
+                    <input type="number" step="0.25" id="min_esf" name="min_esf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="max_esf">ESF Máximo:</label>
+                    <input type="number" step="0.25" id="max_esf" name="max_esf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cil">CIL:</label>
+                    <input type="number" step="0.25" id="cil" name="cil" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio">Precio:</label>
+                    <input type="number" step="0.01" id="precio" name="precio" required>
+                </div>
+
+                <div class="form-group">
+                    <div class="table-container">
+                        <table id="tratamientosTable">
+                            <thead>
+                                <tr>
+                                    <th>Tratamiento</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tratamientos">
+                                <!-- Los tratamientos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button type="submit">Crear Producto</button>
+            </form>
+        </section>
+
+        <section id="previewSection">
+            <div id="vistaPrevia">
+                <h3>Vista Previa del Producto</h3>
+                <!-- Aquí se mostrará la vista previa -->
             </div>
+        </section>
 
-            <button type="submit">Crear Producto</button>
-        </form>
-    </section>
+        <section id="productListSection">
+            <h2>Lista de Productos</h2>
+            <div class="table-container">
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Tipo de Lente</th>
+                            <th>Material</th>
+                            <th>Laboratorio</th>
+                            <th>ESF Mínimo</th>
+                            <th>ESF Máximo</th>
+                            <th>CIL</th>
+                            <th>Precio</th>
+                            <th>Tratamientos</th>
+                            <th><!-- Columna vacía para la papelera --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Los productos se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 
-    <!-- Sección: Vista previa del producto -->
-    <section id="previewSection">
-        <div id="vistaPrevia">
-            <h3>Vista Previa del Producto</h3>
-            <!-- Aquí se mostrará la vista previa -->
-        </div>
-    </section>
-
-    <!-- Sección: Lista de productos -->
-    <section id="productListSection">
-        <h2>Lista de Productos</h2>
-        <div class="table-container">
-            <table id="productTable">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Tipo de Lente</th>
-                        <th>Material</th>
-                        <th>Índice de Refracción</th>
-                        <th>Laboratorio</th>
-                        <th>ESF Mínimo</th>
-                        <th>ESF Máximo</th>
-                        <th>CIL</th>
-                        <th>Precio</th>
-                        <th>Tratamientos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Los productos se cargarán aquí -->
-                </tbody>
-            </table>
-        </div>
-    </section>
-</div>
+    <script type="module" src="abm.js"></script>
+</body>
+</html>
