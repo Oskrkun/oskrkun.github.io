@@ -29,6 +29,12 @@ body {
     overflow: hidden; /* Evita que el contenido se desborde */
 }
 
+.content-container {
+    flex: 1; /* El contenido principal ocupa el espacio restante */
+    padding: 20px; /* Espaciado interno */
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+}
+
 .sidebar-header {
     padding: 20px;
     text-align: left; /* Alinear el contenido a la izquierda */
@@ -153,7 +159,7 @@ body {
     }
 
     .sidebar-menu li a i {
-        margin-right: 10px; /* Espacio entre íconos y texto */
+        margin-right: 25px; /* Espacio entre íconos y texto */
     }
 
     .sidebar-menu li a span {
