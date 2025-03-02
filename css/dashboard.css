@@ -20,6 +20,7 @@ body, html {
     background-color: var(--color-fondo);
     color: var(--color-texto);
     display: flex;
+    flex-direction: column;
 }
 
 /* Menú lateral */
@@ -28,6 +29,7 @@ body, html {
     background-color: var(--color-primario);
     padding: 20px;
     box-sizing: border-box;
+    transition: transform 0.3s ease;
 }
 
 #menuLateral nav {
@@ -49,9 +51,48 @@ body, html {
     background-color: var(--color-fondo-hover);
 }
 
+/* Botón de hamburguesa */
+#hamburguesaButton {
+    display: none; /* Oculto por defecto */
+    padding: 10px;
+    background-color: var(--color-primario);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    text-align: center;
+}
+
 /* Área de contenido */
 #contenidoPrincipal {
     width: 80%;
     padding: 20px;
     box-sizing: border-box;
+    flex-grow: 1;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    #menuLateral {
+        position: fixed;
+        top: 0;
+        left: -100%; /* Ocultar el menú lateral por defecto */
+        width: 250px;
+        height: 100%;
+        z-index: 1000;
+        transform: translateX(-100%);
+    }
+
+    #menuLateral.abierto {
+        transform: translateX(0); /* Mostrar el menú lateral */
+    }
+
+    #hamburguesaButton {
+        display: block; /* Mostrar el botón de hamburguesa en móviles */
+    }
+
+    #contenidoPrincipal {
+        width: 100%;
+        padding-top: 60px; /* Espacio para el botón de hamburguesa */
+    }
 }

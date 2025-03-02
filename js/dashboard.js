@@ -75,6 +75,12 @@ async function cargarContenido(seccion) {
     }
 }
 
+// Manejar el menú de hamburguesa
+function toggleMenu() {
+    const menuLateral = document.getElementById('menuLateral');
+    menuLateral.classList.toggle('abierto');
+}
+
 // Escuchar clics en los botones del menú
 document.addEventListener('DOMContentLoaded', () => {
     verificarAutenticacion();
@@ -85,4 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('clientesButton').addEventListener('click', () => cargarContenido('clientes'));
     document.getElementById('armazonesButton').addEventListener('click', () => cargarContenido('armazones'));
     document.getElementById('configButton').addEventListener('click', () => cargarContenido('config'));
+
+    // Manejar el botón de hamburguesa
+    document.getElementById('hamburguesaButton').addEventListener('click', toggleMenu);
 });
