@@ -46,8 +46,17 @@ async function cargarContenido(seccion) {
     // Cargar el contenido correspondiente
     switch (seccion) {
         case 'abm':
+            // Cargar el CSS de ABM
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/abm.css';
+            document.head.appendChild(link);
+
+            // Cargar el HTML de ABM
             contenidoPrincipal.innerHTML = await fetch('abm.html').then(res => res.text());
-            await import('./abm.js'); // Cargar el JS de ABM
+
+            // Cargar el JS de ABM
+            await import('./abm.js');
             break;
         case 'agenda':
             contenidoPrincipal.innerHTML = await fetch('agenda.html').then(res => res.text());

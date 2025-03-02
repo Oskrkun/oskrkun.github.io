@@ -1,5 +1,7 @@
-/* Variables de colores */
-:root {
+/* abm.css */
+
+#abm-content {
+    /* Variables de colores */
     --color-primario: #4A90E2; /* Azul claro */
     --color-secundario: #357ABD; /* Azul más oscuro */
     --color-fondo: #f5f5f5; /* Fondo claro */
@@ -10,8 +12,7 @@
     --color-borde: #ddd; /* Color de bordes */
 }
 
-/* Estilos generales */
-body, html {
+#abm-content body, #abm-content html {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -22,7 +23,7 @@ body, html {
     color: var(--color-texto);
 }
 
-header {
+#abm-content header {
     background-color: var(--color-primario);
     color: var(--color-texto);
     padding: 10px 20px;
@@ -34,12 +35,12 @@ header {
     margin: 0; /* Asegura que no haya margen */
 }
 
-header #userBar {
+#abm-content header #userBar {
     display: flex;
     gap: 20px;
 }
 
-main {
+#abm-content main {
     padding: 5px;
     display: flex;
     flex-direction: column;
@@ -47,12 +48,12 @@ main {
     box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-h1, h2, h3 {
+#abm-content h1, #abm-content h2, #abm-content h3 {
     color: var(--color-primario);
 }
 
 /* Sección: Formulario de creación de producto */
-#formSection {
+#abm-content #formSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
     border-radius: 5px;
@@ -61,20 +62,20 @@ h1, h2, h3 {
     box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-#productForm .form-group {
+#abm-content #productForm .form-group {
     display: flex;
     align-items: center; /* Alinea verticalmente las etiquetas y los inputs */
     margin-bottom: 15px;
 }
 
-#productForm label {
+#abm-content #productForm label {
     flex: 0 0 150px; /* Ancho fijo para las etiquetas */
     margin-bottom: 0; /* Elimina el margen inferior */
     font-weight: bold;
     color: var(--color-texto);
 }
 
-#productForm input, #productForm select {
+#abm-content #productForm input, #abm-content #productForm select {
     flex: 1; /* Ocupa el espacio restante */
     padding: 8px;
     border: 1px solid var(--color-borde);
@@ -85,7 +86,7 @@ h1, h2, h3 {
     box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-#productForm button {
+#abm-content #productForm button {
     background-color: var(--color-primario);
     color: var(--color-texto);
     padding: 10px 20px;
@@ -96,19 +97,19 @@ h1, h2, h3 {
     margin-top: 10px; /* Espacio arriba del botón */
 }
 
-#productForm button:hover {
+#abm-content #productForm button:hover {
     background-color: var(--color-secundario);
 }
 
 /* Subsección: Tratamientos */
-#tratamientosTable {
+#abm-content #tratamientosTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px; /* Espacio vertical entre filas */
     margin-top: 10px;
 }
 
-#tratamientosTable th {
+#abm-content #tratamientosTable th {
     background-color: var(--color-primario);
     color: var(--color-texto);
     padding: 12px 15px;
@@ -116,11 +117,11 @@ h1, h2, h3 {
     font-weight: 600;
 }
 
-#tratamientosTable th:nth-child(2) {
+#abm-content #tratamientosTable th:nth-child(2) {
     text-align: center; /* Centrar el encabezado "Seleccionar" */
 }
 
-#tratamientosTable td {
+#abm-content #tratamientosTable td {
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
     padding: 12px 15px;
@@ -128,29 +129,29 @@ h1, h2, h3 {
     border-radius: 0; /* Bordes rectos por defecto */
 }
 
-#tratamientosTable td:first-child {
+#abm-content #tratamientosTable td:first-child {
     border-top-left-radius: 8px; /* Redondea la esquina superior izquierda */
     border-bottom-left-radius: 8px; /* Redondea la esquina inferior izquierda */
 }
 
-#tratamientosTable td:last-child {
+#abm-content #tratamientosTable td:last-child {
     border-top-right-radius: 8px; /* Redondea la esquina superior derecha */
     border-bottom-right-radius: 8px; /* Redondea la esquina inferior derecha */
     text-align: center; /* Centrar el contenido de la segunda columna */
 }
 
-#tratamientosTable tr:hover td {
+#abm-content #tratamientosTable tr:hover td {
     background-color: var(--color-fondo-hover);
     cursor: pointer;
 }
 
-#tratamientosTable input[type="checkbox"] {
+#abm-content #tratamientosTable input[type="checkbox"] {
     margin: 0; /* Elimina el margen del checkbox */
     transform: scale(1.2); /* Aumenta el tamaño del checkbox */
 }
 
 /* Sección: Vista previa del producto */
-#previewSection {
+#abm-content #previewSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
     border-radius: 5px;
@@ -159,17 +160,17 @@ h1, h2, h3 {
     box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-#vistaPrevia h3 {
+#abm-content #vistaPrevia h3 {
     margin-top: 0;
     color: var(--color-primario);
 }
 
-#vistaPrevia p {
+#abm-content #vistaPrevia p {
     margin: 5px 0;
 }
 
 /* Sección: Lista de productos */
-#productListSection {
+#abm-content #productListSection {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
     border-radius: 5px;
@@ -178,21 +179,21 @@ h1, h2, h3 {
     box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
-.table-container {
+#abm-content .table-container {
     width: 100%;
     overflow-x: auto;
     margin: 0; /* Asegura que no haya margen */
     padding: 0; /* Asegura que no haya padding */
 }
 
-#productTable {
+#abm-content #productTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px; /* Espacio vertical entre filas */
     white-space: nowrap;
 }
 
-#productTable th {
+#abm-content #productTable th {
     background-color: var(--color-primario);
     color: var(--color-texto);
     padding: 12px 15px;
@@ -200,7 +201,7 @@ h1, h2, h3 {
     font-weight: 600;
 }
 
-#productTable td {
+#abm-content #productTable td {
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
     padding: 12px 15px;
@@ -208,63 +209,63 @@ h1, h2, h3 {
     border-radius: 0; /* Bordes rectos */
 }
 
-#productTable tr:hover td {
+#abm-content #productTable tr:hover td {
     background-color: var(--color-fondo-hover);
     cursor: pointer;
 }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-    main {
+    #abm-content main {
         flex-direction: column;
     }
 
-    #formSection, #previewSection, #productListSection {
+    #abm-content #formSection, #abm-content #previewSection, #abm-content #productListSection {
         width: 100%;
         padding: 15px;
         box-sizing: border-box; /* Incluye el padding en el ancho total */
     }
 
-    #productForm .form-group {
+    #abm-content #productForm .form-group {
         flex-direction: column; /* Cambia a disposición vertical en móviles */
         align-items: flex-start; /* Alinea las etiquetas a la izquierda */
     }
 
-    #productForm label {
+    #abm-content #productForm label {
         flex: 1; /* Ocupa todo el ancho disponible */
         margin-bottom: 5px; /* Espacio entre etiqueta y campo */
     }
 
-    #productForm input, #productForm select {
+    #abm-content #productForm input, #abm-content #productForm select {
         width: 100%; /* Campos de entrada ocupan el 100% del ancho */
         font-size: 14px; /* Tamaño de fuente más pequeño en móviles */
     }
 
-    #productForm button {
+    #abm-content #productForm button {
         width: 100%; /* Botón de ancho completo en móviles */
     }
 
-    #productTable th, #productTable td {
+    #abm-content #productTable th, #abm-content #productTable td {
         padding: 10px; /* Padding más pequeño en móviles */
     }
 
-    .table-container {
+    #abm-content .table-container {
         overflow-x: auto; /* Permite desplazamiento horizontal en móviles */
     }
 }
 
 @media (max-width: 480px) {
-    header {
+    #abm-content header {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    header #userBar {
+    #abm-content header #userBar {
         flex-direction: column;
         gap: 10px;
     }
 
-    #productForm button {
+    #abm-content #productForm button {
         width: 100%; /* Botón de ancho completo en móviles */
     }
 }

@@ -1,10 +1,12 @@
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #45a049;
-    --text-color: #fff;
-    --background-color: #f4f4f4;
-    --sidebar-width: 250px;
-    --sidebar-collapsed-width: 60px;
+    --primary-color: #4A90E2; /* Azul claro (color primario del ABM) */
+    --secondary-color: #357ABD; /* Azul más oscuro (color secundario del ABM) */
+    --background-color: #f5f5f5; /* Fondo claro */
+    --text-color: #333; /* Texto oscuro */
+    --container-background: #fff; /* Fondo del contenedor */
+    --row-background: #f9f9f9; /* Fondo de las filas */
+    --hover-background: #e0e0e0; /* Fondo al pasar el ratón */
+    --border-color: #ddd; /* Color de bordes */
 }
 
 body {
@@ -77,7 +79,7 @@ body {
 
 .content-container {
     flex-grow: 1;
-    /*padding: 20px;*/
+    padding: 20px;
     background-color: var(--background-color);
     height: 100vh;
     overflow-y: auto;
@@ -115,10 +117,6 @@ body {
         display: flex;
         flex-direction: column;
     }
-
-    /*.content-container {
-        margin-top: 60px;  Ajuste para la barra de menú superior
-    }*/
 }
 
 @media (max-width: 480px) {
