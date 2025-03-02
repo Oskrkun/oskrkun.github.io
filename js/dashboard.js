@@ -41,4 +41,101 @@ function ocultarBotonesAdmin() {
 // Cargar contenido dinámico
 async function cargarContenido(seccion) {
     const contenidoPrincipal = document.getElementById('contenidoPrincipal');
-    contenidoPrincipal.innerHTML = '';
+    contenidoPrincipal.innerHTML = ''; // Limpiar contenido anterior
+
+    // Cargar el contenido correspondiente
+    switch (seccion) {
+        case 'abm':
+            // Cargar el CSS de ABM
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'css/abm.css';
+            document.head.appendChild(link);
+
+            // Cargar el HTML de ABM
+            contenidoPrincipal.innerHTML = await fetch('abm.html').then(res => res.text());
+
+            // Cargar el JS de ABM
+            await import('./abm.js');
+            break;
+        case 'agenda':
+            contenidoPrincipal.innerHTML = await fetch('agenda.html').then(res => res.text());
+            await import('./agenda.js');
+            break;
+        case 'presupuesto':
+            contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
+            await import('./presupuesto.js');
+            break;
+        case 'clientes':
+            contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());
+            await import('./clientes.js');
+            break;
+        case 'armazones':
+            contenidoPrincipal.innerHTML = await fetch('armazones.html').then(res => res.text());
+            await import('./armazones.js');
+            break;
+        case 'config':
+            contenidoPrincipal.innerHTML = await fetch('config.html').then(res => res.text());
+            await import('./config.js');
+            break;
+        default:
+            contenidoPrincipal.innerHTML = '<p>Selecciona una opción del menú.</p>';
+    }
+}
+
+// Manejar el menú de hamburguesa
+function toggleMenu() {
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    sidebarMenu.classList.toggle('active');
+}
+
+// Cerrar el menú de hamburguesa al hacer clic en un enlace
+function cerrarMenu() {
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    sidebarMenu.classList.remove('active');
+}
+
+// Escuchar clics en los botones del menú
+document.addEventListener('DOMContentLoaded', () => {
+    verificarAutenticacion();
+
+    document.getElementById('abmButton').addEventListener('click', () => {
+        cargarContenido('abm');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    document.getElementById('agendaButton').addEventListener('click', () => {
+        cargarContenido('agenda');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    document.getElementById('presupuestoButton').addEventListener('click', () => {
+        cargarContenido('presupuesto');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    document.getElementById('clientesButton').addEventListener('click', () => {
+        cargarContenido('clientes');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    document.getElementById('armazonesButton').addEventListener('click', () => {
+        cargarContenido('armazones');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    document.getElementById('configButton').addEventListener('click', () => {
+        cargarContenido('config');
+        cerrarMenu(); // Cerrar el menú al hacer clic
+    });
+
+    // Manejar el botón de hamburguesa
+    document.getElementById('menuToggle').addEventListener('click', toggleMenu);
+
+    // Ajustar el menú al redimensionar la pantalla
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            document.querySelector('.sidebar-menu').classList.remove('active');
+        }
+    });
+});
