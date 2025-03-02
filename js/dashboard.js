@@ -66,7 +66,7 @@ function actualizarTextoUsuario(user) {
 // Cargar contenido dinámico
 async function cargarContenido(seccion) {
     const contenidoPrincipal = document.getElementById('contenidoPrincipal');
-    contenidoPrincipal.innerHTML = ''; // Limpiar contenido anterior
+    contenidoPrincipal.innerHTML = ''; // Limpiar contenido anterior antes de cargar uno nuevo
 
     // Cargar el contenido correspondiente
     switch (seccion) {
