@@ -77,7 +77,7 @@ body {
 
 .content-container {
     flex-grow: 1;
-    padding: 20px;
+    /*padding: 20px;*/
     background-color: var(--background-color);
     height: 100vh;
     overflow-y: auto;
@@ -116,9 +116,9 @@ body {
         flex-direction: column;
     }
 
-    .content-container {
-        margin-top: 60px; /* Ajuste para la barra de menú superior */
-    }
+    /*.content-container {
+        margin-top: 60px;  Ajuste para la barra de menú superior
+    }*/
 }
 
 @media (max-width: 480px) {
