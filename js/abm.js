@@ -2,9 +2,11 @@
 
 import { supabaseClient } from './supabaseConfig.js';
 
-// Función para inicializar el ABM
+// Función para inicializar el ABM (Altas, Bajas y Modificaciones)
 export async function initABM() {
-    // Cargar datos del formulario
+    console.log('Inicializando ABM...');
+
+    // Cargar datos del formulario (tipos de lentes, materiales, etc.)
     await cargarDatosFormulario();
 
     // Mostrar vista previa del producto
@@ -16,9 +18,13 @@ export async function initABM() {
     // Manejar el envío del formulario
     const productForm = document.getElementById('productForm');
     if (productForm) {
+        console.log('Formulario encontrado, agregando evento submit...');
         productForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
 
+            console.log('Formulario enviado, obteniendo datos...');
+
+            // Obtener los valores del formulario
             const nombre = document.getElementById('nombre').value;
             const tipo_lente_id = document.getElementById('tipo_lente').value;
             const material_id = document.getElementById('material').value;
@@ -30,12 +36,31 @@ export async function initABM() {
             const precio = parseFloat(document.getElementById('precio').value);
             const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
+            console.log('Datos del formulario:', {
+                nombre,
+                tipo_lente_id,
+                material_id,
+                indice_refraccion_id,
+                laboratorio_id,
+                min_esf,
+                max_esf,
+                cil,
+                precio,
+                tratamientos
+            });
+
+            // Verificar si el usuario está autenticado
             const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
             if (userError || !user) {
                 console.error('Usuario no autenticado:', userError ? userError.message : 'No hay usuario');
+                alert('Error: Usuario no autenticado.');
                 return;
             }
 
+            console.log('Usuario autenticado:', user.id);
+
+            // Llamar a la función de PostgreSQL para crear el producto
+            console.log('Llamando a la función crear_producto en Supabase...');
             const response = await supabaseClient.rpc('crear_producto', {
                 p_nombre: nombre,
                 p_tipo_lente_id: tipo_lente_id,
@@ -50,29 +75,49 @@ export async function initABM() {
                 p_tratamientos: tratamientos
             });
 
-            console.log('Respuesta completa de Supabase:', response); // Depuración
+            console.log('Respuesta completa de Supabase:', JSON.stringify(response, null, 2)); // Depuración detallada
 
-            if (response.error) {
-                console.error('Error creando producto:', response.error);
-                alert('Error al crear el producto: ' + response.error.message);
+            // Verificar si la respuesta contiene un error
+            if (response.data && response.data.error) {
+                console.error('Error creando producto:', response.data.error);
+                alert('Error al crear el producto: ' + response.data.error);
+            } else if (response.error) {
+                // Manejar errores de Supabase (por ejemplo, problemas de conexión)
+                console.error('Error de Supabase:', response.error);
+                alert('Error de Supabase: ' + response.error.message);
             } else {
+                // Si no hay errores, mostrar mensaje de éxito
+                console.log('Producto creado correctamente.');
                 alert('Producto creado correctamente.');
                 await cargarProductos(); // Recargar la tabla de productos
             }
         });
+    } else {
+        console.error('Formulario no encontrado.');
     }
 }
 
-// Cargar datos para los selectores del formulario
+// Cargar datos para los selectores del formulario (tipos de lentes, materiales, etc.)
 async function cargarDatosFormulario() {
+    console.log('Cargando datos del formulario...');
+
     try {
+        // Obtener datos de Supabase
         const tiposLentes = await supabaseClient.rpc('cargar_tipos_lentes');
         const materiales = await supabaseClient.rpc('cargar_materiales');
         const indicesRefraccion = await supabaseClient.rpc('cargar_indices_refraccion');
         const laboratorios = await supabaseClient.rpc('cargar_laboratorios');
         const tratamientos = await supabaseClient.rpc('cargar_tratamientos');
 
-        // Llenar los selectores
+        console.log('Datos cargados:', {
+            tiposLentes,
+            materiales,
+            indicesRefraccion,
+            laboratorios,
+            tratamientos
+        });
+
+        // Llenar los selectores del formulario
         llenarSelector('tipo_lente', tiposLentes.data);
         llenarSelector('material', materiales.data);
         llenarSelector('indice_refraccion', indicesRefraccion.data);
@@ -80,18 +125,22 @@ async function cargarDatosFormulario() {
 
         // Llenar los tratamientos como filas de la tabla
         const tratamientosContainer = document.getElementById('tratamientos');
-        tratamientos.data.forEach(tratamiento => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${tratamiento.nombre}</td>
-                <td>
-                    <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
-                </td>
-            `;
-            tratamientosContainer.appendChild(row);
-        });
+        if (tratamientosContainer) {
+            tratamientos.data.forEach(tratamiento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tratamiento.nombre}</td>
+                    <td>
+                        <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
+                    </td>
+                `;
+                tratamientosContainer.appendChild(row);
+            });
+        } else {
+            console.error('Contenedor de tratamientos no encontrado.');
+        }
 
-        // Agregar evento para mostrar la vista previa
+        // Agregar evento para mostrar la vista previa cuando cambien los valores del formulario
         document.getElementById('productForm').addEventListener('input', mostrarVistaPrevia);
     } catch (error) {
         console.error('Error cargando datos del formulario:', error);
@@ -100,17 +149,24 @@ async function cargarDatosFormulario() {
 
 // Llenar un selector con datos
 function llenarSelector(id, datos) {
+    console.log(`Llenando selector ${id} con datos...`);
     const selector = document.getElementById(id);
-    datos.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.id;
-        option.textContent = item.nombre || item.valor;  // Usar 'valor' para índices de refracción
-        selector.appendChild(option);
-    });
+    if (selector) {
+        datos.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.nombre || item.valor;  // Usar 'valor' para índices de refracción
+            selector.appendChild(option);
+        });
+    } else {
+        console.error(`Selector ${id} no encontrado.`);
+    }
 }
 
 // Mostrar vista previa del producto
 function mostrarVistaPrevia() {
+    console.log('Mostrando vista previa del producto...');
+
     const nombre = document.getElementById('nombre').value;
     const tipo_lente = document.getElementById('tipo_lente').options[document.getElementById('tipo_lente').selectedIndex].text;
     const material = document.getElementById('material').options[document.getElementById('material').selectedIndex].text;
@@ -129,54 +185,66 @@ function mostrarVistaPrevia() {
     }).join(', ');
 
     const vistaPrevia = document.getElementById('vistaPrevia');
-    vistaPrevia.innerHTML = `
-        <h3>Vista Previa del Producto</h3>
-        <p><strong>Nombre:</strong> ${nombre}</p>
-        <p><strong>Tipo de Lente:</strong> ${tipo_lente}</p>
-        <p><strong>Material:</strong> ${material}</p>
-        <p><strong>Índice de Refracción:</strong> ${indice_refraccion}</p>
-        <p><strong>Laboratorio:</strong> ${laboratorio}</p>
-        <p><strong>ESF Mínimo:</strong> ${formatearNumero(min_esf)}</p>
-        <p><strong>ESF Máximo:</strong> ${formatearNumero(max_esf)}</p>
-        <p><strong>CIL:</strong> ${formatearNumero(cil)}</p>
-        <p><strong>Precio:</strong> ${precio}</p>
-        <p><strong>Tratamientos:</strong> ${tratamientos}</p>
-    `;
+    if (vistaPrevia) {
+        vistaPrevia.innerHTML = `
+            <h3>Vista Previa del Producto</h3>
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>Tipo de Lente:</strong> ${tipo_lente}</p>
+            <p><strong>Material:</strong> ${material}</p>
+            <p><strong>Índice de Refracción:</strong> ${indice_refraccion}</p>
+            <p><strong>Laboratorio:</strong> ${laboratorio}</p>
+            <p><strong>ESF Mínimo:</strong> ${formatearNumero(min_esf)}</p>
+            <p><strong>ESF Máximo:</strong> ${formatearNumero(max_esf)}</p>
+            <p><strong>CIL:</strong> ${formatearNumero(cil)}</p>
+            <p><strong>Precio:</strong> ${precio}</p>
+            <p><strong>Tratamientos:</strong> ${tratamientos}</p>
+        `;
+    } else {
+        console.error('Contenedor de vista previa no encontrado.');
+    }
 }
 
 // Cargar productos en la tabla
 async function cargarProductos() {
+    console.log('Cargando productos en la tabla...');
+
     try {
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos');
 
         if (error) throw error;
 
+        console.log('Productos cargados:', productos);
+
         const tbody = document.querySelector('#productTable tbody');
-        tbody.innerHTML = '';
+        if (tbody) {
+            tbody.innerHTML = '';
 
-        productos.forEach(producto => {
-            const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
-            const precio = formatearPrecio(producto.precio); // Formatear el precio
+            productos.forEach(producto => {
+                const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
+                const precio = formatearPrecio(producto.precio); // Formatear el precio
 
-            const min_esf = formatearNumero(producto.min_esf);
-            const max_esf = formatearNumero(producto.max_esf);
-            const cil = formatearNumero(producto.cil);
+                const min_esf = formatearNumero(producto.min_esf);
+                const max_esf = formatearNumero(producto.max_esf);
+                const cil = formatearNumero(producto.cil);
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${producto.nombre}</td>
-                <td>${producto.tipo_lente}</td>
-                <td>${producto.material}</td>
-                <td>${producto.indice_refraccion}</td>
-                <td>${producto.laboratorio}</td>
-                <td>${min_esf}</td>
-                <td>${max_esf}</td>
-                <td>${cil}</td>
-                <td>${precio}</td>
-                <td>${tratamientos}</td>
-            `;
-            tbody.appendChild(row);
-        });
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${producto.nombre}</td>
+                    <td>${producto.tipo_lente}</td>
+                    <td>${producto.material}</td>
+                    <td>${producto.indice_refraccion}</td>
+                    <td>${producto.laboratorio}</td>
+                    <td>${min_esf}</td>
+                    <td>${max_esf}</td>
+                    <td>${cil}</td>
+                    <td>${precio}</td>
+                    <td>${tratamientos}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        } else {
+            console.error('Cuerpo de la tabla de productos no encontrado.');
+        }
     } catch (error) {
         console.error('Error cargando productos:', error);
     }
