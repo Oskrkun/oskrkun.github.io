@@ -1,3 +1,5 @@
+// dashboard.js
+
 import { supabaseClient } from './supabaseConfig.js';
 
 // Verificar si el usuario está autenticado
@@ -44,28 +46,28 @@ async function cargarContenido(seccion) {
     // Cargar el contenido correspondiente
     switch (seccion) {
         case 'abm':
-            await import('./abm.js');
             contenidoPrincipal.innerHTML = await fetch('abm.html').then(res => res.text());
+            await import('./abm.js'); // Cargar el JS de ABM
             break;
         case 'agenda':
-            await import('./agenda.js');
             contenidoPrincipal.innerHTML = await fetch('agenda.html').then(res => res.text());
+            await import('./agenda.js');
             break;
         case 'presupuesto':
-            await import('./presupuesto.js');
             contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
+            await import('./presupuesto.js');
             break;
         case 'clientes':
-            await import('./clientes.js');
             contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());
+            await import('./clientes.js');
             break;
         case 'armazones':
-            await import('./armazones.js');
             contenidoPrincipal.innerHTML = await fetch('armazones.html').then(res => res.text());
+            await import('./armazones.js');
             break;
         case 'config':
-            await import('./config.js');
             contenidoPrincipal.innerHTML = await fetch('config.html').then(res => res.text());
+            await import('./config.js');
             break;
         default:
             contenidoPrincipal.innerHTML = '<p>Selecciona una opción del menú.</p>';
