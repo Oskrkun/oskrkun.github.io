@@ -42,7 +42,7 @@ if (typeof supabase === 'undefined') {
                     localStorage.setItem('supabaseAuthToken', data.session.access_token);
 
                     // Redirige a la página abm.html
-                    window.location.href = 'abm.html';
+                    window.location.href = 'dashboard.html';
                 }
             } catch (err) {
                 console.error('Error inesperado:', err); // Depuración
