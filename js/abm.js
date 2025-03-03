@@ -25,7 +25,7 @@ export async function initABM() {
             console.log('Formulario enviado, obteniendo datos...');
 
             // Obtener los valores del formulario
-            const nombre = document.getElementById('nombre').value;
+            const nombre = document.getElementById('nombre').value.trim(); // Trim para eliminar espacios en blanco
             const tipo_lente_id = document.getElementById('tipo_lente').value;
             const material_id = document.getElementById('material').value;
             const indice_refraccion_id = document.getElementById('indice_refraccion').value;
@@ -62,7 +62,7 @@ export async function initABM() {
             // Llamar a la función de PostgreSQL para crear el producto
             console.log('Llamando a la función crear_producto en Supabase...');
             const response = await supabaseClient.rpc('crear_producto', {
-                p_nombre: nombre,
+                p_nombre: nombre || null, // Si el nombre está vacío, se envía null
                 p_tipo_lente_id: tipo_lente_id,
                 p_material_id: material_id,
                 p_indice_refraccion_id: indice_refraccion_id,
