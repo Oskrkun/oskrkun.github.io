@@ -91,7 +91,7 @@ async function cargarContenido(seccion) {
                 document.head.appendChild(link);
 
                 // Cargar el HTML de ABM
-                contenidoPrincipal.innerHTML = await fetch('../abm.html').then(res => res.text());
+                contenidoPrincipal.innerHTML = await fetch('./abm.html').then(res => res.text());
 
                 // Esperar a que el DOM se actualice antes de inicializar el ABM
                 await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
