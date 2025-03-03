@@ -141,7 +141,12 @@ async function cargarDatosFormulario() {
         }
 
         // Agregar evento para mostrar la vista previa cuando cambien los valores del formulario
-        document.getElementById('productForm').addEventListener('input', mostrarVistaPrevia);
+        const productForm = document.getElementById('productForm');
+        if (productForm) {
+            productForm.addEventListener('input', mostrarVistaPrevia);
+        } else {
+            console.error('Formulario no encontrado.');
+        }
     } catch (error) {
         console.error('Error cargando datos del formulario:', error);
     }
@@ -167,15 +172,15 @@ function llenarSelector(id, datos) {
 function mostrarVistaPrevia() {
     console.log('Mostrando vista previa del producto...');
 
-    const nombre = document.getElementById('nombre').value;
-    const tipo_lente = document.getElementById('tipo_lente').options[document.getElementById('tipo_lente').selectedIndex].text;
-    const material = document.getElementById('material').options[document.getElementById('material').selectedIndex].text;
-    const indice_refraccion = document.getElementById('indice_refraccion').options[document.getElementById('indice_refraccion').selectedIndex].text;
-    const laboratorio = document.getElementById('laboratorio').options[document.getElementById('laboratorio').selectedIndex].text;
-    const min_esf = document.getElementById('min_esf').value;
-    const max_esf = document.getElementById('max_esf').value;
-    const cil = document.getElementById('cil').value;
-    const precio = formatearPrecio(document.getElementById('precio').value); // Formatear el precio
+    const nombre = document.getElementById('nombre')?.value;
+    const tipo_lente = document.getElementById('tipo_lente')?.options[document.getElementById('tipo_lente')?.selectedIndex]?.text;
+    const material = document.getElementById('material')?.options[document.getElementById('material')?.selectedIndex]?.text;
+    const indice_refraccion = document.getElementById('indice_refraccion')?.options[document.getElementById('indice_refraccion')?.selectedIndex]?.text;
+    const laboratorio = document.getElementById('laboratorio')?.options[document.getElementById('laboratorio')?.selectedIndex]?.text;
+    const min_esf = document.getElementById('min_esf')?.value;
+    const max_esf = document.getElementById('max_esf')?.value;
+    const cil = document.getElementById('cil')?.value;
+    const precio = formatearPrecio(document.getElementById('precio')?.value); // Formatear el precio
 
     // Obtener los tratamientos seleccionados
     const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => {
