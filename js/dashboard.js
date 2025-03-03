@@ -15,16 +15,15 @@ async function verificarAutenticacion() {
         window.location.href = 'index.html'; // Redirigir al login si no hay sesión
     } else {
         console.log('Usuario autenticado:', user);
-        verificarSiEsAdmin(user);
-        actualizarTextoUsuario(user); // Actualizar el texto del usuario en el logo
+        await verificarSiEsAdmin(user); // Llamar a verificarSiEsAdmin
     }
 }
 
-// Verificar si el usuario es administrador
+// Verificar si el usuario es administrador y obtener su nick
 async function verificarSiEsAdmin(user) {
     const { data: admin, error: adminError } = await supabaseClient
         .from('administradores')
-        .select('user_id')
+        .select('user_id, nick') // Seleccionar user_id y nick
         .eq('user_id', user.id)
         .single();
 
@@ -33,6 +32,8 @@ async function verificarSiEsAdmin(user) {
         ocultarBotonesAdmin(); // Ocultar botones de administrador
     } else {
         console.log('Usuario es administrador:', admin);
+        // Pasar el nick a la función actualizarTextoUsuario
+        actualizarTextoUsuario(user, admin.nick);
     }
 }
 
@@ -44,7 +45,7 @@ function ocultarBotonesAdmin() {
 }
 
 // Actualizar el texto del usuario en el logo
-function actualizarTextoUsuario(user) {
+function actualizarTextoUsuario(user, nick = null) {
     const logoElement = document.querySelector('.logo');
     const userIcon = document.getElementById('userIcon');
     const userRole = document.getElementById('userRole');
@@ -57,12 +58,13 @@ function actualizarTextoUsuario(user) {
         if (esAdmin) {
             userIcon.className = 'fas fa-user-shield'; // Ícono para administrador
             userRole.textContent = 'Admin:';
+            // Mostrar el nick si está disponible
+            userEmail.textContent = nick || user.email; // Usar el nick si existe, de lo contrario, usar el correo
         } else {
             userIcon.className = 'fas fa-user'; // Ícono para usuario común
             userRole.textContent = 'Bienvenido:';
+            userEmail.textContent = user.email; // Mostrar el correo del usuario
         }
-
-        userEmail.textContent = user.email; // Mostrar el correo del usuario
     }
 }
 
