@@ -87,7 +87,7 @@ async function cargarContenido(seccion) {
                 // Cargar el CSS de ABM
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
-                link.href = 'css/abm.css'; // Ruta corregida para el CSS de ABM
+                link.href = '../css/abm.css'; // Ruta corregida para el CSS de ABM
                 document.head.appendChild(link);
 
                 // Cargar el HTML de ABM
