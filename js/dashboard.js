@@ -87,11 +87,14 @@ async function cargarContenido(seccion) {
                 // Cargar el CSS de ABM
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
-                link.href = 'css/abm.css';
+                link.href = 'css/abm.css'; // Ruta corregida para el CSS de ABM
                 document.head.appendChild(link);
 
                 // Cargar el HTML de ABM
                 contenidoPrincipal.innerHTML = await fetch('abm.html').then(res => res.text());
+
+                // Esperar a que el DOM se actualice antes de inicializar el ABM
+                await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
 
                 // Inicializar el ABM después de cargar el contenido
                 await initABM(); // Llamar a la función de inicialización del ABM
