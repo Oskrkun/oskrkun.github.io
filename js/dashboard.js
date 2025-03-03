@@ -1,29 +1,47 @@
 // dashboard.js
 
-import { supabaseClient } from './supabaseConfig.js';
+import { supabaseClient } from './supabaseConfig.js'; // Importar el cliente de Supabase
 import { initABM } from './abm.js'; // Importar la función de inicialización del ABM
 
 // Variable de estado para controlar si una carga está en progreso
 let cargaEnProgreso = false;
 
+// Definir los botones disponibles para cada tipo de usuario
+const botonesPorTipoUsuario = {
+    admin: [
+        { id: 'abmButton', icon: 'fas fa-box', text: 'ABM', seccion: 'abm' }, // Botón ABM para administradores
+        { id: 'agendaButton', icon: 'fas fa-calendar', text: 'AGENDA', seccion: 'agenda' }, // Botón Agenda para administradores
+        { id: 'configButton', icon: 'fas fa-cog', text: 'CONFIG', seccion: 'config' }, // Botón Configuración para administradores
+    ],
+    usuario: [
+        { id: 'presupuestoButton', icon: 'fas fa-dollar-sign', text: 'PRESUPUESTO', seccion: 'presupuesto' }, // Botón Presupuesto para usuarios comunes
+        { id: 'clientesButton', icon: 'fas fa-users', text: 'CLIENTES', seccion: 'clientes' }, // Botón Clientes para usuarios comunes
+        { id: 'armazonesButton', icon: 'fas fa-glasses', text: 'ARMAZONES', seccion: 'armazones' }, // Botón Armazones para usuarios comunes
+    ],
+};
+
 // Verificar si el usuario está autenticado
 async function verificarAutenticacion() {
+    console.log('Verificando autenticación del usuario...'); // Depuración: Inicio de la verificación
+
     // Obtener el usuario autenticado desde Supabase
     const { data: { user }, error } = await supabaseClient.auth.getUser();
 
     if (error || !user) {
         // Si hay un error o no hay usuario, redirigir al login
-        console.error('Usuario no autenticado:', error ? error.message : 'No hay usuario');
+        console.error('Usuario no autenticado:', error ? error.message : 'No hay usuario'); // Depuración: Error de autenticación
         window.location.href = 'index.html'; // Redirigir al login si no hay sesión
     } else {
         // Si el usuario está autenticado, mostrar información en la consola y verificar si es administrador
-        console.log('Usuario autenticado:', user);
+        console.log('Usuario autenticado:', user); // Depuración: Usuario autenticado
         await verificarSiEsAdmin(user); // Llamar a verificarSiEsAdmin
     }
 }
 
 // Verificar si el usuario es administrador y obtener su nick
 async function verificarSiEsAdmin(user) {
+    console.log('Verificando si el usuario es administrador...'); // Depuración: Inicio de la verificación de administrador
+
     // Consultar la tabla 'administradores' para obtener el user_id y el nick del usuario
     const { data: admin, error: adminError } = await supabaseClient
         .from('administradores')
@@ -32,65 +50,81 @@ async function verificarSiEsAdmin(user) {
         .single(); // Obtener un solo registro
 
     if (adminError || !admin) {
-        // Si hay un error o el usuario no es administrador, ocultar los botones de administrador
-        console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador');
-        ocultarBotonesAdmin(); // Ocultar botones de administrador
+        // Si hay un error o el usuario no es administrador, crear botones para usuario común
+        console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador'); // Depuración: Usuario no es administrador
+        crearBotones('usuario'); // Crear botones para usuario común
     } else {
-        // Si el usuario es administrador, mostrar información en la consola y actualizar la interfaz con el nick
-        console.log('Usuario es administrador:', admin);
-        actualizarTextoUsuario(user, admin.nick); // Pasar el nick a la función actualizarTextoUsuario
+        // Si el usuario es administrador, crear botones para administrador y actualizar la interfaz con el nick
+        console.log('Usuario es administrador:', admin); // Depuración: Usuario es administrador
+        crearBotones('admin'); // Crear botones para administrador
+        actualizarTextoUsuario(user, admin.nick); // Actualizar el texto del usuario con el nick
     }
 }
 
-// Ocultar botones de administrador si el usuario no es admin
-function ocultarBotonesAdmin() {
-    // Ocultar los botones de ABM, Agenda y Configuración si el usuario no es administrador
-    document.getElementById('abmButton').style.display = 'none';
-    document.getElementById('agendaButton').style.display = 'none';
-    document.getElementById('configButton').style.display = 'none';
+// Función modular para crear botones dinámicamente
+function crearBotones(tipoUsuario) {
+    console.log(`Creando botones para el tipo de usuario: ${tipoUsuario}`); // Depuración: Inicio de la creación de botones
+
+    const sidebarMenu = document.getElementById('sidebarMenu');
+    sidebarMenu.innerHTML = ''; // Limpiar el menú antes de agregar nuevos botones
+
+    // Obtener los botones correspondientes al tipo de usuario
+    const botones = botonesPorTipoUsuario[tipoUsuario];
+
+    if (botones) {
+        botones.forEach(boton => {
+            const li = document.createElement('li'); // Crear un elemento <li> para el botón
+            li.id = boton.id; // Asignar el ID del botón
+            li.innerHTML = `<a href="#"><i class="${boton.icon}"></i><span>${boton.text}</span></a>`; // Asignar el ícono y el texto
+            li.addEventListener('click', () => {
+                cargarContenido(boton.seccion); // Cargar el contenido correspondiente al hacer clic
+                cerrarMenu(); // Cerrar el menú de hamburguesa
+            });
+            sidebarMenu.appendChild(li); // Agregar el botón al menú
+        });
+    } else {
+        console.error('No se encontraron botones para el tipo de usuario:', tipoUsuario); // Depuración: Error si no hay botones
+    }
 }
 
 // Actualizar el texto del usuario en el logo
 function actualizarTextoUsuario(user, nick = null) {
-    // Obtener los elementos del DOM que se van a actualizar
+    console.log('Actualizando texto del usuario...'); // Depuración: Inicio de la actualización del texto
+
     const userIcon = document.getElementById('userIcon'); // Ícono del usuario
     const userRole = document.getElementById('userRole'); // Rol del usuario (Admin o Bienvenido)
     const userEmail = document.getElementById('userEmail'); // Correo electrónico o nick del usuario
 
-    // Depuración: Verificar si los elementos del DOM se encontraron correctamente
-    console.log('Elemento userIcon:', userIcon);
-    console.log('Elemento userRole:', userRole);
-    console.log('Elemento userEmail:', userEmail);
-    console.log('Nick recibido:', nick); // Verificar si el nick se está pasando correctamente
-
     if (userIcon && userRole && userEmail) {
-        // Verificar si el usuario es administrador (si el botón ABM está visible)
-        const esAdmin = document.getElementById('abmButton').style.display !== 'none';
+        // Verificar si el usuario es administrador (si hay botones de administrador)
+        const esAdmin = botonesPorTipoUsuario.admin.some(boton => document.getElementById(boton.id));
 
         if (esAdmin) {
             // Si el usuario es administrador, mostrar el ícono de administrador y el nick
             userIcon.className = 'fas fa-user-shield'; // Ícono para administrador
             userRole.textContent = 'Admin:';
             userEmail.textContent = nick || user.email; // Usar el nick si existe, de lo contrario, usar el correo
-            console.log('Texto actualizado (Admin):', userEmail.textContent); // Depuración: Verificar el texto actualizado
+            console.log('Texto actualizado (Admin):', userEmail.textContent); // Depuración: Texto actualizado
         } else {
             // Si el usuario no es administrador, mostrar el ícono de usuario común y el correo electrónico
             userIcon.className = 'fas fa-user'; // Ícono para usuario común
             userRole.textContent = 'Bienvenido:';
             userEmail.textContent = user.email; // Mostrar el correo del usuario
-            console.log('Texto actualizado (Usuario común):', userEmail.textContent); // Depuración: Verificar el texto actualizado
+            console.log('Texto actualizado (Usuario común):', userEmail.textContent); // Depuración: Texto actualizado
         }
     } else {
         // Si no se encontraron los elementos del DOM, mostrar un mensaje de error en la consola
-        console.error('No se encontraron los elementos del DOM para actualizar el texto del usuario.');
+        console.error('No se encontraron los elementos del DOM para actualizar el texto del usuario.'); // Depuración: Error en el DOM
     }
 }
 
 // Cargar contenido dinámico
 async function cargarContenido(seccion) {
+    console.log(`Cargando contenido para la sección: ${seccion}`); // Depuración: Inicio de la carga de contenido
+
     // Si ya hay una carga en progreso, ignorar el clic
     if (cargaEnProgreso) {
-        console.log('Carga en progreso, ignorando clic adicional.');
+        console.log('Carga en progreso, ignorando clic adicional.'); // Depuración: Carga en progreso
         return;
     }
 
@@ -149,60 +183,32 @@ async function cargarContenido(seccion) {
                 contenidoPrincipal.innerHTML = '<p>Selecciona una opción del menú.</p>';
         }
     } catch (error) {
-        console.error('Error cargando contenido:', error);
+        console.error('Error cargando contenido:', error); // Depuración: Error al cargar contenido
     } finally {
         // Marcar que la carga ha terminado
         cargaEnProgreso = false;
+        console.log('Carga finalizada.'); // Depuración: Carga finalizada
     }
 }
 
 // Manejar el menú de hamburguesa
 function toggleMenu() {
+    console.log('Alternando menú de hamburguesa...'); // Depuración: Alternar menú
     const sidebarMenu = document.querySelector('.sidebar-menu');
     sidebarMenu.classList.toggle('active');
 }
 
 // Cerrar el menú de hamburguesa al hacer clic en un enlace
 function cerrarMenu() {
+    console.log('Cerrando menú de hamburguesa...'); // Depuración: Cerrar menú
     const sidebarMenu = document.querySelector('.sidebar-menu');
     sidebarMenu.classList.remove('active');
 }
 
 // Escuchar clics en los botones del menú
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificar la autenticación del usuario cuando el DOM esté listo
-    verificarAutenticacion();
-
-    // Asignar eventos a los botones del menú
-    document.getElementById('abmButton').addEventListener('click', () => {
-        cargarContenido('abm');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
-
-    document.getElementById('agendaButton').addEventListener('click', () => {
-        cargarContenido('agenda');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
-
-    document.getElementById('presupuestoButton').addEventListener('click', () => {
-        cargarContenido('presupuesto');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
-
-    document.getElementById('clientesButton').addEventListener('click', () => {
-        cargarContenido('clientes');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
-
-    document.getElementById('armazonesButton').addEventListener('click', () => {
-        cargarContenido('armazones');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
-
-    document.getElementById('configButton').addEventListener('click', () => {
-        cargarContenido('config');
-        cerrarMenu(); // Cerrar el menú al hacer clic
-    });
+    console.log('DOM cargado, iniciando dashboard...'); // Depuración: DOM cargado
+    verificarAutenticacion(); // Verificar la autenticación del usuario
 
     // Manejar el botón de hamburguesa
     document.getElementById('menuToggle').addEventListener('click', toggleMenu);
