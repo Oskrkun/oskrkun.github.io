@@ -318,6 +318,3 @@ function formatearPrecio(precio) {
         maximumFractionDigits: 2,
     })}`;
 }
-
-// Inicializar el ABM cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', initABM);
