@@ -69,7 +69,7 @@ body {
 }
 
 .user-email-container {
-    font-size: 0.8em; /* Tamaño más pequeño para el correo */
+    font-size: 1em; /* Tamaño más pequeño para el correo */
     word-break: break-word; /* Romper el texto si es demasiado largo */
     max-width: 200px; /* Ancho máximo para el correo */
     overflow: hidden; /* Evitar que el texto se desborde */
