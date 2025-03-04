@@ -5,6 +5,8 @@
     --color-fondo: #f5f5f5;
     --color-texto: #333;
     --color-fondo-contenedor: #fff;
+    --color-fondo-fila: #f9f9f9;
+    --color-fondo-hover: #e0e0e0;
     --color-borde: #ddd;
 }
 
@@ -20,4 +22,48 @@
 #presupuesto-content p {
     color: var(--color-texto);
     font-size: 1.1em;
+}
+
+/* Tabla de presupuesto */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+#tablaPresupuesto {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+}
+
+#tablaPresupuesto th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+#tablaPresupuesto td {
+    background-color: var(--color-fondo-fila);
+    padding: 12px 15px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: 100px; /* Ancho mínimo para las celdas */
+}
+
+#tablaPresupuesto tr:hover td {
+    background-color: var(--color-fondo-hover);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: scroll;
+    }
+
+    #tablaPresupuesto th,
+    #tablaPresupuesto td {
+        padding: 10px;
+    }
 }
