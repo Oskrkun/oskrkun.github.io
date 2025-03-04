@@ -70,6 +70,7 @@
     color: white;
     padding: 12px 15px;
     text-align: left;
+	white-space: nowrap;
 }
 
 #tratamientosTable td, #productTable td {

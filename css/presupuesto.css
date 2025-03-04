@@ -13,57 +13,114 @@
 /* Estilos generales */
 #presupuesto-content {
     padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
 #presupuesto-content h1 {
     color: var(--color-primario);
+    text-align: center;
 }
 
 #presupuesto-content p {
     color: var(--color-texto);
     font-size: 1.1em;
+    text-align: center;
 }
 
-/* Tabla de presupuesto */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 20px;
+/* Estilos de la tabla */
+.vista-previa {
+    background-color: var(--color-fondo-contenedor);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 60%;
+    margin: 20px auto;
 }
 
-#tablaPresupuesto {
+table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px;
-    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+    border-spacing: 5px 10px;
+    table-layout: auto;
 }
 
-#tablaPresupuesto th {
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 100px;
+}
+
+thead th {
     background-color: var(--color-primario);
     color: white;
-    padding: 12px 15px;
-    text-align: left;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#tablaPresupuesto td {
+tbody td {
     background-color: var(--color-fondo-fila);
-    padding: 12px 15px;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: 100px; /* Ancho mínimo para las celdas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#tablaPresupuesto tr:hover td {
+tbody tr:hover td {
     background-color: var(--color-fondo-hover);
 }
 
-/* Responsive */
+.espacio {
+    padding: 10px;
+}
+
+input[type="text"] {
+    width: 80px;
+    padding: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: var(--color-fondo-fila);
+}
+
+/* Oculta la columna ADD en la sección CERCA */
+table tr:nth-child(3) td:last-child,
+table tr:nth-child(4) td:last-child {
+    display: none;
+}
+
+/* Estilos responsivos */
 @media (max-width: 768px) {
-    .table-container {
-        overflow-x: scroll;
+    .vista-previa {
+        width: 90%; /* Aumenta el ancho en dispositivos móviles */
     }
 
-    #tablaPresupuesto th,
-    #tablaPresupuesto td {
+    table {
+        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+    }
+
+    th, td {
+        padding: 8px 10px; /* Reduce el padding en dispositivos móviles */
+        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
+    }
+
+    input[type="text"] {
+        width: 60px; /* Reduce el ancho de los inputs en móviles */
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vista-previa {
+        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
         padding: 10px;
+    }
+
+    th, td {
+        padding: 6px 8px; /* Reduce aún más el padding */
+        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
+    }
+
+    input[type="text"] {
+        width: 50px; /* Reduce el ancho de los inputs */
+        padding: 4px;
     }
 }

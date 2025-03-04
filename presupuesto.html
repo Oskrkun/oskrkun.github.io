@@ -1,79 +1,63 @@
-<div id="presupuesto-content">
-    <h1>Presupuesto</h1>
-    <p>Aquí puedes gestionar los presupuestos.</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presupuesto</title>
+    <link rel="stylesheet" href="css/presupuesto.css">
+</head>
+<body>
+    <div id="presupuesto-content">
+        <h1>Presupuesto</h1>
+        <p>Aquí puedes gestionar los presupuestos.</p>
 
-    <!-- Tabla de presupuesto -->
-    <div class="table-container">
-        <table id="tablaPresupuesto">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>ESF</th>
-                    <th>CIL</th>
-                    <th>EJE</th>
-                    <th>PRISMA</th>
-                    <th>DIST I</th>
-                    <th>ALTURA_P</th>
-                    <th>ADD</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Contenedor de la tabla -->
+        <div class="vista-previa">
+            <table>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <th class="espacio">ESF</th>
+                        <th class="espacio">CIL</th>
+                        <th class="espacio">EJE</th>
+                        <th class="espacio">ADD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" class="espacio">LEJOS</td>
+                        <td class="espacio">OD</td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <td class="espacio">OI</td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" class="espacio">CERCA</td>
+                        <td class="espacio">OD</td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="espacio">OI</td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td class="espacio"><input type="text"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+</body>
+</html>
