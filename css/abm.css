@@ -1,208 +1,105 @@
-/* abm.css */
+/* Variables de colores */
+:root {
+    --color-primario: #4A90E2;
+    --color-secundario: #357ABD;
+    --color-fondo: #f5f5f5;
+    --color-texto: #333;
+    --color-fondo-contenedor: #fff;
+    --color-fondo-fila: #f9f9f9;
+    --color-fondo-hover: #e0e0e0;
+    --color-borde: #ddd;
+}
 
+/* Estilos generales */
 #abm-content {
-    /* Variables de colores */
-    --color-primario: #4A90E2; /* Azul claro */
-    --color-secundario: #357ABD; /* Azul más oscuro */
-    --color-fondo: #f5f5f5; /* Fondo claro */
-    --color-texto: #333; /* Texto oscuro */
-    --color-fondo-contenedor: #fff; /* Fondo del contenedor */
-    --color-fondo-fila: #f9f9f9; /* Fondo de las filas */
-    --color-fondo-hover: #e0e0e0; /* Fondo al pasar el ratón */
-    --color-borde: #ddd; /* Color de bordes */
+    padding: 20px;
 }
 
 #abm-content h1, #abm-content h2, #abm-content h3 {
     color: var(--color-primario);
 }
 
-/* Sección: Formulario de creación de producto */
-#abm-content #formSection {
-    background-color: var(--color-fondo-contenedor);
-    padding: 20px;
-	margin-bottom: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#abm-content #productForm .form-group {
+/* Formulario */
+#productForm .form-group {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
 }
 
-#abm-content #productForm label {
+#productForm label {
     flex: 0 0 150px;
-    margin-bottom: 0;
     font-weight: bold;
-    color: var(--color-texto);
 }
 
-#abm-content #productForm input, #abm-content #productForm select {
+#productForm input, #productForm select {
     flex: 1;
     padding: 8px;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
     background-color: var(--color-fondo-fila);
-    color: var(--color-texto);
-    font-size: 16px;
-    box-sizing: border-box;
 }
 
-#abm-content #productForm button {
+#productForm button {
     background-color: var(--color-primario);
-    color: var(--color-texto);
+    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
 }
 
-#abm-content #productForm button:hover {
+#productForm button:hover {
     background-color: var(--color-secundario);
 }
 
-/* Subsección: Tratamientos */
-#abm-content #tratamientosTable {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    margin-top: 10px;
-}
-
-#abm-content #tratamientosTable th {
-    background-color: var(--color-primario);
-    color: var(--color-texto);
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-#abm-content #tratamientosTable th:nth-child(2) {
-    text-align: center;
-}
-
-#abm-content #tratamientosTable td {
-    background-color: var(--color-fondo-fila);
-    color: var(--color-texto);
-    padding: 12px 15px;
-    text-align: left;
-    border-radius: 0;
-}
-
-#abm-content #tratamientosTable td:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-#abm-content #tratamientosTable td:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: center;
-}
-
-#abm-content #tratamientosTable tr:hover td {
-    background-color: var(--color-fondo-hover);
-    cursor: pointer;
-}
-
-#abm-content #tratamientosTable input[type="checkbox"] {
-    margin: 0;
-    transform: scale(1.2);
-}
-
-/* Sección: Vista previa del producto */
-#abm-content #previewSection {
-    background-color: var(--color-fondo-contenedor);
-    padding: 20px;
-	margin-bottom: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#abm-content #vistaPrevia h3 {
-    margin-top: 0;
-    color: var(--color-primario);
-}
-
-#abm-content #vistaPrevia p {
-    margin: 5px 0;
-}
-
-/* Sección: Lista de productos */
-#abm-content #productListSection {
-    background-color: var(--color-fondo-contenedor);
-    padding: 20px;
-	margin-bottom: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#abm-content .table-container {
+/* Tablas */
+.table-container {
     width: 100%;
     overflow-x: auto;
-    margin: 0;
-    padding: 0;
 }
 
-#abm-content #productTable {
+#tratamientosTable, #productTable {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
-    white-space: nowrap;
 }
 
-#abm-content #productTable th {
+#tratamientosTable th, #productTable th {
     background-color: var(--color-primario);
-    color: var(--color-texto);
+    color: white;
     padding: 12px 15px;
     text-align: left;
-    font-weight: 600;
 }
 
-#abm-content #productTable td {
+#tratamientosTable td, #productTable td {
     background-color: var(--color-fondo-fila);
-    color: var(--color-texto);
     padding: 12px 15px;
-    text-align: left;
-    border-radius: 0;
 }
 
-#abm-content #productTable tr:hover td {
+#tratamientosTable tr:hover td, #productTable tr:hover td {
     background-color: var(--color-fondo-hover);
-    cursor: pointer;
 }
 
-/* Estilos responsivos */
+/* Vista previa */
+#vistaPrevia {
+    background-color: var(--color-fondo-contenedor);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    #abm-content #productForm .form-group {
+    #productForm .form-group {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    #abm-content #productForm label {
-        flex: 1;
+    #productForm label {
         margin-bottom: 5px;
     }
 
-    #abm-content #productForm input, #abm-content #productForm select {
+    #productForm input, #productForm select {
         width: 100%;
-        font-size: 14px;
-    }
-
-    #abm-content #productForm button {
-        width: 100%;
-    }
-
-    #abm-content #productTable th, #abm-content #productTable td {
-        padding: 10px;
     }
 }
