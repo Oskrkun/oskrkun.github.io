@@ -1,6 +1,4 @@
-/* ================================================== */
 /* Variables de colores */
-/* ================================================== */
 :root {
     --color-primario: #4A90E2;
     --color-secundario: #357ABD;
@@ -12,9 +10,7 @@
     --color-borde: #ddd;
 }
 
-/* ================================================== */
 /* Estilos generales */
-/* ================================================== */
 #presupuesto-content {
     font-family: Arial, sans-serif;
 }
@@ -30,59 +26,50 @@
     text-align: center;
 }
 
-/* ================================================== */
 /* Contenedor de la tabla */
-/* ================================================== */
 .vista-previa {
     background-color: var(--color-fondo-contenedor);
-    border-radius: 8px; /* Bordes redondeados */
+    border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    overflow-x: auto;
+    width: 100%; /* Ocupa el 100% del contenedor padre */
+    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
+    margin: 20px auto; /* Centrar el contenedor */
+    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
 }
 
-/* ================================================== */
 /* Estilos de la tabla */
-/* ================================================== */
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px 10px;
-    table-layout: auto;
-    padding: 10px;
+    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+	padding: 10px;
 }
 
-/* Encabezado de la tabla */
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: 100px; /* Ancho mínimo para las celdas */
+}
+
 thead th {
     background-color: var(--color-primario);
     color: white;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 6px; /* Bordes redondeados */
 }
 
-/* Celda invisible en el encabezado */
+/* Celda invisible */
 thead th.invisible {
     background-color: transparent;
     box-shadow: none;
     color: transparent;
 }
 
-/* Celdas del cuerpo de la tabla */
 tbody td {
     background-color: var(--color-fondo-fila);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 6px; /* Bordes redondeados */
-}
-
-/* Primera columna (OD L., OI L., etc.) */
-tbody td:first-child {
-    min-width: auto; /* Ancho automático según el contenido */
-    width: 80px; /* Ancho fijo más pequeño */
-    padding: 12px 10px; /* Ajuste de padding */
-    text-align: left; /* Alineación del texto a la izquierda */
 }
 
 /* Hover solo en celdas con inputs */
@@ -90,16 +77,19 @@ tbody td:hover {
     background-color: var(--color-fondo-hover);
 }
 
-/* Inputs */
+.espacio {
+    padding: 10px;
+}
+
 input[type="text"] {
     width: 80px;
     padding: 8px;
     box-sizing: border-box;
     text-align: center;
     border: 1px solid var(--color-borde);
-    border-radius: 4px; /* Bordes redondeados */
-    background-color: white;
-    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    background-color: white; /* Fondo blanco para los inputs */
+    transition: background-color 0.3s ease; /* Transición suave para el hover */
 }
 
 /* Oculta la columna ADD en la sección CERCA */
@@ -108,9 +98,7 @@ table tr:nth-child(4) td:last-child {
     display: none;
 }
 
-/* ================================================== */
 /* Estilos responsivos */
-/* ================================================== */
 @media (max-width: 768px) {
     .vista-previa {
         width: 95%;
@@ -118,44 +106,33 @@ table tr:nth-child(4) td:last-child {
     }
 
     table {
-        border-spacing: 2px 5px;
+        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+		
     }
 
     th, td {
-        padding: 8px 10px;
-        min-width: 60px;
-    }
-
-    /* Primera columna en móviles */
-    tbody td:first-child {
-        width: 60px; /* Ancho más pequeño en móviles */
-        padding: 8px 6px; /* Ajuste de padding */
+        padding: 8px 10px; /* Reduce el padding en dispositivos móviles */
+        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
     }
 
     input[type="text"] {
-        width: 60px;
+        width: 60px; /* Reduce el ancho de los inputs en móviles */
         padding: 6px;
     }
 }
 
 @media (max-width: 480px) {
     .vista-previa {
-        width: 100%;
+        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
     }
 
     th, td {
-        padding: 6px 8px;
-        min-width: 50px;
-    }
-
-    /* Primera columna en pantallas muy pequeñas */
-    tbody td:first-child {
-        width: 50px; /* Ancho más pequeño en pantallas pequeñas */
-        padding: 6px 4px; /* Ajuste de padding */
+        padding: 6px 8px; /* Reduce aún más el padding */
+        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
     }
 
     input[type="text"] {
-        width: 50px;
+        width: 50px; /* Reduce el ancho de los inputs */
         padding: 4px;
     }
 }
