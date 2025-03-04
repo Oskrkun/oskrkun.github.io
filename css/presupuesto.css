@@ -27,28 +27,31 @@
     text-align: center;
 }
 
-/* Estilos de la tabla */
+/* Contenedor de la tabla */
 .vista-previa {
     background-color: var(--color-fondo-contenedor);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 60%;
-    margin: 20px auto;
+    width: 100%; /* Ocupa el 100% del contenedor padre */
+    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
+    margin: 20px auto; /* Centrar el contenedor */
+    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
 }
 
+/* Estilos de la tabla */
 table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px 10px;
-    table-layout: auto;
+    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
 }
 
 th, td {
     padding: 12px 15px;
     text-align: center;
-    white-space: nowrap;
-    min-width: 100px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: 100px; /* Ancho mínimo para las celdas */
 }
 
 thead th {
@@ -91,6 +94,7 @@ table tr:nth-child(4) td:last-child {
 @media (max-width: 768px) {
     .vista-previa {
         width: 90%; /* Aumenta el ancho en dispositivos móviles */
+        padding: 15px; /* Reduce el padding */
     }
 
     table {
@@ -111,7 +115,7 @@ table tr:nth-child(4) td:last-child {
 @media (max-width: 480px) {
     .vista-previa {
         width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
-        padding: 10px;
+        padding: 10px; /* Reduce aún más el padding */
     }
 
     th, td {
