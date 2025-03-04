@@ -28,7 +28,7 @@ export async function cargarContenido(seccion) {
                 // Cargar el CSS de ABM
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
-                link.href = 'css/abm.css'; // Ruta corregida para el CSS de ABM
+                link.href = 'css/abm.css';
                 document.head.appendChild(link);
 
                 // Cargar el HTML de ABM
@@ -47,9 +47,21 @@ export async function cargarContenido(seccion) {
                 break;
 
             case 'presupuesto':
-                contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
-                await import('./presupuesto.js');
-                break;
+				// Cargar el CSS de Presupuesto
+				const linkPresupuesto = document.createElement('link');
+				linkPresupuesto.rel = 'stylesheet';
+				linkPresupuesto.href = 'css/presupuesto.css'; // Ruta al archivo CSS de Presupuesto
+				document.head.appendChild(linkPresupuesto);
+
+				// Cargar el HTML de Presupuesto
+				contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
+
+				// Esperar a que el DOM se actualice antes de inicializar el Presupuesto
+				await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
+
+				// Inicializar el Presupuesto después de cargar el contenido
+				await import('./presupuesto.js'); // Llamar a la función de inicialización del Presupuesto
+				break;
 
             case 'clientes':
                 contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());
