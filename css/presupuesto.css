@@ -1,0 +1,23 @@
+/* Variables de colores */
+:root {
+    --color-primario: #4A90E2;
+    --color-secundario: #357ABD;
+    --color-fondo: #f5f5f5;
+    --color-texto: #333;
+    --color-fondo-contenedor: #fff;
+    --color-borde: #ddd;
+}
+
+/* Estilos generales */
+#presupuesto-content {
+    padding: 20px;
+}
+
+#presupuesto-content h1 {
+    color: var(--color-primario);
+}
+
+#presupuesto-content p {
+    color: var(--color-texto);
+    font-size: 1.1em;
+}
