@@ -43,6 +43,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+	padding: 10px;
 }
 
 th, td {
@@ -100,11 +101,13 @@ table tr:nth-child(4) td:last-child {
 /* Estilos responsivos */
 @media (max-width: 768px) {
     .vista-previa {
-        width: 90%; /* Aumenta el ancho en dispositivos móviles */
+        width: 95%;
+        padding: 10px;
     }
 
     table {
         border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+		
     }
 
     th, td {
