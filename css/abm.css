@@ -62,6 +62,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
+    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
 }
 
 #tratamientosTable th, #productTable th {
@@ -74,6 +75,8 @@
 #tratamientosTable td, #productTable td {
     background-color: var(--color-fondo-fila);
     padding: 12px 15px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: 100px; /* Ancho mínimo para las celdas */
 }
 
 #tratamientosTable tr:hover td, #productTable tr:hover td {

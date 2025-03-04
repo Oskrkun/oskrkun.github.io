@@ -1,5 +1,3 @@
-// abm.js
-
 import { supabaseClient } from './supabaseConfig.js';
 
 // Función para inicializar el ABM (Altas, Bajas y Modificaciones)
@@ -236,7 +234,6 @@ async function cargarProductos() {
 
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${producto.id}</td> <!-- Mostrar el ID del producto -->
                         <td>${producto.nombre}</td>
                         <td>${producto.tipo_lente}</td>
                         <td>${producto.material}</td>
@@ -290,7 +287,7 @@ async function cargarProductos() {
                 // Si no hay productos, mostrar un mensaje en la tabla
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="11" style="text-align: center;">No hay productos disponibles.</td>
+                    <td colspan="10" style="text-align: center;">No hay productos disponibles.</td>
                 `;
                 tbody.appendChild(row);
             }
