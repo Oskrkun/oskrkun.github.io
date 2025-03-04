@@ -61,12 +61,20 @@ thead th {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Celda invisible */
+thead th.invisible {
+    background-color: transparent;
+    box-shadow: none;
+    color: transparent;
+}
+
 tbody td {
     background-color: var(--color-fondo-fila);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-tbody tr:hover td {
+/* Hover solo en celdas con inputs */
+tbody td:hover {
     background-color: var(--color-fondo-hover);
 }
 
@@ -81,7 +89,8 @@ input[type="text"] {
     text-align: center;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
-    background-color: var(--color-fondo-fila);
+    background-color: white; /* Fondo blanco para los inputs */
+    transition: background-color 0.3s ease; /* Transición suave para el hover */
 }
 
 /* Oculta la columna ADD en la sección CERCA */
