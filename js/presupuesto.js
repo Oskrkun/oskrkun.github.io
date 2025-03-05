@@ -157,11 +157,7 @@ function validarInput(event) {
 
         // Validar que el valor esté dentro del rango permitido
         const valorNumerico = parseFloat(value);
-        if (valorNumerico < -MAX_ESF_CIL || valorNumerico > MAX_ESF_CIL) {
-            console.error(`Error: El valor en ${id} debe estar entre -${MAX_ESF_CIL} y +${MAX_ESF_CIL}.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
+        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
 
     console.log(`Input ${id} validado correctamente.`);
@@ -258,7 +254,7 @@ function onInputBlur(event) {
 
         // Mostrar advertencia si el valor es mayor a MAX_ESF_CIL
         const valorNumerico = parseFloat(valorAjustado);
-        mostrarAdvertenciaMaxEsfCil(valorNumerico);
+        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
 }
 
@@ -305,10 +301,11 @@ function mostrarAdvertenciaAddDiferente() {
 }
 
 // Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF_CIL
-function mostrarAdvertenciaMaxEsfCil(valorNumerico) {
+function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
     const advertenciaMaxEsfCil = document.getElementById('advertencia-max-esf-cil');
     if (advertenciaMaxEsfCil) {
         if (valorNumerico > MAX_ESF_CIL || valorNumerico < -MAX_ESF_CIL) {
+            advertenciaMaxEsfCil.textContent = `*${id.includes('esf') ? 'ESF' : 'CIL'} demasiado alto. Consultar con el laboratorio.`;
             advertenciaMaxEsfCil.style.display = 'block';
         } else {
             advertenciaMaxEsfCil.style.display = 'none';
