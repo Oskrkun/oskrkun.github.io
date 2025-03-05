@@ -24,6 +24,7 @@ function validarInput(event) {
 
     // Validación específica para EJE
     if (id.includes('eje')) {
+        // Solo permitir números enteros entre 0 y 180
         if (!/^\d*$/.test(value)) {
             console.error(`Error: El valor en ${id} no es válido. Solo se permiten números.`);
             input.value = value.slice(0, -1); // Eliminar el último carácter no válido
@@ -72,7 +73,6 @@ function ajustarValorAPasos(valor) {
 function onInputFocus(event) {
     const input = event.target;
     console.log(`Entrando al input con ID: ${input.id}`);
-    input.value = ''; // Borrar el contenido al entrar
     input.placeholder = ''; // Limpiar el placeholder al entrar
 }
 
@@ -80,7 +80,8 @@ function onInputFocus(event) {
 function onInputBlur(event) {
     const input = event.target;
     const value = input.value.trim();
-    console.log(`Saliendo del input con ID: ${input.id}, Valor: ${value}`);
+    const id = input.id;
+    console.log(`Saliendo del input con ID: ${id}, Valor: ${value}`);
 
     // Validación específica para EJE
     if (id.includes('eje')) {
@@ -96,7 +97,7 @@ function onInputBlur(event) {
         }
     } else {
         // Solo aplicar corrección a ESF y CIL
-        if (esEsfOCil(input.id)) {
+        if (esEsfOCil(id)) {
             if (value === '' || value === '+' || value === '-') {
                 input.value = '+0.00'; // Si está vacío o solo tiene un signo, poner +0.00
                 return;
