@@ -11,126 +11,146 @@
 }
 
 /* Estilos generales */
-#abm-content {
+#presupuesto-content {
     font-family: Arial, sans-serif;
-    background-color: var(--color-fondo);
-    padding: 20px;
 }
 
-#abm-content h1,
-#abm-content h2,
-#abm-content h3 {
+#presupuesto-content h1 {
     color: var(--color-primario);
     text-align: center;
 }
 
-#abm-content p {
+#presupuesto-content p {
     color: var(--color-texto);
     font-size: 1.1em;
     text-align: center;
 }
 
-/* Estilos del formulario */
-#formSection {
+/* Contenedor de la tabla */
+.vista-previa {
     background-color: var(--color-fondo-contenedor);
-    padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--color-texto);
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid var(--color-borde);
-    border-radius: 4px;
-    box-sizing: border-box;
+    width: 100%; /* Ocupa el 100% del contenedor padre */
+    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
+    /*margin: 20px auto; Centrar el contenedor */
+    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
 }
 
 /* Estilos de la tabla */
-.table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 20px;
-}
-
 table {
     width: 100%;
-    border-collapse: collapse;
-    background-color: var(--color-fondo-contenedor);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-collapse: separate;
+    border-spacing: 5px 10px;
+    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+    padding: 10px;
 }
 
 th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--color-borde);
-    white-space: nowrap;
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: 100px; /* Ancho mínimo para las celdas */
 }
 
-th {
+thead th {
     background-color: var(--color-primario);
     color: white;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-tbody tr:hover {
+/* Celda invisible */
+thead th.invisible {
+    background-color: transparent;
+    box-shadow: none;
+    color: transparent;
+}
+
+tbody td {
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover solo en celdas con inputs */
+tbody td:hover {
     background-color: var(--color-fondo-hover);
 }
 
-/* Estilos de la sección de vista previa */
-#previewSection {
-    width: 100%;
-    padding: 20px;
-    background-color: var(--color-fondo-contenedor);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+.espacio {
+    padding: 10px;
 }
 
-#vistaPrevia {
-    width: 100%;
+/* Estilo para la primera columna */
+.primer-columna {
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: auto; /* Elimina el ancho mínimo fijo */
+    width: auto; /* Ajusta el ancho al contenido */
 }
 
-/* Estilos de la lista de productos */
-#productListSection {
-    width: 100%;
-    padding: 20px;
-    background-color: var(--color-fondo-contenedor);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+input[type="text"] {
+    width: 80px;
+    padding: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: white; /* Fondo blanco para los inputs */
+    transition: background-color 0.3s ease; /* Transición suave para el hover */
+}
+
+/* Oculta la columna ADD en la sección CERCA */
+table tr:nth-child(3) td:last-child,
+table tr:nth-child(4) td:last-child {
+    display: none;
 }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-    th, td {
-        padding: 8px;
+    .vista-previa {
+        width: 95%;
+        padding: 10px;
     }
 
-    .form-group input,
-    .form-group select {
+    table {
+        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+    }
+
+    th, td {
+        /*padding: 8px 10px;  Reduce el padding en dispositivos móviles */
+        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
+    }
+
+    /* Ajuste específico para la primera columna en 768px */
+    .primer-columna {
+        min-width: 60px; /* Ajusta el ancho mínimo para que no se salga */
+        width: auto; /* Ajusta el ancho al contenido */
+    }
+
+    input[type="text"] {
+        width: 60px; /* Reduce el ancho de los inputs en móviles */
         padding: 6px;
     }
 }
 
 @media (max-width: 480px) {
-    th, td {
-        padding: 6px;
-        font-size: 14px;
+    .vista-previa {
+        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
     }
 
-    .form-group input,
-    .form-group select {
+    th, td {
+        /* padding: 6px 8px; Reduce aún más el padding */
+        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
+    }
+
+    /* Ajuste específico para la primera columna en 480px */
+    .primer-columna {
+        min-width: 50px; /* Ajusta el ancho mínimo para que no se salga */
+        width: auto; /* Ajusta el ancho al contenido */
+    }
+
+    input[type="text"] {
+        width: 50px; /* Reduce el ancho de los inputs */
         padding: 4px;
     }
 }
