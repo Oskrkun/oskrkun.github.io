@@ -129,7 +129,7 @@ table tr:nth-child(4) td:last-child {
 
 @media (max-width: 480px) {
     .vista-previa {
-        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
+        /*width: 100%;  Ocupa todo el ancho en pantallas muy pequeñas */
     }
 
     th, td {
