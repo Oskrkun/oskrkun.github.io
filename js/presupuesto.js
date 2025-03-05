@@ -84,7 +84,7 @@ function actualizarCercaDesdeAdd(input) {
     const lejosOD = parseFloat(document.querySelector('.seccion-lejos input').value);
     const lejosOI = parseFloat(document.querySelectorAll('.seccion-lejos input')[1].value);
 
-    if (!isNaN(addOD) {
+    if (!isNaN(addOD)) {
         const cercaOD = lejosOD + addOD;
         document.querySelector('.seccion-cerca input').value = (cercaOD >= 0 ? '+' : '') + cercaOD.toFixed(2);
     }
