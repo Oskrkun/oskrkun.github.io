@@ -219,10 +219,15 @@ function onInputBlur(event) {
 
         console.log(`Valor ajustado a: ${valorAjustado}`);
 
-        // Mostrar alerta si el valor es mayor a 25.00 o menor a -25.00
+        // Mostrar advertencia si el valor es mayor a 25.00 o menor a -25.00
         const valorNumerico = parseFloat(valorAjustado);
-        if (valorNumerico > 25.00 || valorNumerico < -25.00) {
-            alert('*Consultar con el laboratorio.');
+        const advertenciaGraduacion = document.getElementById('advertencia-graduacion');
+        if (advertenciaGraduacion) {
+            if (valorNumerico > 25.00 || valorNumerico < -25.00) {
+                advertenciaGraduacion.style.display = 'block';
+            } else {
+                advertenciaGraduacion.style.display = 'none';
+            }
         }
     }
 }
