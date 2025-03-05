@@ -1,8 +1,8 @@
 // presupuesto.js
 // Variables para establecer los máximos de ADD, ESF y CIL
 const MAX_ADD = 3.25;
-const MAX_ESF = 35.00; // Máximo valor para ESF
-const MAX_CIL = 35.00; // Máximo valor para CIL
+const MAX_ESF = 25.00; // Máximo valor para ESF
+const MAX_CIL = 8.00; // Máximo valor para CIL
 
 // Lista de errores activos
 let erroresActivos = [];
