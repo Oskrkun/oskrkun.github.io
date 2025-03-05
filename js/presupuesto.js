@@ -1,7 +1,4 @@
 // presupuesto.js
-//Oskrkun
-//18:24
-
 // Variables para establecer los máximos de ADD, ESF y CIL
 const MAX_ADD = 3.25;
 const MAX_ESF = 35.00; // Máximo valor para ESF
@@ -299,7 +296,8 @@ function mostrarAdvertenciaAddDiferente() {
 function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
     const esfOCil = id.includes('esf') ? 'ESF' : 'CIL';
     const maxValor = id.includes('esf') ? MAX_ESF : MAX_CIL;
-    const mensajeError = `*${esfOCil} demasiado alto. Consultar con el laboratorio.`;
+    const ojo = id.includes('od') ? 'OD' : 'OI';
+    const mensajeError = `*${esfOCil} demasiado alto en ${ojo}. Consultar con el laboratorio.`;
 
     // Verificar si el valor está fuera de rango
     if (valorNumerico > maxValor || valorNumerico < -maxValor) {
