@@ -129,6 +129,7 @@ table tr:nth-child(4) td:last-child {
 
 @media (max-width: 480px) {
     .vista-previa {
+		padding: 5px;
         /*width: 100%;  Ocupa todo el ancho en pantallas muy pequeñas */
     }
 
