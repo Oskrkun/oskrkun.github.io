@@ -64,7 +64,9 @@ function validarInput(event) {
         input.placeholder = `Sugerencia: ${valorAjustado}`;
 
         // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
-        calcularCerca();
+        if (value !== '') {
+            calcularCerca();
+        }
     }
     // Validación para ESF y CIL
     else {
@@ -128,7 +130,7 @@ function onInputBlur(event) {
     // Validación específica para ADD
     else if (id.includes('add')) {
         if (value === '') {
-            input.value = '0.00'; // Si está vacío, poner 0.00
+            input.value = ''; // Si está vacío, no hacer nada
         } else {
             // Asegurar que el valor esté en el rango de 0 a 3.25
             const valorNumerico = parseFloat(value);
@@ -144,7 +146,9 @@ function onInputBlur(event) {
         }
 
         // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
-        calcularCerca();
+        if (value !== '') {
+            calcularCerca();
+        }
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
@@ -216,17 +220,26 @@ function calcularAdd() {
 
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
 function sincronizarCambios() {
+    const input = event.target;
+    const id = input.id;
+
     // Si se modifica ADD, actualizar "cerca"
-    calcularCerca();
+    if (id.includes('add') && input.value !== '') {
+        calcularCerca();
+    }
 
     // Si se modifica "cerca", actualizar ADD
-    calcularAdd();
+    if (id.includes('cerca-esf') && input.value !== '') {
+        calcularAdd();
+    }
 
-    // Si se modifica "lejos", actualizar "cerca" si ADD está presente
-    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
-    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
-    if (addOD !== 0 || addOI !== 0) {
-        calcularCerca();
+    // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
+    if (id.includes('lejos-esf')) {
+        const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+        const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+        if (addOD !== 0 || addOI !== 0) {
+            calcularCerca();
+        }
     }
 }
 
