@@ -34,6 +34,12 @@
     width: 100%; /* Ocupa el 100% del contenedor padre */
     max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
     overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+    padding: 20px; /* Espacio interno para separar las tablas */
+}
+
+/* Espacio entre secciones */
+.espacio-seccion {
+    height: 20px; /* Espacio vertical entre las tablas */
 }
 
 /* Estilos de la tabla */
@@ -42,6 +48,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+    margin-bottom: 20px; /* Espacio entre tablas */
 }
 
 th, td {
@@ -97,26 +104,15 @@ input[type="text"] {
     transition: background-color 0.3s ease; /* Transición suave para el hover */
 }
 
-/* Estilos para la nueva fila ADD */
-tr.add-fila td {
+/* Estilos para la sección ADD */
+.seccion-add td {
     background-color: var(--color-primario); /* Fondo azul como el encabezado */
     color: white; /* Texto en blanco para contrastar */
-    text-align: left;
-    padding-left: 20px;
 }
 
-tr.add-fila td input[type="text"] {
-    width: 60px;
-    margin-left: 10px;
-    margin-right: 20px;
+.seccion-add input[type="text"] {
     background-color: white; /* Fondo blanco para los inputs */
     color: var(--color-texto); /* Texto en color oscuro para los inputs */
-    border: 1px solid var(--color-borde);
-    border-radius: 4px;
-}
-
-tr.add-fila td span {
-    margin-right: 10px;
 }
 
 /* Estilos responsivos */
@@ -133,12 +129,6 @@ tr.add-fila td span {
         min-width: 60px; /* Reduce el ancho mínimo de las celdas */
     }
 
-    /* Ajuste específico para la primera columna en 768px */
-    .primer-columna {
-        min-width: 60px; /* Ajusta el ancho mínimo para que no se salga */
-        width: auto; /* Ajusta el ancho al contenido */
-    }
-
     input[type="text"] {
         width: 60px; /* Reduce el ancho de los inputs en móviles */
         padding: 6px;
@@ -152,12 +142,6 @@ tr.add-fila td span {
 
     th, td {
         min-width: 50px; /* Reduce el ancho mínimo de las celdas */
-    }
-
-    /* Ajuste específico para la primera columna en 480px */
-    .primer-columna {
-        min-width: 50px; /* Ajusta el ancho mínimo para que no se salga */
-        width: auto; /* Ajusta el ancho al contenido */
     }
 
     input[type="text"] {
