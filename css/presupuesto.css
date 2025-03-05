@@ -155,6 +155,6 @@ input[type="text"] {
     color: red; /* Color rojo para el texto */
     font-weight: bold; /* Texto en negrita */
     font-size: 14px; /* Tamaño de fuente */
-    margin-right: 10px; /* Espaciado entre advertencias */
+    margin-left: 10px; /* Espaciado entre advertencias */
     display: block; /* Mostrar como bloque para que cada advertencia esté en una línea nueva */
 }
