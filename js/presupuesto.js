@@ -1,5 +1,6 @@
 // presupuesto.js
 // Variable para establecer el máximo de ADD
+// Oskrkun
 const MAX_ADD = 3.25;
 const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
 
