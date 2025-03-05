@@ -13,6 +13,11 @@ export async function initPresupuesto() {
     // Seleccionar todos los inputs de la sección "cerca"
     const inputsCerca = document.querySelectorAll('.seccion-cerca input');
 
+    // Función para verificar si un número es múltiplo de 0.25
+    function esMultiploDe025(numero) {
+        return Math.abs(numero * 100) % 25 === 0;
+    }
+
     // Función para validar y formatear ESF y CIL
     function validarYFormatearESFCIL(input) {
         let valor = input.value.trim();
@@ -31,7 +36,7 @@ export async function initPresupuesto() {
         let numero = parseFloat(valor);
 
         // Verificar si el número es un múltiplo de 0.25
-        if (Math.abs(numero * 100) % 25 !== 0) {
+        if (!esMultiploDe025(numero)) {
             alert('Valor no válido para ESF/CIL. Debe ser un múltiplo de 0.25.');
             input.value = '';
             return;
@@ -77,7 +82,7 @@ export async function initPresupuesto() {
         let numero = parseFloat(valor);
 
         // Verificar si el número es un múltiplo de 0.25
-        if (Math.abs(numero * 100) % 25 !== 0) {
+        if (!esMultiploDe025(numero)) {
             alert('Valor no válido para ADD. Debe ser un múltiplo de 0.25.');
             input.value = '';
             return;
