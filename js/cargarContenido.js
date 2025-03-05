@@ -60,7 +60,7 @@ export async function cargarContenido(seccion) {
 				await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
 
 				// Inicializar el Presupuesto después de cargar el contenido
-				await import('./presupuesto.js'); // Llamar a la función de inicialización del Presupuesto
+				await import('./presupuesto.js').then(module => module.initPresupuesto()); // Llamar a la función de inicialización del Presupuesto
 				break;
 
             case 'clientes':
