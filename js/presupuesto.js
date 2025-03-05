@@ -8,6 +8,8 @@ export async function initPresupuesto() {
     const inputs = document.querySelectorAll('.vista-previa input');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
+        input.addEventListener('focus', onInputFocus); // Evento al entrar al input
+        input.addEventListener('blur', onInputBlur); // Evento al salir del input
     });
 
     console.log('Eventos agregados a los inputs.');
@@ -30,6 +32,38 @@ function validarInput(event) {
 
     // Aquí puedes agregar más validaciones específicas si es necesario
     console.log(`Input ${id} validado correctamente.`);
+}
+
+// Función para ajustar el valor a pasos de 0.25
+function ajustarValorAPasos(valor) {
+    const paso = 0.25;
+    const valorNumerico = parseFloat(valor);
+    const multiplicador = 1 / paso;
+    const valorAjustado = Math.round(valorNumerico * multiplicador) / multiplicador;
+    return valorAjustado.toFixed(2); // Asegurar que tenga 2 decimales
+}
+
+// Función para manejar el evento de foco (entrar al input)
+function onInputFocus(event) {
+    const input = event.target;
+    console.log(`Entrando al input con ID: ${input.id}`);
+}
+
+// Función para manejar el evento de blur (salir del input)
+function onInputBlur(event) {
+    const input = event.target;
+    const value = input.value.trim();
+    console.log(`Saliendo del input con ID: ${input.id}, Valor: ${value}`);
+
+    if (value === '') {
+        return; // No hacer nada si el input está vacío
+    }
+
+    // Ajustar el valor a pasos de 0.25
+    const valorAjustado = ajustarValorAPasos(value);
+    input.value = valorAjustado;
+
+    console.log(`Valor ajustado a: ${valorAjustado}`);
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
