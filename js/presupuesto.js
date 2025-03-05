@@ -65,7 +65,11 @@ function validarInput(event) {
 
         // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
         if (value !== '') {
-            calcularCerca();
+            if (id.includes('od')) {
+                calcularCercaOD();
+            } else if (id.includes('oi')) {
+                calcularCercaOI();
+            }
         }
     }
     // Validación para ESF y CIL
@@ -126,6 +130,13 @@ function onInputBlur(event) {
                 input.value = '180';
             }
         }
+
+        // Sincronizar el eje al salir del input
+        if (id.includes('od')) {
+            document.getElementById('od-cerca-eje').value = value;
+        } else if (id.includes('oi')) {
+            document.getElementById('oi-cerca-eje').value = value;
+        }
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
@@ -147,7 +158,11 @@ function onInputBlur(event) {
 
         // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
         if (value !== '') {
-            calcularCerca();
+            if (id.includes('od')) {
+                calcularCercaOD();
+            } else if (id.includes('oi')) {
+                calcularCercaOI();
+            }
         }
     }
     // Validación para ESF y CIL
@@ -170,75 +185,113 @@ function onInputBlur(event) {
     }
 }
 
-// Función para calcular y actualizar la parte de "cerca" basada en ADD
-function calcularCerca() {
-    // Obtener los valores de ESF de "lejos" y ADD
+// Función para calcular y actualizar la parte de "cerca" basada en ADD (OD)
+function calcularCercaOD() {
+    // Obtener los valores de ESF de "lejos" y ADD para OD
     const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
-    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
     const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+
+    // Calcular el valor de ESF para "cerca" en OD
+    const esfCercaOD = esfLejosOD + addOD;
+
+    // Ajustar el valor a pasos de 0.25
+    const esfCercaODAjustado = ajustarValorAPasos(esfCercaOD.toString());
+
+    // Actualizar el campo de ESF en "cerca" para OD
+    document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
+
+    // Copiar el cilindro y el eje de "lejos" a "cerca" para OD
+    document.getElementById('od-cerca-cil').value = document.getElementById('od-lejos-cil').value;
+    document.getElementById('od-cerca-eje').value = document.getElementById('od-lejos-eje').value;
+}
+
+// Función para calcular y actualizar la parte de "cerca" basada en ADD (OI)
+function calcularCercaOI() {
+    // Obtener los valores de ESF de "lejos" y ADD para OI
+    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
     const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
 
-    // Calcular los valores de ESF para "cerca"
-    const esfCercaOD = esfLejosOD + addOD;
+    // Calcular el valor de ESF para "cerca" en OI
     const esfCercaOI = esfLejosOI + addOI;
 
-    // Ajustar los valores a pasos de 0.25
-    const esfCercaODAjustado = ajustarValorAPasos(esfCercaOD.toString());
+    // Ajustar el valor a pasos de 0.25
     const esfCercaOIAjustado = ajustarValorAPasos(esfCercaOI.toString());
 
-    // Actualizar los campos de ESF en "cerca"
-    document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
+    // Actualizar el campo de ESF en "cerca" para OI
     document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
 
-    // Copiar el cilindro y el eje de "lejos" a "cerca"
-    document.getElementById('od-cerca-cil').value = document.getElementById('od-lejos-cil').value;
+    // Copiar el cilindro y el eje de "lejos" a "cerca" para OI
     document.getElementById('oi-cerca-cil').value = document.getElementById('oi-lejos-cil').value;
-    document.getElementById('od-cerca-eje').value = document.getElementById('od-lejos-eje').value;
     document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
 }
 
-// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca"
-function calcularAdd() {
-    // Obtener los valores de ESF de "lejos" y "cerca"
+// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca" (OD)
+function calcularAddOD() {
+    // Obtener los valores de ESF de "lejos" y "cerca" para OD
     const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
-    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
     const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
+
+    // Calcular ADD como la diferencia entre "cerca" y "lejos" para OD
+    const addOD = esfCercaOD - esfLejosOD;
+
+    // Ajustar el valor de ADD a pasos de 0.25
+    const addODAjustado = ajustarValorAPasos(addOD.toString());
+
+    // Actualizar el campo de ADD para OD
+    document.getElementById('add-od').value = addODAjustado;
+}
+
+// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca" (OI)
+function calcularAddOI() {
+    // Obtener los valores de ESF de "lejos" y "cerca" para OI
+    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
     const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
 
-    // Calcular ADD como la diferencia entre "cerca" y "lejos"
-    const addOD = esfCercaOD - esfLejosOD;
+    // Calcular ADD como la diferencia entre "cerca" y "lejos" para OI
     const addOI = esfCercaOI - esfLejosOI;
 
-    // Ajustar los valores de ADD a pasos de 0.25
-    const addODAjustado = ajustarValorAPasos(addOD.toString());
+    // Ajustar el valor de ADD a pasos de 0.25
     const addOIAjustado = ajustarValorAPasos(addOI.toString());
 
-    // Actualizar los campos de ADD
-    document.getElementById('add-od').value = addODAjustado;
+    // Actualizar el campo de ADD para OI
     document.getElementById('add-oi').value = addOIAjustado;
 }
 
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
-function sincronizarCambios() {
+function sincronizarCambios(event) {
     const input = event.target;
     const id = input.id;
 
     // Si se modifica ADD, actualizar "cerca"
     if (id.includes('add') && input.value !== '') {
-        calcularCerca();
+        if (id.includes('od')) {
+            calcularCercaOD();
+        } else if (id.includes('oi')) {
+            calcularCercaOI();
+        }
     }
 
     // Si se modifica "cerca", actualizar ADD
     if (id.includes('cerca-esf') && input.value !== '') {
-        calcularAdd();
+        if (id.includes('od')) {
+            calcularAddOD();
+        } else if (id.includes('oi')) {
+            calcularAddOI();
+        }
     }
 
     // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
     if (id.includes('lejos-esf')) {
-        const addOD = parseFloat(document.getElementById('add-od').value) || 0;
-        const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
-        if (addOD !== 0 || addOI !== 0) {
-            calcularCerca();
+        if (id.includes('od')) {
+            const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+            if (addOD !== 0) {
+                calcularCercaOD();
+            }
+        } else if (id.includes('oi')) {
+            const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+            if (addOI !== 0) {
+                calcularCercaOI();
+            }
         }
     }
 }
