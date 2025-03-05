@@ -117,7 +117,7 @@ table tr:nth-child(4) td:last-child {
     }
 
     th, td {
-        padding: 8px 10px; /* Reduce el padding en dispositivos móviles */
+        /*padding: 8px 10px;  Reduce el padding en dispositivos móviles */
         min-width: 60px; /* Reduce el ancho mínimo de las celdas */
     }
 
@@ -139,7 +139,7 @@ table tr:nth-child(4) td:last-child {
     }
 
     th, td {
-        padding: 6px 8px; /* Reduce aún más el padding */
+        /* padding: 6px 8px; Reduce aún más el padding */
         min-width: 50px; /* Reduce el ancho mínimo de las celdas */
     }
 
