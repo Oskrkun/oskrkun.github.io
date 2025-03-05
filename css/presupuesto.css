@@ -11,6 +11,10 @@
 }
 
 /* Estilos generales */
+* {
+    box-sizing: border-box;
+}
+
 #presupuesto-content {
     font-family: Arial, sans-serif;
 }
@@ -31,10 +35,10 @@
     background-color: var(--color-fondo-contenedor);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ocupa el 100% del contenedor padre */
-    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
-    margin: 20px auto; /* Centrar el contenedor */
-    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    overflow-x: auto;
 }
 
 /* Estilos de la tabla */
@@ -42,15 +46,15 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px 10px;
-    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+    table-layout: auto;
     padding: 10px;
 }
 
 th, td {
     padding: 12px 15px;
     text-align: center;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: 100px; /* Ancho mínimo para las celdas */
+    white-space: nowrap;
+    min-width: 100px;
 }
 
 thead th {
@@ -60,7 +64,6 @@ thead th {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Celda invisible */
 thead th.invisible {
     background-color: transparent;
     box-shadow: none;
@@ -72,7 +75,6 @@ tbody td {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover solo en celdas con inputs */
 tbody td:hover {
     background-color: var(--color-fondo-hover);
 }
@@ -83,20 +85,22 @@ tbody td:hover {
 
 /* Estilo para la primera columna */
 .primer-columna {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: auto; /* Elimina el ancho mínimo fijo */
-    width: auto; /* Ajusta el ancho al contenido */
+    white-space: normal;
+    min-width: auto;
+    width: auto;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 input[type="text"] {
     width: 80px;
-    padding: 8px;
+    padding: 4px; /* Reducido el padding */
     box-sizing: border-box;
     text-align: center;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
-    background-color: white; /* Fondo blanco para los inputs */
-    transition: background-color 0.3s ease; /* Transición suave para el hover */
+    background-color: white;
+    transition: background-color 0.3s ease;
 }
 
 /* Oculta la columna ADD en la sección CERCA */
@@ -113,33 +117,40 @@ table tr:nth-child(4) td:last-child {
     }
 
     table {
-        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+        border-spacing: 2px 5px;
     }
 
     th, td {
-        padding: 8px 10px; /* Reduce el padding en dispositivos móviles */
-        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
+        padding: 8px 10px;
+        min-width: 60px;
+    }
+
+    .primer-columna {
+        min-width: 60px;
     }
 
     input[type="text"] {
-        width: 60px; /* Reduce el ancho de los inputs en móviles */
-        padding: 6px;
+        width: 60px;
+        padding: 3px;
     }
 }
 
 @media (max-width: 480px) {
     .vista-previa {
-		padding: 5px;
-        /*width: 100%;  Ocupa todo el ancho en pantallas muy pequeñas */
+        width: 100%;
     }
 
     th, td {
-        padding: 6px 8px; /* Reduce aún más el padding */
-        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
+        padding: 6px 8px;
+        min-width: 50px;
+    }
+
+    .primer-columna {
+        min-width: 50px;
     }
 
     input[type="text"] {
-        width: 50px; /* Reduce el ancho de los inputs */
-        padding: 4px;
+        width: 50px;
+        padding: 2px;
     }
 }
