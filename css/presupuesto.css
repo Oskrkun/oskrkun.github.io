@@ -48,7 +48,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
-    margin-bottom: 20px; /* Espacio entre tablas */
+    /*margin-bottom: 20px;  Espacio entre tablas */
 }
 
 th, td {
