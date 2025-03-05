@@ -1,5 +1,4 @@
 // presupuesto.js
-
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -23,17 +22,34 @@ function validarInput(event) {
 
     console.log(`Validando input con ID: ${id}, Valor: ${value}`);
 
-    // Permitir los símbolos +, - y punto decimal mientras se escribe
-    if (!/^[+-]?\d*\.?\d*$/.test(value)) {
-        console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
-        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-        return;
-    }
+    // Validación específica para EJE
+    if (id.includes('eje')) {
+        if (!/^\d*$/.test(value)) {
+            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
 
-    // Mostrar sugerencia en el placeholder mientras se escribe
-    if (esEsfOCil(input.id)) {
-        const valorAjustado = ajustarValorAPasos(value);
-        input.placeholder = `Sugerencia: ${valorAjustado}`;
+        // Asegurar que el valor esté en el rango de 0 a 180
+        const valorNumerico = parseInt(value, 10);
+        if (valorNumerico < 0 || valorNumerico > 180) {
+            console.error(`Error: El valor en ${id} debe estar entre 0 y 180.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
+    } else {
+        // Permitir los símbolos +, - y punto decimal mientras se escribe
+        if (!/^[+-]?\d*\.?\d*$/.test(value)) {
+            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
+
+        // Mostrar sugerencia en el placeholder mientras se escribe
+        if (esEsfOCil(input.id)) {
+            const valorAjustado = ajustarValorAPasos(value);
+            input.placeholder = `Sugerencia: ${valorAjustado}`;
+        }
     }
 
     console.log(`Input ${id} validado correctamente.`);
@@ -56,6 +72,7 @@ function ajustarValorAPasos(valor) {
 function onInputFocus(event) {
     const input = event.target;
     console.log(`Entrando al input con ID: ${input.id}`);
+    input.value = ''; // Borrar el contenido al entrar
     input.placeholder = ''; // Limpiar el placeholder al entrar
 }
 
@@ -65,19 +82,37 @@ function onInputBlur(event) {
     const value = input.value.trim();
     console.log(`Saliendo del input con ID: ${input.id}, Valor: ${value}`);
 
-    // Solo aplicar corrección a ESF y CIL
-    if (esEsfOCil(input.id)) {
-        if (value === '' || value === '+' || value === '-') {
-            input.value = ''; // Limpiar si solo hay un signo
-            return;
+    // Validación específica para EJE
+    if (id.includes('eje')) {
+        if (value === '') {
+            input.value = '0'; // Si está vacío, poner 0
+        } else {
+            const valorNumerico = parseInt(value, 10);
+            if (valorNumerico < 0) {
+                input.value = '0';
+            } else if (valorNumerico > 180) {
+                input.value = '180';
+            }
         }
+    } else {
+        // Solo aplicar corrección a ESF y CIL
+        if (esEsfOCil(input.id)) {
+            if (value === '' || value === '+' || value === '-') {
+                input.value = '+0.00'; // Si está vacío o solo tiene un signo, poner +0.00
+                return;
+            }
 
-        // Ajustar el valor a pasos de 0.25
-        const valorAjustado = ajustarValorAPasos(value);
-        input.value = valorAjustado;
-        input.placeholder = ''; // Limpiar el placeholder al salir
+            // Asegurar que el valor tenga un signo
+            let valorAjustado = ajustarValorAPasos(value);
+            if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
+                valorAjustado = `+${valorAjustado}`;
+            }
 
-        console.log(`Valor ajustado a: ${valorAjustado}`);
+            input.value = valorAjustado;
+            input.placeholder = ''; // Limpiar el placeholder al salir
+
+            console.log(`Valor ajustado a: ${valorAjustado}`);
+        }
     }
 }
 
