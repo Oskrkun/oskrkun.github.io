@@ -34,7 +34,7 @@
     width: 100%; /* Ocupa el 100% del contenedor padre */
     max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
     overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
-    padding: 20px; /* Espacio interno para separar las tablas */
+    /*padding: 20px;  Espacio interno para separar las tablas */
 }
 
 /* Espacio entre secciones */
@@ -122,7 +122,7 @@ input[type="text"] {
     }
 
     table {
-        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
+        /*border-spacing: 2px 5px; Reduce el espacio entre celdas */
     }
 
     th, td {
