@@ -240,7 +240,15 @@ function calcularAddOD() {
     const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
 
     // Calcular ADD como la diferencia entre "cerca" y "lejos" para OD
-    const addOD = esfCercaOD - esfLejosOD;
+    let addOD = esfCercaOD - esfLejosOD;
+
+    // Asegurar que ADD no supere 3.25
+    if (addOD > 3.25) {
+        addOD = 3.25;
+        // Recalcular la parte de "cerca" con el valor máximo de ADD
+        const esfCercaODAjustado = ajustarValorAPasos((esfLejosOD + addOD).toString());
+        document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
+    }
 
     // Ajustar el valor de ADD a pasos de 0.25
     const addODAjustado = ajustarValorAPasos(addOD.toString());
@@ -256,7 +264,15 @@ function calcularAddOI() {
     const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
 
     // Calcular ADD como la diferencia entre "cerca" y "lejos" para OI
-    const addOI = esfCercaOI - esfLejosOI;
+    let addOI = esfCercaOI - esfLejosOI;
+
+    // Asegurar que ADD no supere 3.25
+    if (addOI > 3.25) {
+        addOI = 3.25;
+        // Recalcular la parte de "cerca" con el valor máximo de ADD
+        const esfCercaOIAjustado = ajustarValorAPasos((esfLejosOI + addOI).toString());
+        document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
+    }
 
     // Ajustar el valor de ADD a pasos de 0.25
     const addOIAjustado = ajustarValorAPasos(addOI.toString());
