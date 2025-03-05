@@ -131,11 +131,19 @@ function onInputBlur(event) {
             }
         }
 
-        // Sincronizar el eje al salir del input
+        // Sincronizar el eje al salir del input solo si hay ADD o receta en cerca
         if (id.includes('od')) {
-            document.getElementById('od-cerca-eje').value = value;
+            const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+            const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
+            if (addOD !== 0 || esfCercaOD !== 0) {
+                document.getElementById('od-cerca-eje').value = value;
+            }
         } else if (id.includes('oi')) {
-            document.getElementById('oi-cerca-eje').value = value;
+            const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+            const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
+            if (addOI !== 0 || esfCercaOI !== 0) {
+                document.getElementById('oi-cerca-eje').value = value;
+            }
         }
     }
     // Validación específica para ADD
