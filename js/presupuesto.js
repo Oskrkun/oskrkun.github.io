@@ -42,27 +42,27 @@ function crearAdvertencias() {
     const advertenciaEjeOD = document.createElement('span');
     advertenciaEjeOD.id = 'advertencia-eje-od';
     advertenciaEjeOD.textContent = '*Falta el Eje del OD';
-    advertenciaEjeOD.style.color = 'red';
+    advertenciaEjeOD.classList.add('advertenciaReceta'); // Agregar clase
     advertenciaEjeOD.style.display = 'none';
 
     const advertenciaEjeOI = document.createElement('span');
     advertenciaEjeOI.id = 'advertencia-eje-oi';
     advertenciaEjeOI.textContent = '*Falta el Eje del OI';
-    advertenciaEjeOI.style.color = 'red';
+    advertenciaEjeOI.classList.add('advertenciaReceta'); // Agregar clase
     advertenciaEjeOI.style.display = 'none';
 
     // Crear span para advertencia de ESF/CIL fuera de rango
     const advertenciaMaxEsfCil = document.createElement('span');
     advertenciaMaxEsfCil.id = 'advertencia-max-esf-cil';
     advertenciaMaxEsfCil.textContent = '*Consultar con el laboratorio.';
-    advertenciaMaxEsfCil.style.color = 'red';
+    advertenciaMaxEsfCil.classList.add('advertenciaReceta'); // Agregar clase
     advertenciaMaxEsfCil.style.display = 'none';
 
     // Crear span para advertencia de ADD diferente
     const advertenciaAddDiferente = document.createElement('span');
     advertenciaAddDiferente.id = 'advertencia-add-diferente';
     advertenciaAddDiferente.textContent = '*Hay una ADD diferente establecida para cada ojo';
-    advertenciaAddDiferente.style.color = 'red';
+    advertenciaAddDiferente.classList.add('advertenciaReceta'); // Agregar clase
     advertenciaAddDiferente.style.display = 'none';
 
     // Agregar los span a los contenedores
