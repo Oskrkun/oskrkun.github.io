@@ -117,12 +117,12 @@ export async function initPresupuesto() {
     // Añadir event listeners a los inputs de "lejos"
     inputsLejos.forEach(input => {
         input.addEventListener('blur', () => {
-            if (input.parentElement.parentElement.classList.contains('seccion-lejos')) {
-                if (input.parentElement.cellIndex === 2 || input.parentElement.cellIndex === 3) {
-                    validarYFormatearESFCIL(input);
-                } else if (input.parentElement.cellIndex === 4) {
-                    validarEJE(input);
-                }
+            const columna = input.parentElement.cellIndex;
+
+            if (columna === 2 || columna === 3) {
+                validarYFormatearESFCIL(input);
+            } else if (columna === 4) {
+                validarEJE(input);
             }
         });
     });
