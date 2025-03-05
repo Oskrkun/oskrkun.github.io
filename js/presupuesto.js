@@ -1,6 +1,6 @@
 // presupuesto.js
 // Variable para establecer el máximo de ADD
-// Oskrkun 17.56
+// Oskrkun 18:08
 const MAX_ADD = 3.25;
 const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
 
@@ -33,59 +33,35 @@ export async function initPresupuesto() {
 
 // Función para crear los span de advertencia dinámicamente
 function crearAdvertencias() {
-    // Crear contenedores para las advertencias
-    const contenedorLejos = document.createElement('div');
-    contenedorLejos.id = 'advertencias-lejos';
-    contenedorLejos.style.marginTop = '10px';
+    // Crear un contenedor único para las advertencias
+    const contenedorErrores = document.createElement('div');
+    contenedorErrores.id = 'contenedor-errores';
+    contenedorErrores.style.marginTop = '10px';
 
-    const contenedorAdd = document.createElement('div');
-    contenedorAdd.id = 'advertencias-add';
-    contenedorAdd.style.marginTop = '10px';
-
-    // Crear span para advertencia de EJE faltante (OD y OI)
-    const advertenciaEjeOD = document.createElement('span');
-    advertenciaEjeOD.id = 'advertencia-eje-od';
-    advertenciaEjeOD.textContent = '*Falta el Eje del OD';
-    advertenciaEjeOD.classList.add('advertenciaReceta'); // Agregar clase
-    advertenciaEjeOD.style.display = 'none';
-
-    const advertenciaEjeOI = document.createElement('span');
-    advertenciaEjeOI.id = 'advertencia-eje-oi';
-    advertenciaEjeOI.textContent = '*Falta el Eje del OI';
-    advertenciaEjeOI.classList.add('advertenciaReceta'); // Agregar clase
-    advertenciaEjeOI.style.display = 'none';
-
-    // Crear span para advertencia de ESF/CIL fuera de rango
-    const advertenciaMaxEsfCil = document.createElement('span');
-    advertenciaMaxEsfCil.id = 'advertencia-max-esf-cil';
-    advertenciaMaxEsfCil.textContent = '*Consultar con el laboratorio.';
-    advertenciaMaxEsfCil.classList.add('advertenciaReceta'); // Agregar clase
-    advertenciaMaxEsfCil.style.display = 'none';
-
-    // Crear span para advertencia de ADD diferente
-    const advertenciaAddDiferente = document.createElement('span');
-    advertenciaAddDiferente.id = 'advertencia-add-diferente';
-    advertenciaAddDiferente.textContent = '*Hay una ADD diferente establecida para cada ojo';
-    advertenciaAddDiferente.classList.add('advertenciaReceta'); // Agregar clase
-    advertenciaAddDiferente.style.display = 'none';
-
-    // Agregar los span a los contenedores
-    contenedorLejos.appendChild(advertenciaEjeOD);
-    contenedorLejos.appendChild(advertenciaEjeOI);
-    contenedorLejos.appendChild(advertenciaMaxEsfCil);
-
-    contenedorAdd.appendChild(advertenciaAddDiferente);
-
-    // Insertar los contenedores debajo de las tablas correspondientes
+    // Insertar el contenedor de errores debajo de la sección de lejos
     const seccionLejos = document.getElementById('seccion-lejos');
     if (seccionLejos) {
-        seccionLejos.insertAdjacentElement('afterend', contenedorLejos);
+        seccionLejos.insertAdjacentElement('afterend', contenedorErrores);
     }
+}
 
-    const seccionAdd = document.getElementById('seccion-add');
-    if (seccionAdd) {
-        seccionAdd.insertAdjacentElement('afterend', contenedorAdd);
-    }
+// Función para actualizar la lista de errores en la interfaz
+function actualizarErrores() {
+    const contenedorErrores = document.getElementById('contenedor-errores');
+    if (!contenedorErrores) return;
+
+    // Limpiar el contenedor de errores
+    contenedorErrores.innerHTML = '';
+
+    // Mostrar cada error en el contenedor
+    erroresActivos.forEach(error => {
+        const spanError = document.createElement('span');
+        spanError.textContent = error;
+        spanError.classList.add('advertenciaReceta');
+        spanError.style.display = 'block';
+        spanError.style.color = 'red'; // Opcional: Cambiar el color para destacar los errores
+        contenedorErrores.appendChild(spanError);
+    });
 }
 
 // Función para validar los inputs
@@ -259,6 +235,9 @@ function onInputBlur(event) {
         const valorNumerico = parseFloat(valorAjustado);
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
+
+    // Actualizar la lista de errores
+    actualizarErrores();
 }
 
 // Función para mostrar advertencia si falta el EJE y hay CIL
@@ -268,24 +247,29 @@ function mostrarAdvertenciaEjeFaltante() {
     const cilOI = document.getElementById('oi-lejos-cil').value.trim();
     const ejeOI = document.getElementById('oi-lejos-eje').value.trim();
 
-    const advertenciaEjeOD = document.getElementById('advertencia-eje-od');
-    const advertenciaEjeOI = document.getElementById('advertencia-eje-oi');
+    const mensajeErrorOD = '*Falta el Eje del OD';
+    const mensajeErrorOI = '*Falta el Eje del OI';
 
-    if (advertenciaEjeOD) {
-        if (cilOD !== '' && ejeOD === '') {
-            advertenciaEjeOD.style.display = 'block';
-        } else {
-            advertenciaEjeOD.style.display = 'none';
+    // Verificar si falta el EJE en OD
+    if (cilOD !== '' && ejeOD === '') {
+        if (!erroresActivos.includes(mensajeErrorOD)) {
+            erroresActivos.push(mensajeErrorOD);
         }
+    } else {
+        erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOD);
     }
 
-    if (advertenciaEjeOI) {
-        if (cilOI !== '' && ejeOI === '') {
-            advertenciaEjeOI.style.display = 'block';
-        } else {
-            advertenciaEjeOI.style.display = 'none';
+    // Verificar si falta el EJE en OI
+    if (cilOI !== '' && ejeOI === '') {
+        if (!erroresActivos.includes(mensajeErrorOI)) {
+            erroresActivos.push(mensajeErrorOI);
         }
+    } else {
+        erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOI);
     }
+
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
 }
 
 // Función para mostrar advertencia si las ADD son diferentes
@@ -293,27 +277,38 @@ function mostrarAdvertenciaAddDiferente() {
     const addOD = parseFloat(document.getElementById('add-od').value) || 0;
     const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
 
-    const advertenciaAddDiferente = document.getElementById('advertencia-add-diferente');
-    if (advertenciaAddDiferente) {
-        if (addOD !== addOI) {
-            advertenciaAddDiferente.style.display = 'block';
-        } else {
-            advertenciaAddDiferente.style.display = 'none';
+    const mensajeError = '*Hay una ADD diferente establecida para cada ojo';
+
+    // Verificar si las ADD son diferentes
+    if (addOD !== addOI) {
+        if (!erroresActivos.includes(mensajeError)) {
+            erroresActivos.push(mensajeError);
         }
+    } else {
+        erroresActivos = erroresActivos.filter(error => error !== mensajeError);
     }
+
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
 }
 
 // Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF_CIL
 function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
-    const advertenciaMaxEsfCil = document.getElementById('advertencia-max-esf-cil');
-    if (advertenciaMaxEsfCil) {
-        if (valorNumerico > MAX_ESF_CIL || valorNumerico < -MAX_ESF_CIL) {
-            advertenciaMaxEsfCil.textContent = `*${id.includes('esf') ? 'ESF' : 'CIL'} demasiado alto. Consultar con el laboratorio.`;
-            advertenciaMaxEsfCil.style.display = 'block';
-        } else {
-            advertenciaMaxEsfCil.style.display = 'none';
+    const mensajeError = `*${id.includes('esf') ? 'ESF' : 'CIL'} demasiado alto. Consultar con el laboratorio.`;
+
+    // Verificar si el valor está fuera de rango
+    if (valorNumerico > MAX_ESF_CIL || valorNumerico < -MAX_ESF_CIL) {
+        // Agregar el error a la lista de errores activos si no está ya presente
+        if (!erroresActivos.includes(mensajeError)) {
+            erroresActivos.push(mensajeError);
         }
+    } else {
+        // Si el valor está dentro del rango, eliminar el error de la lista
+        erroresActivos = erroresActivos.filter(error => error !== mensajeError);
     }
+
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
 }
 
 // Función para calcular y actualizar la parte de "cerca" basada en ADD (OD)
