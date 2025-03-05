@@ -59,6 +59,9 @@ function validarInput(event) {
         // Mostrar sugerencia en el placeholder mientras se escribe
         const valorAjustado = ajustarValorAPasos(value);
         input.placeholder = `Sugerencia: ${valorAjustado}`;
+
+        // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
+        calcularCerca();
     }
     // Validación para ESF y CIL
     else {
@@ -136,6 +139,9 @@ function onInputBlur(event) {
                 input.value = valorAjustado;
             }
         }
+
+        // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
+        calcularCerca();
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
@@ -155,6 +161,27 @@ function onInputBlur(event) {
 
         console.log(`Valor ajustado a: ${valorAjustado}`);
     }
+}
+
+// Función para calcular y actualizar la parte de "cerca"
+function calcularCerca() {
+    // Obtener los valores de ESF de "lejos" y ADD
+    const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
+    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
+    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+
+    // Calcular los valores de ESF para "cerca"
+    const esfCercaOD = esfLejosOD + addOD;
+    const esfCercaOI = esfLejosOI + addOI;
+
+    // Ajustar los valores a pasos de 0.25
+    const esfCercaODAjustado = ajustarValorAPasos(esfCercaOD.toString());
+    const esfCercaOIAjustado = ajustarValorAPasos(esfCercaOI.toString());
+
+    // Actualizar los campos de ESF en "cerca"
+    document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
+    document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
 }
 
 // Función para verificar si el input es ESF o CIL
