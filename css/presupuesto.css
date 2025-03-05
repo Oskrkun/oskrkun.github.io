@@ -43,7 +43,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
-    padding: 10px;
+    /*padding: 10px;*/
 }
 
 th, td {
