@@ -43,7 +43,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
-	padding: 10px;
+    padding: 10px;
 }
 
 th, td {
@@ -81,6 +81,13 @@ tbody td:hover {
     padding: 10px;
 }
 
+/* Estilo para la primera columna */
+.primer-columna {
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    min-width: auto; /* Elimina el ancho mínimo fijo */
+    width: auto; /* Ajusta el ancho al contenido */
+}
+
 input[type="text"] {
     width: 80px;
     padding: 8px;
@@ -107,7 +114,6 @@ table tr:nth-child(4) td:last-child {
 
     table {
         border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
-		
     }
 
     th, td {
