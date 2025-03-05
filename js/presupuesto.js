@@ -1,4 +1,8 @@
 // presupuesto.js
+// Variable para establecer el máximo de ADD
+const MAX_ADD = 3.25;
+const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -15,6 +19,9 @@ export async function initPresupuesto() {
 
     // Agregar eventos para sincronizar cambios
     agregarEventosSincronizacion();
+
+    // Mostrar advertencia si las ADD son diferentes
+    mostrarAdvertenciaAddDiferente();
 }
 
 // Función para validar los inputs
@@ -51,10 +58,10 @@ function validarInput(event) {
             return;
         }
 
-        // Asegurar que el valor esté en el rango de 0 a 3.25
+        // Asegurar que el valor esté en el rango de 0 a MAX_ADD
         const valorNumerico = parseFloat(value);
-        if (valorNumerico < 0 || valorNumerico > 3.25) {
-            console.error(`Error: El valor en ${id} debe estar entre 0 y 3.25.`);
+        if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
+            console.error(`Error: El valor en ${id} debe estar entre 0 y ${MAX_ADD}.`);
             input.value = value.slice(0, -1); // Eliminar el último carácter no válido
             return;
         }
@@ -71,6 +78,9 @@ function validarInput(event) {
                 calcularCercaOI();
             }
         }
+
+        // Mostrar advertencia si las ADD son diferentes
+        mostrarAdvertenciaAddDiferente();
     }
     // Validación para ESF y CIL
     else {
@@ -85,6 +95,21 @@ function validarInput(event) {
         if (esEsfOCil(input.id)) {
             const valorAjustado = ajustarValorAPasos(value);
             input.placeholder = `Sugerencia: ${valorAjustado}`;
+        }
+
+        // Validar que no haya valores de 3 cifras
+        if (value.length > 5) { // Considerando el signo y el punto decimal
+            console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
+
+        // Validar que el valor esté dentro del rango permitido
+        const valorNumerico = parseFloat(value);
+        if (valorNumerico < -MAX_ESF_CIL || valorNumerico > MAX_ESF_CIL) {
+            console.error(`Error: El valor en ${id} debe estar entre -${MAX_ESF_CIL} y +${MAX_ESF_CIL}.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
         }
     }
 
@@ -151,12 +176,12 @@ function onInputBlur(event) {
         if (value === '') {
             input.value = ''; // Si está vacío, no hacer nada
         } else {
-            // Asegurar que el valor esté en el rango de 0 a 3.25
+            // Asegurar que el valor esté en el rango de 0 a MAX_ADD
             const valorNumerico = parseFloat(value);
             if (valorNumerico < 0) {
                 input.value = '0.00';
-            } else if (valorNumerico > 3.25) {
-                input.value = '3.25';
+            } else if (valorNumerico > MAX_ADD) {
+                input.value = MAX_ADD.toFixed(2);
             } else {
                 // Ajustar el valor a pasos de 0.25
                 const valorAjustado = ajustarValorAPasos(value);
@@ -172,11 +197,14 @@ function onInputBlur(event) {
                 calcularCercaOI();
             }
         }
+
+        // Mostrar advertencia si las ADD son diferentes
+        mostrarAdvertenciaAddDiferente();
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
         if (value === '' || value === '+' || value === '-') {
-            input.value = '+0.00'; // Si está vacío o solo tiene un signo, poner +0.00
+            input.value = ''; // Si está vacío o solo tiene un signo, dejarlo vacío
             return;
         }
 
@@ -190,6 +218,27 @@ function onInputBlur(event) {
         input.placeholder = ''; // Limpiar el placeholder al salir
 
         console.log(`Valor ajustado a: ${valorAjustado}`);
+
+        // Mostrar alerta si el valor es mayor a 25.00 o menor a -25.00
+        const valorNumerico = parseFloat(valorAjustado);
+        if (valorNumerico > 25.00 || valorNumerico < -25.00) {
+            alert('*Consultar con el laboratorio.');
+        }
+    }
+}
+
+// Función para mostrar advertencia si las ADD son diferentes
+function mostrarAdvertenciaAddDiferente() {
+    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+
+    const advertencia = document.getElementById('advertencia-add-diferente');
+    if (advertencia) {
+        if (addOD !== addOI) {
+            advertencia.style.display = 'block';
+        } else {
+            advertencia.style.display = 'none';
+        }
     }
 }
 
@@ -242,9 +291,9 @@ function calcularAddOD() {
     // Calcular ADD como la diferencia entre "cerca" y "lejos" para OD
     let addOD = esfCercaOD - esfLejosOD;
 
-    // Asegurar que ADD no supere 3.25
-    if (addOD > 3.25) {
-        addOD = 3.25;
+    // Asegurar que ADD no supere MAX_ADD
+    if (addOD > MAX_ADD) {
+        addOD = MAX_ADD;
         // Recalcular la parte de "cerca" con el valor máximo de ADD
         const esfCercaODAjustado = ajustarValorAPasos((esfLejosOD + addOD).toString());
         document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
@@ -266,9 +315,9 @@ function calcularAddOI() {
     // Calcular ADD como la diferencia entre "cerca" y "lejos" para OI
     let addOI = esfCercaOI - esfLejosOI;
 
-    // Asegurar que ADD no supere 3.25
-    if (addOI > 3.25) {
-        addOI = 3.25;
+    // Asegurar que ADD no supere MAX_ADD
+    if (addOI > MAX_ADD) {
+        addOI = MAX_ADD;
         // Recalcular la parte de "cerca" con el valor máximo de ADD
         const esfCercaOIAjustado = ajustarValorAPasos((esfLejosOI + addOI).toString());
         document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
@@ -316,6 +365,15 @@ function sincronizarCambios(event) {
             if (addOI !== 0) {
                 calcularCercaOI();
             }
+        }
+    }
+
+    // Sincronizar el eje de "cerca" con "lejos" si se modifica "cerca"
+    if (id.includes('cerca-eje')) {
+        if (id.includes('od')) {
+            document.getElementById('od-lejos-eje').value = input.value;
+        } else if (id.includes('oi')) {
+            document.getElementById('oi-lejos-eje').value = input.value;
         }
     }
 }
