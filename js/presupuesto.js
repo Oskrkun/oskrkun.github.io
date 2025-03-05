@@ -12,6 +12,9 @@ export async function initPresupuesto() {
     });
 
     console.log('Eventos agregados a los inputs.');
+
+    // Agregar eventos para sincronizar cambios
+    agregarEventosSincronizacion();
 }
 
 // Función para validar los inputs
@@ -163,7 +166,7 @@ function onInputBlur(event) {
     }
 }
 
-// Función para calcular y actualizar la parte de "cerca"
+// Función para calcular y actualizar la parte de "cerca" basada en ADD
 function calcularCerca() {
     // Obtener los valores de ESF de "lejos" y ADD
     const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
@@ -182,6 +185,68 @@ function calcularCerca() {
     // Actualizar los campos de ESF en "cerca"
     document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
     document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
+
+    // Copiar el cilindro y el eje de "lejos" a "cerca"
+    document.getElementById('od-cerca-cil').value = document.getElementById('od-lejos-cil').value;
+    document.getElementById('oi-cerca-cil').value = document.getElementById('oi-lejos-cil').value;
+    document.getElementById('od-cerca-eje').value = document.getElementById('od-lejos-eje').value;
+    document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
+}
+
+// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca"
+function calcularAdd() {
+    // Obtener los valores de ESF de "lejos" y "cerca"
+    const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
+    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
+    const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
+    const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
+
+    // Calcular ADD como la diferencia entre "cerca" y "lejos"
+    const addOD = esfCercaOD - esfLejosOD;
+    const addOI = esfCercaOI - esfLejosOI;
+
+    // Ajustar los valores de ADD a pasos de 0.25
+    const addODAjustado = ajustarValorAPasos(addOD.toString());
+    const addOIAjustado = ajustarValorAPasos(addOI.toString());
+
+    // Actualizar los campos de ADD
+    document.getElementById('add-od').value = addODAjustado;
+    document.getElementById('add-oi').value = addOIAjustado;
+}
+
+// Función para sincronizar cambios entre "lejos", "cerca" y ADD
+function sincronizarCambios() {
+    // Si se modifica ADD, actualizar "cerca"
+    calcularCerca();
+
+    // Si se modifica "cerca", actualizar ADD
+    calcularAdd();
+
+    // Si se modifica "lejos", actualizar "cerca" si ADD está presente
+    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+    if (addOD !== 0 || addOI !== 0) {
+        calcularCerca();
+    }
+}
+
+// Función para agregar eventos de sincronización
+function agregarEventosSincronizacion() {
+    const inputsLejos = document.querySelectorAll('.seccion-lejos input');
+    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
+    const inputsAdd = document.querySelectorAll('.seccion-add input');
+
+    inputsLejos.forEach(input => {
+        input.addEventListener('input', sincronizarCambios);
+    });
+
+    inputsCerca.forEach(input => {
+        input.addEventListener('input', sincronizarCambios);
+    });
+
+    inputsAdd.forEach(input => {
+        input.addEventListener('input', sincronizarCambios);
+    });
 }
 
 // Función para verificar si el input es ESF o CIL
