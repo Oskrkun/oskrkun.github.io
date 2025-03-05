@@ -58,7 +58,7 @@ function onInputBlur(event) {
     if (value === '') {
         return; // No hacer nada si el input está vacío
     }
-
+	//soyokr
     // Ajustar el valor a pasos de 0.25
     const valorAjustado = ajustarValorAPasos(value);
     input.value = valorAjustado;
