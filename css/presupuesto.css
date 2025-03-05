@@ -91,6 +91,7 @@ tbody tr:hover {
 /* Estilos de la sección de vista previa */
 #previewSection {
     width: 100%;
+    padding: 20px;
     background-color: var(--color-fondo-contenedor);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -99,7 +100,6 @@ tbody tr:hover {
 
 #vistaPrevia {
     width: 100%;
-    padding: 0; /* Eliminamos el padding */
 }
 
 /* Estilos de la lista de productos */
@@ -121,22 +121,6 @@ tbody tr:hover {
     .form-group select {
         padding: 6px;
     }
-
-    /* Ajustes para la tabla en pantallas pequeñas */
-    .vista-previa {
-        width: 100%;
-        overflow: hidden; /* Evita que la tabla se desborde */
-    }
-
-    table {
-        width: 100%;
-        table-layout: fixed; /* Fija el ancho de la tabla */
-    }
-
-    th, td {
-        white-space: normal; /* Permite que el texto se divida en varias líneas */
-        word-wrap: break-word; /* Rompe el texto si es demasiado largo */
-    }
 }
 
 @media (max-width: 480px) {
@@ -148,19 +132,5 @@ tbody tr:hover {
     .form-group input,
     .form-group select {
         padding: 4px;
-    }
-
-    /* Ajustes adicionales para pantallas muy pequeñas */
-    .vista-previa {
-        width: 100%;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    th, td {
-        white-space: normal; /* Permite que el texto se divida en varias líneas */
-        word-wrap: break-word; /* Rompe el texto si es demasiado largo */
     }
 }
