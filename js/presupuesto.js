@@ -4,6 +4,9 @@
 const MAX_ADD = 3.25;
 const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
 
+// Lista de errores activos
+let erroresActivos = [];
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
