@@ -38,7 +38,30 @@ function validarInput(event) {
             input.value = value.slice(0, -1); // Eliminar el último carácter no válido
             return;
         }
-    } else {
+    }
+    // Validación específica para ADD
+    else if (id.includes('add')) {
+        // Solo permitir números positivos y punto decimal
+        if (!/^\d*\.?\d*$/.test(value)) {
+            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números positivos y punto decimal.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
+
+        // Asegurar que el valor esté en el rango de 0 a 3.25
+        const valorNumerico = parseFloat(value);
+        if (valorNumerico < 0 || valorNumerico > 3.25) {
+            console.error(`Error: El valor en ${id} debe estar entre 0 y 3.25.`);
+            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+            return;
+        }
+
+        // Mostrar sugerencia en el placeholder mientras se escribe
+        const valorAjustado = ajustarValorAPasos(value);
+        input.placeholder = `Sugerencia: ${valorAjustado}`;
+    }
+    // Validación para ESF y CIL
+    else {
         // Permitir los símbolos +, - y punto decimal mientras se escribe
         if (!/^[+-]?\d*\.?\d*$/.test(value)) {
             console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
@@ -95,25 +118,42 @@ function onInputBlur(event) {
                 input.value = '180';
             }
         }
-    } else {
-        // Solo aplicar corrección a ESF y CIL
-        if (esEsfOCil(id)) {
-            if (value === '' || value === '+' || value === '-') {
-                input.value = '+0.00'; // Si está vacío o solo tiene un signo, poner +0.00
-                return;
+    }
+    // Validación específica para ADD
+    else if (id.includes('add')) {
+        if (value === '') {
+            input.value = '0.00'; // Si está vacío, poner 0.00
+        } else {
+            // Asegurar que el valor esté en el rango de 0 a 3.25
+            const valorNumerico = parseFloat(value);
+            if (valorNumerico < 0) {
+                input.value = '0.00';
+            } else if (valorNumerico > 3.25) {
+                input.value = '3.25';
+            } else {
+                // Ajustar el valor a pasos de 0.25
+                const valorAjustado = ajustarValorAPasos(value);
+                input.value = valorAjustado;
             }
-
-            // Asegurar que el valor tenga un signo
-            let valorAjustado = ajustarValorAPasos(value);
-            if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
-                valorAjustado = `+${valorAjustado}`;
-            }
-
-            input.value = valorAjustado;
-            input.placeholder = ''; // Limpiar el placeholder al salir
-
-            console.log(`Valor ajustado a: ${valorAjustado}`);
         }
+    }
+    // Validación para ESF y CIL
+    else if (esEsfOCil(id)) {
+        if (value === '' || value === '+' || value === '-') {
+            input.value = '+0.00'; // Si está vacío o solo tiene un signo, poner +0.00
+            return;
+        }
+
+        // Asegurar que el valor tenga un signo
+        let valorAjustado = ajustarValorAPasos(value);
+        if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
+            valorAjustado = `+${valorAjustado}`;
+        }
+
+        input.value = valorAjustado;
+        input.placeholder = ''; // Limpiar el placeholder al salir
+
+        console.log(`Valor ajustado a: ${valorAjustado}`);
     }
 }
 
