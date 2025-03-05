@@ -1,156 +1,21 @@
-/* Variables de colores */
-:root {
-    --color-primario: #4A90E2;
-    --color-secundario: #357ABD;
-    --color-fondo: #f5f5f5;
-    --color-texto: #333;
-    --color-fondo-contenedor: #fff;
-    --color-fondo-fila: #f9f9f9;
-    --color-fondo-hover: #e0e0e0;
-    --color-borde: #ddd;
-}
-
-/* Estilos generales */
-#presupuesto-content {
-    font-family: Arial, sans-serif;
-}
-
-#presupuesto-content h1 {
-    color: var(--color-primario);
-    text-align: center;
-}
-
-#presupuesto-content p {
-    color: var(--color-texto);
-    font-size: 1.1em;
-    text-align: center;
-}
-
-/* Contenedor de la tabla */
-.vista-previa {
-    background-color: var(--color-fondo-contenedor);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ocupa el 100% del contenedor padre */
-    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
-    /*margin: 20px auto; Centrar el contenedor */
-    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
-}
-
-/* Estilos de la tabla */
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 5px 10px;
-    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
-    /*padding: 10px;*/
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: center;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: 100px; /* Ancho mínimo para las celdas */
-}
-
-thead th {
-    background-color: var(--color-primario);
-    color: white;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Celda invisible */
-thead th.invisible {
-    background-color: transparent;
-    box-shadow: none;
-    color: transparent;
-}
-
-tbody td {
-    background-color: var(--color-fondo-fila);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Hover solo en celdas con inputs */
-tbody td:hover {
-    background-color: var(--color-fondo-hover);
-}
-
-.espacio {
-    padding: 10px;
-}
-
-/* Estilo para la primera columna */
-.primer-columna {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: auto; /* Elimina el ancho mínimo fijo */
-    width: auto; /* Ajusta el ancho al contenido */
-}
-
-input[type="text"] {
-    width: 80px;
-    padding: 8px;
-    box-sizing: border-box;
-    text-align: center;
-    border: 1px solid var(--color-borde);
-    border-radius: 4px;
-    background-color: white; /* Fondo blanco para los inputs */
-    transition: background-color 0.3s ease; /* Transición suave para el hover */
-}
-
-/* Oculta la columna ADD en la sección CERCA */
-table tr:nth-child(3) td:last-child,
+/* Eliminar la regla que oculta la columna ADD */
+/* table tr:nth-child(3) td:last-child,
 table tr:nth-child(4) td:last-child {
     display: none;
+} */
+
+/* Estilos para la nueva fila ADD */
+tr td[colspan="3"] {
+    text-align: left;
+    padding-left: 20px;
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
-    .vista-previa {
-        width: 95%;
-        /*padding: 10px;*/
-    }
-
-    table {
-        border-spacing: 2px 5px; /* Reduce el espacio entre celdas */
-    }
-
-    th, td {
-        /*padding: 8px 10px;  Reduce el padding en dispositivos móviles */
-        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
-    }
-
-    /* Ajuste específico para la primera columna en 768px */
-    .primer-columna {
-        min-width: 60px; /* Ajusta el ancho mínimo para que no se salga */
-        width: auto; /* Ajusta el ancho al contenido */
-    }
-
-    input[type="text"] {
-        width: 60px; /* Reduce el ancho de los inputs en móviles */
-        padding: 6px;
-    }
+tr td[colspan="3"] input[type="text"] {
+    width: 60px;
+    margin-left: 10px;
+    margin-right: 20px;
 }
 
-@media (max-width: 480px) {
-    .vista-previa {
-        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
-    }
-
-    th, td {
-        /* padding: 6px 8px; Reduce aún más el padding */
-        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
-    }
-
-    /* Ajuste específico para la primera columna en 480px */
-    .primer-columna {
-        min-width: 50px; /* Ajusta el ancho mínimo para que no se salga */
-        width: auto; /* Ajusta el ancho al contenido */
-    }
-
-    input[type="text"] {
-        width: 50px; /* Reduce el ancho de los inputs */
-        padding: 4px;
-    }
+tr td[colspan="3"] span {
+    margin-right: 10px;
 }
