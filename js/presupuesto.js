@@ -1,8 +1,11 @@
 // presupuesto.js
-// Variable para establecer el máximo de ADD
-// Oskrkun 18:08
+//Oskrkun
+//18:24
+
+// Variables para establecer los máximos de ADD, ESF y CIL
 const MAX_ADD = 3.25;
-const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
+const MAX_ESF = 35.00; // Máximo valor para ESF
+const MAX_CIL = 35.00; // Máximo valor para CIL
 
 // Lista de errores activos
 let erroresActivos = [];
@@ -231,7 +234,7 @@ function onInputBlur(event) {
 
         input.value = valorAjustado;
 
-        // Mostrar advertencia si el valor es mayor a MAX_ESF_CIL
+        // Mostrar advertencia si el valor es mayor a MAX_ESF o MAX_CIL
         const valorNumerico = parseFloat(valorAjustado);
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
@@ -292,12 +295,14 @@ function mostrarAdvertenciaAddDiferente() {
     actualizarErrores();
 }
 
-// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF_CIL
+// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF o MAX_CIL
 function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
-    const mensajeError = `*${id.includes('esf') ? 'ESF' : 'CIL'} demasiado alto. Consultar con el laboratorio.`;
+    const esfOCil = id.includes('esf') ? 'ESF' : 'CIL';
+    const maxValor = id.includes('esf') ? MAX_ESF : MAX_CIL;
+    const mensajeError = `*${esfOCil} demasiado alto. Consultar con el laboratorio.`;
 
     // Verificar si el valor está fuera de rango
-    if (valorNumerico > MAX_ESF_CIL || valorNumerico < -MAX_ESF_CIL) {
+    if (valorNumerico > maxValor || valorNumerico < -maxValor) {
         // Agregar el error a la lista de errores activos si no está ya presente
         if (!erroresActivos.includes(mensajeError)) {
             erroresActivos.push(mensajeError);
