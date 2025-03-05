@@ -7,6 +7,9 @@ const MAX_ESF_CIL = 35.00; // Máximo valor para ESF y CIL
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
 
+    // Crear los span de advertencia dinámicamente
+    crearAdvertencias();
+
     // Agregar eventos a los inputs
     const inputs = document.querySelectorAll('.vista-previa input');
     inputs.forEach(input => {
@@ -22,6 +25,63 @@ export async function initPresupuesto() {
 
     // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
+}
+
+// Función para crear los span de advertencia dinámicamente
+function crearAdvertencias() {
+    // Crear contenedores para las advertencias
+    const contenedorLejos = document.createElement('div');
+    contenedorLejos.id = 'advertencias-lejos';
+    contenedorLejos.style.marginTop = '10px';
+
+    const contenedorAdd = document.createElement('div');
+    contenedorAdd.id = 'advertencias-add';
+    contenedorAdd.style.marginTop = '10px';
+
+    // Crear span para advertencia de EJE faltante (OD y OI)
+    const advertenciaEjeOD = document.createElement('span');
+    advertenciaEjeOD.id = 'advertencia-eje-od';
+    advertenciaEjeOD.textContent = '*Falta el Eje del OD';
+    advertenciaEjeOD.style.color = 'red';
+    advertenciaEjeOD.style.display = 'none';
+
+    const advertenciaEjeOI = document.createElement('span');
+    advertenciaEjeOI.id = 'advertencia-eje-oi';
+    advertenciaEjeOI.textContent = '*Falta el Eje del OI';
+    advertenciaEjeOI.style.color = 'red';
+    advertenciaEjeOI.style.display = 'none';
+
+    // Crear span para advertencia de ESF/CIL fuera de rango
+    const advertenciaMaxEsfCil = document.createElement('span');
+    advertenciaMaxEsfCil.id = 'advertencia-max-esf-cil';
+    advertenciaMaxEsfCil.textContent = '*Consultar con el laboratorio.';
+    advertenciaMaxEsfCil.style.color = 'red';
+    advertenciaMaxEsfCil.style.display = 'none';
+
+    // Crear span para advertencia de ADD diferente
+    const advertenciaAddDiferente = document.createElement('span');
+    advertenciaAddDiferente.id = 'advertencia-add-diferente';
+    advertenciaAddDiferente.textContent = '*Hay una ADD diferente establecida para cada ojo';
+    advertenciaAddDiferente.style.color = 'red';
+    advertenciaAddDiferente.style.display = 'none';
+
+    // Agregar los span a los contenedores
+    contenedorLejos.appendChild(advertenciaEjeOD);
+    contenedorLejos.appendChild(advertenciaEjeOI);
+    contenedorLejos.appendChild(advertenciaMaxEsfCil);
+
+    contenedorAdd.appendChild(advertenciaAddDiferente);
+
+    // Insertar los contenedores debajo de las tablas correspondientes
+    const seccionLejos = document.getElementById('seccion-lejos');
+    if (seccionLejos) {
+        seccionLejos.insertAdjacentElement('afterend', contenedorLejos);
+    }
+
+    const seccionAdd = document.getElementById('seccion-add');
+    if (seccionAdd) {
+        seccionAdd.insertAdjacentElement('afterend', contenedorAdd);
+    }
 }
 
 // Función para validar los inputs
@@ -66,10 +126,6 @@ function validarInput(event) {
             return;
         }
 
-        // Mostrar sugerencia en el placeholder mientras se escribe
-        const valorAjustado = ajustarValorAPasos(value);
-        input.placeholder = `Sugerencia: ${valorAjustado}`;
-
         // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
         if (value !== '') {
             if (id.includes('od')) {
@@ -89,12 +145,6 @@ function validarInput(event) {
             console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
             input.value = value.slice(0, -1); // Eliminar el último carácter no válido
             return;
-        }
-
-        // Mostrar sugerencia en el placeholder mientras se escribe
-        if (esEsfOCil(input.id)) {
-            const valorAjustado = ajustarValorAPasos(value);
-            input.placeholder = `Sugerencia: ${valorAjustado}`;
         }
 
         // Validar que no haya valores de 3 cifras
@@ -146,7 +196,8 @@ function onInputBlur(event) {
     // Validación específica para EJE
     if (id.includes('eje')) {
         if (value === '') {
-            input.value = '0'; // Si está vacío, poner 0
+            // No autocompletar con 0 si está vacío
+            input.value = '';
         } else {
             const valorNumerico = parseInt(value, 10);
             if (valorNumerico < 0) {
@@ -156,20 +207,8 @@ function onInputBlur(event) {
             }
         }
 
-        // Sincronizar el eje al salir del input solo si hay ADD o receta en cerca
-        if (id.includes('od')) {
-            const addOD = parseFloat(document.getElementById('add-od').value) || 0;
-            const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
-            if (addOD !== 0 || esfCercaOD !== 0) {
-                document.getElementById('od-cerca-eje').value = value;
-            }
-        } else if (id.includes('oi')) {
-            const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
-            const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
-            if (addOI !== 0 || esfCercaOI !== 0) {
-                document.getElementById('oi-cerca-eje').value = value;
-            }
-        }
+        // Mostrar advertencia si falta el EJE y hay CIL
+        mostrarAdvertenciaEjeFaltante();
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
@@ -215,19 +254,36 @@ function onInputBlur(event) {
         }
 
         input.value = valorAjustado;
-        input.placeholder = ''; // Limpiar el placeholder al salir
 
-        console.log(`Valor ajustado a: ${valorAjustado}`);
-
-        // Mostrar advertencia si el valor es mayor a 25.00 o menor a -25.00
+        // Mostrar advertencia si el valor es mayor a MAX_ESF_CIL
         const valorNumerico = parseFloat(valorAjustado);
-        const advertenciaGraduacion = document.getElementById('advertencia-graduacion');
-        if (advertenciaGraduacion) {
-            if (valorNumerico > 25.00 || valorNumerico < -25.00) {
-                advertenciaGraduacion.style.display = 'block';
-            } else {
-                advertenciaGraduacion.style.display = 'none';
-            }
+        mostrarAdvertenciaMaxEsfCil(valorNumerico);
+    }
+}
+
+// Función para mostrar advertencia si falta el EJE y hay CIL
+function mostrarAdvertenciaEjeFaltante() {
+    const cilOD = document.getElementById('od-lejos-cil').value.trim();
+    const ejeOD = document.getElementById('od-lejos-eje').value.trim();
+    const cilOI = document.getElementById('oi-lejos-cil').value.trim();
+    const ejeOI = document.getElementById('oi-lejos-eje').value.trim();
+
+    const advertenciaEjeOD = document.getElementById('advertencia-eje-od');
+    const advertenciaEjeOI = document.getElementById('advertencia-eje-oi');
+
+    if (advertenciaEjeOD) {
+        if (cilOD !== '' && ejeOD === '') {
+            advertenciaEjeOD.style.display = 'block';
+        } else {
+            advertenciaEjeOD.style.display = 'none';
+        }
+    }
+
+    if (advertenciaEjeOI) {
+        if (cilOI !== '' && ejeOI === '') {
+            advertenciaEjeOI.style.display = 'block';
+        } else {
+            advertenciaEjeOI.style.display = 'none';
         }
     }
 }
@@ -237,12 +293,24 @@ function mostrarAdvertenciaAddDiferente() {
     const addOD = parseFloat(document.getElementById('add-od').value) || 0;
     const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
 
-    const advertencia = document.getElementById('advertencia-add-diferente');
-    if (advertencia) {
+    const advertenciaAddDiferente = document.getElementById('advertencia-add-diferente');
+    if (advertenciaAddDiferente) {
         if (addOD !== addOI) {
-            advertencia.style.display = 'block';
+            advertenciaAddDiferente.style.display = 'block';
         } else {
-            advertencia.style.display = 'none';
+            advertenciaAddDiferente.style.display = 'none';
+        }
+    }
+}
+
+// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF_CIL
+function mostrarAdvertenciaMaxEsfCil(valorNumerico) {
+    const advertenciaMaxEsfCil = document.getElementById('advertencia-max-esf-cil');
+    if (advertenciaMaxEsfCil) {
+        if (valorNumerico > MAX_ESF_CIL || valorNumerico < -MAX_ESF_CIL) {
+            advertenciaMaxEsfCil.style.display = 'block';
+        } else {
+            advertenciaMaxEsfCil.style.display = 'none';
         }
     }
 }
