@@ -161,14 +161,6 @@ input[type="text"] {
     display: block; /* Mostrar como bloque para que cada advertencia esté en una línea nueva */
 }
 
-/* Evitar la selección de texto en las filas y celdas */
-table, th, td {
-    user-select: none; /* Evita que el texto sea seleccionable */
-    -webkit-user-select: none; /* Compatibilidad con navegadores basados en WebKit */
-    -moz-user-select: none; /* Compatibilidad con Firefox */
-    -ms-user-select: none; /* Compatibilidad con Internet Explorer/Edge */
-}
-
 /* Estilos para la celda con el botón de flecha */
 #arrow-trasp {
     background-color: transparent; /* Celda transparente */
