@@ -8,7 +8,6 @@
     --color-fondo-fila: #f9f9f9;
     --color-fondo-hover: #e0e0e0;
     --color-borde: #ddd;
-    --color-verde: #4CAF50; /* Nuevo color verde */
 }
 
 /* Estilos generales */
@@ -35,6 +34,7 @@
     width: 100%; /* Ocupa el 100% del contenedor padre */
     max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
     overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+    /*padding: 20px;  Espacio interno para separar las tablas */
 }
 
 /* Espacio entre secciones */
@@ -48,6 +48,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+    /*margin-bottom: 20px;  Espacio entre tablas */
 }
 
 th, td {
@@ -55,7 +56,6 @@ th, td {
     text-align: center;
     white-space: nowrap; /* Evita que el texto se divida en varias líneas */
     min-width: 100px; /* Ancho mínimo para las celdas */
-    user-select: none; /* Desactiva la selección de texto */
 }
 
 thead th {
@@ -66,28 +66,24 @@ thead th {
 }
 
 /* Celda invisible */
-thead th.invisible,
-td.invisible {
+thead th.invisible {
     background-color: transparent;
     box-shadow: none;
     color: transparent;
 }
 
-/* Celda con la flecha */
-td.flecha-celda {
-    background-color: var(--color-verde); /* Fondo verde */
-    color: white; /* Texto blanco */
+tbody td {
+    background-color: var(--color-fondo-fila);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos para el ícono de Font Awesome */
-td.flecha-celda i {
-    font-size: 18px; /* Tamaño del ícono */
+/* Hover solo en celdas con inputs */
+tbody td:hover {
+    background-color: var(--color-fondo-hover);
 }
 
-/* Eliminar hover de las filas */
-tbody td:hover {
-    background-color: var(--color-fondo-fila); /* Mantener el color original */
+.espacio {
+    padding: 10px;
 }
 
 /* Estilo para la primera columna */
@@ -123,6 +119,10 @@ input[type="text"] {
 @media (max-width: 768px) {
     .vista-previa {
         width: 100%;
+    }
+
+    table {
+        /*border-spacing: 2px 5px; Reduce el espacio entre celdas */
     }
 
     th, td {
