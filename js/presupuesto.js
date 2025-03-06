@@ -62,6 +62,9 @@ export async function initPresupuesto() {
 
     // Cargar tipos de lentes desde Supabase
     await cargarTiposLentes();
+
+    // Cargar tratamientos desde Supabase
+    await cargarTratamientos();
 }
 
 // Función para agregar evento al botón de rotación
@@ -130,6 +133,49 @@ async function cargarTiposLentes() {
         }
     } catch (error) {
         console.error('Error cargando tipos de lentes:', error);
+    }
+}
+
+// Función para cargar los tratamientos desde Supabase
+async function cargarTratamientos() {
+    console.log('Cargando tratamientos...');
+
+    try {
+        // Obtener datos de Supabase
+        const { data: tratamientos, error } = await supabaseClient.rpc('cargar_tratamientos');
+
+        if (error) throw error;
+
+        console.log('Tratamientos cargados:', tratamientos);
+
+        // Llenar la tabla de tratamientos
+        const tratamientosContainer = document.getElementById('tratamientos');
+        if (tratamientosContainer) {
+            tratamientosContainer.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+
+            tratamientos.forEach(tratamiento => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tratamiento.nombre}</td>
+                    <td>
+                        <input type="checkbox" id="tratamiento_${tratamiento.id}" name="tratamientos" value="${tratamiento.id}">
+                    </td>
+                `;
+                tratamientosContainer.appendChild(row);
+            });
+
+            // Agregar evento para manejar la selección de tratamientos
+            tratamientosContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    console.log('Tratamiento seleccionado:', this.value, this.checked);
+                    // Aquí puedes agregar lógica para manejar la selección de tratamientos
+                });
+            });
+        } else {
+            console.error('Contenedor de tratamientos no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando tratamientos:', error);
     }
 }
 
