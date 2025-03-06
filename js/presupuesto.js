@@ -1,5 +1,6 @@
 // presupuesto.js
-//Oskrkun 14.16.6.3.25
+// Oskrkun 14.55.6.3.25
+import { supabaseClient } from './supabaseConfig.js';
 import {
     MAX_ADD,
     MAX_ESF,
@@ -58,6 +59,9 @@ export async function initPresupuesto() {
 
     // Agregar evento al botón de rotación
     agregarEventoBotonRotacion();
+
+    // Cargar tipos de lentes desde Supabase
+    await cargarTiposLentes();
 }
 
 // Función para agregar evento al botón de rotación
@@ -78,6 +82,55 @@ function deshabilitarCamposCerca() {
     inputsCerca.forEach(input => {
         input.disabled = true; // Deshabilitar los campos de "cerca"
     });
+}
+
+// Función para cargar los tipos de lentes desde Supabase
+async function cargarTiposLentes() {
+    console.log('Cargando tipos de lentes...');
+
+    try {
+        // Obtener datos de Supabase
+        const { data: tiposLentes, error } = await supabaseClient.rpc('cargar_tipos_lentes');
+
+        if (error) throw error;
+
+        console.log('Tipos de lentes cargados:', tiposLentes);
+
+        // Llenar la tabla de tipos de lentes
+        const tipoLentesContainer = document.getElementById('tipoLentes');
+        if (tipoLentesContainer) {
+            tipoLentesContainer.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+
+            tiposLentes.forEach(tipoLente => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${tipoLente.nombre}</td>
+                    <td>
+                        <input type="radio" id="tipoLente_${tipoLente.id}" name="tipoLente" value="${tipoLente.id}">
+                    </td>
+                `;
+                tipoLentesContainer.appendChild(row);
+            });
+
+            // Agregar evento para permitir solo un checkbox seleccionado
+            tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.checked) {
+                        // Desmarcar todos los otros radios
+                        tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(otherRadio => {
+                            if (otherRadio !== this) {
+                                otherRadio.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        } else {
+            console.error('Contenedor de tipos de lentes no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando tipos de lentes:', error);
+    }
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
