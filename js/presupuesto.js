@@ -24,6 +24,13 @@ export async function initPresupuesto() {
         input.addEventListener('input', validarInput);
         input.addEventListener('focus', onInputFocus); // Evento al entrar al input
         input.addEventListener('blur', onInputBlur); // Evento al salir del input
+
+        // Agregar evento para borrar el contenido al recibir el foco
+        input.addEventListener('focus', function () {
+            if (this.value !== '') {
+                this.value = ''; // Borrar el contenido si no está vacío
+            }
+        });
     });
 
     console.log('Eventos agregados a los inputs.');
