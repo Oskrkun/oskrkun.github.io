@@ -291,13 +291,26 @@ function revisarErroresYActualizarCerca() {
 
     if (addOD !== 0) {
         calcularCerca('od');
+    } else {
+        limpiarCerca('od'); // Si la ADD está vacía, limpiar la parte de "cerca" del OD
     }
+
     if (addOI !== 0) {
         calcularCerca('oi');
+    } else {
+        limpiarCerca('oi'); // Si la ADD está vacía, limpiar la parte de "cerca" del OI
     }
 
     // Actualizar la lista de errores en la interfaz
     actualizarErrores();
+}
+
+// Función para limpiar la parte de "cerca" cuando la ADD está vacía
+function limpiarCerca(ojo) {
+    // Limpiar los campos de "cerca" para el ojo especificado
+    document.getElementById(`${ojo}-cerca-esf`).value = '';
+    document.getElementById(`${ojo}-cerca-cil`).value = '';
+    document.getElementById(`${ojo}-cerca-eje`).value = '';
 }
 
 // Función para mostrar advertencia si falta el EJE y hay CIL
@@ -400,9 +413,15 @@ function sincronizarCambios(event) {
     const id = input.id;
 
     // Si se modifica ADD, actualizar "cerca"
-    if (id.includes('add') && input.value !== '') {
+    if (id.includes('add')) {
         const ojo = id.includes('od') ? 'od' : 'oi';
-        calcularCerca(ojo);
+        const add = parseFloat(input.value) || 0;
+
+        if (add !== 0) {
+            calcularCerca(ojo); // Si hay ADD, calcular "cerca"
+        } else {
+            limpiarCerca(ojo); // Si la ADD está vacía, limpiar la parte de "cerca"
+        }
     }
 
     // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
