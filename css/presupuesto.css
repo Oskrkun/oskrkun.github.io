@@ -156,8 +156,10 @@ input[type="text"] {
     display: block;
 }
 
-/* Evitar la selección de texto en las filas y celdas */
-table, th, td {
+/* Aplicar las reglas solo a las tablas de lejos, cerca y ADD */
+.seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
+.seccion-cerca table, .seccion-cerca th, .seccion-cerca td,
+.seccion-add table, .seccion-add th, .seccion-add td {
     user-select: none; /* Evita que el texto sea seleccionable */
     -webkit-user-select: none; /* Compatibilidad con navegadores basados en WebKit */
     -moz-user-select: none; /* Compatibilidad con Firefox */
@@ -165,8 +167,10 @@ table, th, td {
     pointer-events: none; /* Desactiva eventos de puntero (clics, hover, etc.) */
 }
 
-/* Permitir interacción solo en los inputs */
-input[type="text"] {
+/* Permitir interacción solo en los inputs dentro de estas secciones */
+.seccion-lejos input[type="text"],
+.seccion-cerca input[type="text"],
+.seccion-add input[type="text"] {
     pointer-events: auto; /* Reactiva los eventos de puntero para los inputs */
 }
 
