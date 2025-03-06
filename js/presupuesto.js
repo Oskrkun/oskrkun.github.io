@@ -1,4 +1,7 @@
 // presupuesto.js
+
+//Oskrkun 9.23.6.3.25
+
 // Variables para establecer los máximos de ADD, ESF y CIL
 const MAX_ADD = 3.25;
 const MAX_ESF = 25.00; // Máximo valor para ESF
@@ -116,18 +119,6 @@ function validarInput(event) {
             input.value = value.slice(0, -1); // Eliminar el último carácter no válido
             return;
         }
-
-        // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
-        if (value !== '') {
-            if (id.includes('od')) {
-                calcularCercaOD();
-            } else if (id.includes('oi')) {
-                calcularCercaOI();
-            }
-        }
-
-        // Mostrar advertencia si las ADD son diferentes
-        mostrarAdvertenciaAddDiferente();
     }
     // Validación para ESF y CIL
     else {
@@ -193,9 +184,6 @@ function onInputBlur(event) {
                 input.value = '180';
             }
         }
-
-        // Mostrar advertencia si falta el EJE y hay CIL
-        mostrarAdvertenciaEjeFaltante();
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
@@ -214,18 +202,6 @@ function onInputBlur(event) {
                 input.value = valorAjustado;
             }
         }
-
-        // Calcular y actualizar la parte de "cerca" cuando se modifica ADD
-        if (value !== '') {
-            if (id.includes('od')) {
-                calcularCercaOD();
-            } else if (id.includes('oi')) {
-                calcularCercaOI();
-            }
-        }
-
-        // Mostrar advertencia si las ADD son diferentes
-        mostrarAdvertenciaAddDiferente();
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
@@ -247,7 +223,27 @@ function onInputBlur(event) {
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
 
-    // Actualizar la lista de errores
+    // Revisar errores y actualizar la parte de "cerca"
+    revisarErroresYActualizarCerca();
+}
+
+// Función para revisar errores y actualizar la parte de "cerca"
+function revisarErroresYActualizarCerca() {
+    // Revisar si falta el eje y hay cilindro
+    mostrarAdvertenciaEjeFaltante();
+
+    // Si hay ADD, actualizar la parte de "cerca"
+    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
+
+    if (addOD !== 0) {
+        calcularCercaOD();
+    }
+    if (addOI !== 0) {
+        calcularCercaOI();
+    }
+
+    // Actualizar la lista de errores en la interfaz
     actualizarErrores();
 }
 
@@ -364,6 +360,8 @@ function calcularCercaOI() {
     document.getElementById('oi-cerca-cil').value = document.getElementById('oi-lejos-cil').value;
     document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
 }
+
+
 
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
 function sincronizarCambios(event) {
