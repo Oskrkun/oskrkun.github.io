@@ -50,9 +50,94 @@ function agregarEventoBotonRotacion() {
     const botonRotacion = document.querySelector('#arrow-trasp button');
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
-            console.log('Botón presionado'); // Mensaje en consola
+            console.log('Botón de transposición presionado');
+            transponerReceta(); // Realizar la transposición
+            sincronizarTodo(); // Sincronizar cambios después de la transposición
         });
     }
+}
+
+// Función para transponer la receta
+function transponerReceta() {
+    console.log('Transponiendo receta...');
+
+    // Obtener los valores de los cilindros de "lejos"
+    const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || 0;
+    const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || 0;
+
+    // Verificar si los cilindros son del mismo signo o diferentes
+    if ((cilOD > 0 && cilOI > 0) || (cilOD < 0 && cilOI < 0)) {
+        // Ambos cilindros son positivos o ambos son negativos: transposición completa en ambos ojos
+        transponerOjo('od');
+        transponerOjo('oi');
+    } else if (cilOD > 0 || cilOI > 0) {
+        // Uno de los cilindros es positivo: cambiar solo el positivo a negativo
+        if (cilOD > 0) {
+            cambiarSignoCilindro('od');
+        }
+        if (cilOI > 0) {
+            cambiarSignoCilindro('oi');
+        }
+    }
+
+    console.log('Receta transpuesta.');
+}
+
+// Función para transponer un ojo (transposición completa)
+function transponerOjo(ojo) {
+    const esf = parseFloat(document.getElementById(`${ojo}-lejos-esf`).value) || 0;
+    const cil = parseFloat(document.getElementById(`${ojo}-lejos-cil`).value) || 0;
+    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0;
+
+    // Cambiar el signo del cilindro
+    const cilTranspuesto = -cil;
+
+    // Ajustar el eje
+    const ejeTranspuesto = (eje <= 90) ? eje + 90 : eje - 90;
+
+    // Calcular la nueva ESF
+    const esfTranspuesto = esf + cil;
+
+    // Actualizar los campos
+    document.getElementById(`${ojo}-lejos-esf`).value = esfTranspuesto.toFixed(2);
+    document.getElementById(`${ojo}-lejos-cil`).value = cilTranspuesto.toFixed(2);
+    document.getElementById(`${ojo}-lejos-eje`).value = ejeTranspuesto;
+
+    console.log(`Ojo ${ojo} transpuesto: ESF=${esfTranspuesto}, CIL=${cilTranspuesto}, EJE=${ejeTranspuesto}`);
+}
+
+// Función para cambiar el signo del cilindro (solo para un ojo)
+function cambiarSignoCilindro(ojo) {
+    const esf = parseFloat(document.getElementById(`${ojo}-lejos-esf`).value) || 0;
+    const cil = parseFloat(document.getElementById(`${ojo}-lejos-cil`).value) || 0;
+    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0;
+
+    // Cambiar el signo del cilindro
+    const cilTranspuesto = -cil;
+
+    // Ajustar el eje
+    const ejeTranspuesto = (eje <= 90) ? eje + 90 : eje - 90;
+
+    // Calcular la nueva ESF
+    const esfTranspuesto = esf + cil;
+
+    // Actualizar los campos
+    document.getElementById(`${ojo}-lejos-esf`).value = esfTranspuesto.toFixed(2);
+    document.getElementById(`${ojo}-lejos-cil`).value = cilTranspuesto.toFixed(2);
+    document.getElementById(`${ojo}-lejos-eje`).value = ejeTranspuesto;
+
+    console.log(`Ojo ${ojo} cambiado: ESF=${esfTranspuesto}, CIL=${cilTranspuesto}, EJE=${ejeTranspuesto}`);
+}
+
+// Función para sincronizar todo después de la transposición
+function sincronizarTodo() {
+    // Revisar errores y actualizar la parte de "cerca"
+    revisarErroresYActualizarCerca();
+
+    // Mostrar advertencia si las ADD son diferentes
+    mostrarAdvertenciaAddDiferente();
+
+    console.log('Sincronización completada después de la transposición.');
 }
 
 // Función para deshabilitar los campos de "cerca"
