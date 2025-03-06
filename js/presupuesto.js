@@ -58,22 +58,32 @@ function deshabilitarCamposCerca() {
 
 // Función para crear los span de advertencia dinámicamente
 function crearAdvertencias() {
+    console.log('Creando contenedor de errores...');
+
     // Crear un contenedor único para las advertencias
     const contenedorErrores = document.createElement('div');
     contenedorErrores.id = 'contenedor-errores';
     contenedorErrores.style.marginTop = '10px';
 
     // Insertar el contenedor de errores debajo de la sección de cerca
-    const seccionCerca = document.getElementById('seccion-cerca');
+    const seccionCerca = document.querySelector('.seccion-cerca');
     if (seccionCerca) {
         seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
+        console.log('Contenedor de errores creado debajo de la sección de cerca.');
+    } else {
+        console.error('No se encontró la sección de cerca.');
     }
 }
 
 // Función para actualizar la lista de errores en la interfaz
 function actualizarErrores() {
+    console.log('Actualizando lista de errores...');
+
     const contenedorErrores = document.getElementById('contenedor-errores');
-    if (!contenedorErrores) return;
+    if (!contenedorErrores) {
+        console.error('No se encontró el contenedor de errores.');
+        return;
+    }
 
     // Limpiar el contenedor de errores
     contenedorErrores.innerHTML = '';
@@ -82,11 +92,12 @@ function actualizarErrores() {
     erroresActivos.forEach(error => {
         const spanError = document.createElement('span');
         spanError.textContent = error;
-        spanError.classList.add('advertenciaReceta');
+        spanError.classList.add('advertenciaReceta'); // Aplicar la clase CSS
         spanError.style.display = 'block';
-        spanError.style.color = 'red'; // Opcional: Cambiar el color para destacar los errores
         contenedorErrores.appendChild(spanError);
     });
+
+    console.log('Errores actualizados:', erroresActivos);
 }
 
 // Función para validar los inputs
@@ -96,6 +107,9 @@ function validarInput(event) {
     const id = input.id;
 
     console.log(`Validando input con ID: ${id}, Valor: ${value}`);
+
+    // Limpiar el error anterior
+    erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
 
     // Validación específica para EJE
     if (id.includes('eje')) {
@@ -118,6 +132,7 @@ function validarEje(input, value) {
     // Solo permitir números enteros entre 0 y 180
     if (!/^\d*$/.test(value)) {
         console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números.`);
+        erroresActivos.push(`*${input.id}: Solo se permiten números.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
@@ -126,6 +141,7 @@ function validarEje(input, value) {
     const valorNumerico = parseInt(value, 10);
     if (valorNumerico < 0 || valorNumerico > 180) {
         console.error(`Error: El valor en ${input.id} debe estar entre 0 y 180.`);
+        erroresActivos.push(`*${input.id}: El valor debe estar entre 0 y 180.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
@@ -136,6 +152,7 @@ function validarADD(input, value) {
     // Solo permitir números positivos y punto decimal
     if (!/^\d*\.?\d*$/.test(value)) {
         console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números positivos y punto decimal.`);
+        erroresActivos.push(`*${input.id}: Solo se permiten números positivos y punto decimal.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
@@ -144,6 +161,7 @@ function validarADD(input, value) {
     const valorNumerico = parseFloat(value);
     if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
         console.error(`Error: El valor en ${input.id} debe estar entre 0 y ${MAX_ADD}.`);
+        erroresActivos.push(`*${input.id}: El valor debe estar entre 0 y ${MAX_ADD}.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
@@ -154,6 +172,7 @@ function validarEsfOCil(input, value, id) {
     // Permitir los símbolos +, - y punto decimal mientras se escribe
     if (!/^[+-]?\d*\.?\d*$/.test(value)) {
         console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
+        erroresActivos.push(`*${id}: Solo se permiten números, +, - y punto decimal.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
@@ -161,6 +180,7 @@ function validarEsfOCil(input, value, id) {
     // Validar que no haya valores de 3 cifras
     if (value.length > 5) { // Considerando el signo y el punto decimal
         console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
+        erroresActivos.push(`*${id}: No puede tener más de 2 cifras enteras.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
