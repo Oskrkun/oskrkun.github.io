@@ -169,28 +169,37 @@ table, th, td {
 
 /* Estilos para la celda con el botón de flecha */
 #arrow-trasp {
-    background-color: #4CAF50; /* Color verde en la gama del azul que estamos usando */
+    background-color: transparent; /* Celda transparente */
     color: white; /* Color del texto en blanco */
     position: relative; /* Posición relativa para posicionar el ícono */
-	padding: 20px;
+    padding: 0; /* Eliminamos el padding para que no haya espacio extra */
+    border: none; /* Sin borde */
+    box-shadow: none; /* Sin sombra */
 }
 
 /* Estilos para el botón con el ícono de flecha */
 #arrow-trasp button {
-    background: none; /* Fondo transparente */
+    background-color: #4CAF50; /* Fondo verde para el botón */
     border: none; /* Sin borde */
     color: white; /* Color del ícono en blanco */
     cursor: pointer; /* Cambia el cursor a pointer */
     font-size: 1.2em; /* Tamaño del ícono */
-    position: absolute; /* Posición absoluta para centrar el ícono */
+    width: 40px; /* Ancho del botón */
+    height: 40px; /* Alto del botón */
+    border-radius: 50%; /* Forma circular */
+    display: flex; /* Flexbox para centrar el ícono */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    position: absolute; /* Posición absoluta para centrar el botón */
     top: 50%; /* Centrar verticalmente */
     left: 50%; /* Centrar horizontalmente */
     transform: translate(-50%, -50%); /* Ajuste fino para centrar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
 }
 
 /* Estilos para el ícono de FontAwesome */
 #arrow-trasp button i {
     font-family: "Font Awesome 5 Free"; /* Fuente de FontAwesome */
     font-weight: 900; /* Peso de la fuente para el ícono sólido */
-	scale: 1.4;
+    scale: 1.2; /* Ajustar tamaño del ícono */
 }
