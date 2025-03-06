@@ -83,7 +83,7 @@ tbody td:hover {
 }
 
 .espacio {
-    padding: 10px;
+    /*padding: 10px;*/
 }
 
 /* Estilo para la primera columna */
@@ -172,6 +172,7 @@ table, th, td {
     background-color: #4CAF50; /* Color verde en la gama del azul que estamos usando */
     color: white; /* Color del texto en blanco */
     position: relative; /* Posición relativa para posicionar el ícono */
+	padding: 20px;
 }
 
 /* Estilos para el botón con el ícono de flecha */
@@ -191,4 +192,5 @@ table, th, td {
 #arrow-trasp button i {
     font-family: "Font Awesome 5 Free"; /* Fuente de FontAwesome */
     font-weight: 900; /* Peso de la fuente para el ícono sólido */
+	scale: 1.4;
 }
