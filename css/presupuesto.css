@@ -31,16 +31,14 @@
     background-color: var(--color-fondo-contenedor);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Ocupa el 100% del contenedor padre */
-    max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
-    overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
-	
-    /*padding: 20px;  Espacio interno para separar las tablas */
+    width: 100%;
+    max-width: 800px;
+    overflow-x: auto;
 }
 
 /* Espacio entre secciones */
 .espacio-seccion {
-    height: 20px; /* Espacio vertical entre las tablas */
+    height: 20px;
 }
 
 /* Estilos de la tabla */
@@ -48,16 +46,14 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 5px 10px;
-    table-layout: auto; /* Permite que las celdas se ajusten al contenido */
-	/*margin-top: 10px;*/
-    /*margin-bottom: 20px;  Espacio entre tablas */
+    table-layout: auto;
 }
 
 th, td {
     padding: 12px 15px;
     text-align: center;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: 100px; /* Ancho mínimo para las celdas */
+    white-space: nowrap;
+    min-width: 100px;
 }
 
 thead th {
@@ -79,9 +75,9 @@ tbody td {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover solo en celdas con inputs */
+/* Eliminar hover en todas las celdas */
 tbody td:hover {
-    background-color: var(--color-fondo-hover);
+    background-color: var(--color-fondo-fila); /* Mantener el color original, sin hover */
 }
 
 .espacio {
@@ -90,9 +86,9 @@ tbody td:hover {
 
 /* Estilo para la primera columna */
 .primer-columna {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    min-width: auto; /* Elimina el ancho mínimo fijo */
-    width: auto; /* Ajusta el ancho al contenido */
+    white-space: nowrap;
+    min-width: auto;
+    width: auto;
 }
 
 input[type="text"] {
@@ -102,19 +98,19 @@ input[type="text"] {
     text-align: center;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
-    background-color: white; /* Fondo blanco para los inputs */
-    transition: background-color 0.3s ease; /* Transición suave para el hover */
+    background-color: white;
+    transition: background-color 0.3s ease;
 }
 
 /* Estilos para la sección ADD */
 .seccion-add td {
-    background-color: var(--color-primario); /* Fondo azul como el encabezado */
-    color: white; /* Texto en blanco para contrastar */
+    background-color: var(--color-primario);
+    color: white;
 }
 
 .seccion-add input[type="text"] {
-    background-color: white; /* Fondo blanco para los inputs */
-    color: var(--color-texto); /* Texto en color oscuro para los inputs */
+    background-color: white;
+    color: var(--color-texto);
 }
 
 /* Estilos responsivos */
@@ -123,42 +119,38 @@ input[type="text"] {
         width: 100%;
     }
 
-    table {
-        /*border-spacing: 2px 5px; Reduce el espacio entre celdas */
-    }
-
     th, td {
-        min-width: 60px; /* Reduce el ancho mínimo de las celdas */
+        min-width: 60px;
     }
 
     input[type="text"] {
-        width: 60px; /* Reduce el ancho de los inputs en móviles */
+        width: 60px;
         padding: 6px;
     }
 }
 
 @media (max-width: 480px) {
     .vista-previa {
-        width: 100%; /* Ocupa todo el ancho en pantallas muy pequeñas */
+        width: 100%;
     }
 
     th, td {
-        min-width: 50px; /* Reduce el ancho mínimo de las celdas */
+        min-width: 50px;
     }
 
     input[type="text"] {
-        width: 50px; /* Reduce el ancho de los inputs */
+        width: 50px;
         padding: 4px;
     }
 }
 
 /* Estilos para la clase advertenciaReceta */
 .advertenciaReceta {
-    color: red; /* Color rojo para el texto */
-    font-weight: bold; /* Texto en negrita */
-    font-size: 14px; /* Tamaño de fuente */
-    margin-left: 10px; /* Espaciado entre advertencias */
-    display: block; /* Mostrar como bloque para que cada advertencia esté en una línea nueva */
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
+    display: block;
 }
 
 /* Evitar la selección de texto en las filas y celdas */
@@ -167,41 +159,48 @@ table, th, td {
     -webkit-user-select: none; /* Compatibilidad con navegadores basados en WebKit */
     -moz-user-select: none; /* Compatibilidad con Firefox */
     -ms-user-select: none; /* Compatibilidad con Internet Explorer/Edge */
+    pointer-events: none; /* Desactiva eventos de puntero (clics, hover, etc.) */
+}
+
+/* Permitir interacción solo en los inputs */
+input[type="text"] {
+    pointer-events: auto; /* Reactiva los eventos de puntero para los inputs */
 }
 
 /* Estilos para la celda con el botón de flecha */
 #arrow-trasp {
-    background-color: transparent; /* Celda transparente */
-    color: white; /* Color del texto en blanco */
-    position: relative; /* Posición relativa para posicionar el ícono */
-    padding: 20px 0; /* Agregamos padding vertical para separar el botón */
-    border: none; /* Sin borde */
-    box-shadow: none; /* Sin sombra */
+    background-color: transparent;
+    color: white;
+    position: relative;
+    padding: 20px 0;
+    border: none;
+    box-shadow: none;
 }
 
 /* Estilos para el botón con el ícono de flecha */
 #arrow-trasp button {
-    background-color: #4CAF50; /* Fondo verde para el botón */
-    border: none; /* Sin borde */
-    color: white; /* Color del ícono en blanco */
-    cursor: pointer; /* Cambia el cursor a pointer */
-    font-size: 1.2em; /* Tamaño del ícono */
-    width: 40px; /* Ancho del botón */
-    height: 40px; /* Alto del botón */
-    border-radius: 50%; /* Forma circular */
-    display: flex; /* Flexbox para centrar el ícono */
-    align-items: center; /* Centrar verticalmente */
-    justify-content: center; /* Centrar horizontalmente */
-    position: absolute; /* Posición absoluta para centrar el botón */
-    top: 50%; /* Centrar verticalmente */
-    left: 50%; /* Centrar horizontalmente */
-    transform: translate(-50%, -50%); /* Ajuste fino para centrar */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: auto; /* Permitir interacción con el botón */
 }
 
 /* Estilos para el ícono de FontAwesome */
 #arrow-trasp button i {
-    font-family: "Font Awesome 5 Free"; /* Fuente de FontAwesome */
-    font-weight: 900; /* Peso de la fuente para el ícono sólido */
-    scale: 1.2; /* Ajustar tamaño del ícono */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    scale: 1.2;
 }
