@@ -1,5 +1,5 @@
 // presupuesto.js
-// Oskrkun 14.55.6.3.25
+// Oskrkun 14.55.6.3.2
 import { supabaseClient } from './supabaseConfig.js';
 import {
     MAX_ADD,
