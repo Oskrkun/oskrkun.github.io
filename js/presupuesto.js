@@ -35,6 +35,19 @@ export async function initPresupuesto() {
 
     // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
+
+    // Agregar evento al botón de rotación
+    agregarEventoBotonRotacion();
+}
+
+// Función para agregar evento al botón de rotación
+function agregarEventoBotonRotacion() {
+    const botonRotacion = document.querySelector('#arrow-trasp button');
+    if (botonRotacion) {
+        botonRotacion.addEventListener('click', () => {
+            console.log('Botón presionado'); // Mensaje en consola
+        });
+    }
 }
 
 // Función para deshabilitar los campos de "cerca"
@@ -361,8 +374,6 @@ function calcularCercaOI() {
     document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
 }
 
-
-
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
 function sincronizarCambios(event) {
     const input = event.target;
@@ -391,6 +402,9 @@ function sincronizarCambios(event) {
             }
         }
     }
+
+    // Mostrar advertencia si las ADD son diferentes
+    mostrarAdvertenciaAddDiferente();
 }
 
 // Función para agregar eventos de sincronización
