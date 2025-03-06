@@ -1,31 +1,75 @@
 <div class="vista-previa">
-		<table class="seccion-lejos" id="seccion-lejos">
-		<table class="seccion-add" id="seccion-add">
-		<table class="seccion-cerca">
-			<thead>
-				<tr>
-					<th class="espacio invisible"></th> <!-- Celda invisible -->
-					<th class="espacio">ESF</th>
-					<th class="espacio">CIL</th>
-					<th class="espacio">EJE</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="espacio primer-columna">OD C.</td>
-					<td class="espacio"><input type="text" id="od-cerca-esf"></td>
-					<td class="espacio"><input type="text" id="od-cerca-cil"></td>
-					<td class="espacio"><input type="text" id="od-cerca-eje"></td>
-				</tr>
-				<tr>
-					<td class="espacio primer-columna">OI C.</td>
-					<td class="espacio"><input type="text" id="oi-cerca-esf"></td>
-					<td class="espacio"><input type="text" id="oi-cerca-cil"></td>
-					<td class="espacio"><input type="text" id="oi-cerca-eje"></td>
-				</tr>
-			</tbody>
-		</table>
+    <!-- Tabla para la parte de "lejos" -->
+    <table class="seccion-lejos" id="seccion-lejos">
+        <thead>
+			<tr>
+                <th class="espacio invisible"></th> <!-- Celda invisible -->
+                <th class="espacio invisible"></th> <!-- Celda invisible -->
+                <th class="espacio invisible"></th> <!-- Celda invisible -->
+                <th class="espacio" id="arrow-trasp">
+					<button><i class="fa-solid fa-arrows-rotate"></i></button>
+				</th>
+            </tr>
+            <tr>
+                <th class="espacio invisible"></th> <!-- Celda invisible -->
+                <th class="espacio">ESF</th>
+                <th class="espacio">CIL</th>
+                <th class="espacio">EJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="espacio primer-columna">OD L.</td>
+                <td class="espacio"><input type="text" id="od-lejos-esf"></td>
+                <td class="espacio"><input type="text" id="od-lejos-cil"></td>
+                <td class="espacio"><input type="text" id="od-lejos-eje"></td>
+            </tr>
+            <tr>
+                <td class="espacio primer-columna">OI L.</td>
+                <td class="espacio"><input type="text" id="oi-lejos-esf"></td>
+                <td class="espacio"><input type="text" id="oi-lejos-cil"></td>
+                <td class="espacio"><input type="text" id="oi-lejos-eje"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Tabla para la parte de "ADD" -->
+    <table class="seccion-add" id="seccion-add">
+        <tbody>
+            <tr class="add-fila">
+                <td class="espacio primer-columna">ADD OD</td>
+                <td class="espacio"><input type="text" id="add-od"></td>
+                <td class="espacio primer-columna">ADD OI</td>
+                <td class="espacio"><input type="text" id="add-oi"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!-- Tabla para la parte de "cerca" -->
+    <table class="seccion-cerca">
+        <thead>
+            <tr>
+                <th class="espacio invisible"></th> <!-- Celda invisible -->
+                <th class="espacio">ESF</th>
+                <th class="espacio">CIL</th>
+                <th class="espacio">EJE</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="espacio primer-columna">OD C.</td>
+                <td class="espacio"><input type="text" id="od-cerca-esf"></td>
+                <td class="espacio"><input type="text" id="od-cerca-cil"></td>
+                <td class="espacio"><input type="text" id="od-cerca-eje"></td>
+            </tr>
+            <tr>
+                <td class="espacio primer-columna">OI C.</td>
+                <td class="espacio"><input type="text" id="oi-cerca-esf"></td>
+                <td class="espacio"><input type="text" id="oi-cerca-cil"></td>
+                <td class="espacio"><input type="text" id="oi-cerca-eje"></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
 <!-- Nueva sección para tipos de lentes -->
 <div>	
 	<section id="tipoLentesSection">
