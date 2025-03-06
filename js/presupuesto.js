@@ -1,5 +1,5 @@
 // presupuesto.js
-
+//Oskrkun 14.16.6.3.25
 import {
     MAX_ADD,
     MAX_ESF,
