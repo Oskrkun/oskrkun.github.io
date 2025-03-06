@@ -34,6 +34,7 @@
     width: 100%; /* Ocupa el 100% del contenedor padre */
     max-width: 800px; /* Ancho máximo para evitar que la tabla sea demasiado grande */
     overflow-x: auto; /* Permite el desplazamiento horizontal si la tabla es muy ancha */
+	
     /*padding: 20px;  Espacio interno para separar las tablas */
 }
 
@@ -48,6 +49,7 @@ table {
     border-collapse: separate;
     border-spacing: 5px 10px;
     table-layout: auto; /* Permite que las celdas se ajusten al contenido */
+	margin-top: 10px;
     /*margin-bottom: 20px;  Espacio entre tablas */
 }
 
@@ -172,7 +174,7 @@ table, th, td {
     background-color: transparent; /* Celda transparente */
     color: white; /* Color del texto en blanco */
     position: relative; /* Posición relativa para posicionar el ícono */
-    padding: 0; /* Eliminamos el padding para que no haya espacio extra */
+    padding: 20px 0; /* Agregamos padding vertical para separar el botón */
     border: none; /* Sin borde */
     box-shadow: none; /* Sin sombra */
 }
