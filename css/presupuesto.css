@@ -158,3 +158,37 @@ input[type="text"] {
     margin-left: 10px; /* Espaciado entre advertencias */
     display: block; /* Mostrar como bloque para que cada advertencia esté en una línea nueva */
 }
+
+/* Evitar la selección de texto en las filas y celdas */
+table, th, td {
+    user-select: none; /* Evita que el texto sea seleccionable */
+    -webkit-user-select: none; /* Compatibilidad con navegadores basados en WebKit */
+    -moz-user-select: none; /* Compatibilidad con Firefox */
+    -ms-user-select: none; /* Compatibilidad con Internet Explorer/Edge */
+}
+
+/* Estilos para la celda con el botón de flecha */
+#arrow-trasp {
+    background-color: #4CAF50; /* Color verde en la gama del azul que estamos usando */
+    color: white; /* Color del texto en blanco */
+    position: relative; /* Posición relativa para posicionar el ícono */
+}
+
+/* Estilos para el botón con el ícono de flecha */
+#arrow-trasp button {
+    background: none; /* Fondo transparente */
+    border: none; /* Sin borde */
+    color: white; /* Color del ícono en blanco */
+    cursor: pointer; /* Cambia el cursor a pointer */
+    font-size: 1.2em; /* Tamaño del ícono */
+    position: absolute; /* Posición absoluta para centrar el ícono */
+    top: 50%; /* Centrar verticalmente */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajuste fino para centrar */
+}
+
+/* Estilos para el ícono de FontAwesome */
+#arrow-trasp button i {
+    font-family: "Font Awesome 5 Free"; /* Fuente de FontAwesome */
+    font-weight: 900; /* Peso de la fuente para el ícono sólido */
+}
