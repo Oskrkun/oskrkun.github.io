@@ -14,8 +14,11 @@ export async function initPresupuesto() {
     // Crear los span de advertencia dinámicamente
     crearAdvertencias();
 
-    // Agregar eventos a los inputs
-    const inputs = document.querySelectorAll('.vista-previa input');
+    // Deshabilitar los campos de "cerca"
+    deshabilitarCamposCerca();
+
+    // Agregar eventos a los inputs de "lejos" y "ADD"
+    const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
         input.addEventListener('focus', onInputFocus); // Evento al entrar al input
@@ -29,6 +32,14 @@ export async function initPresupuesto() {
 
     // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
+}
+
+// Función para deshabilitar los campos de "cerca"
+function deshabilitarCamposCerca() {
+    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
+    inputsCerca.forEach(input => {
+        input.disabled = true; // Deshabilitar los campos de "cerca"
+    });
 }
 
 // Función para crear los span de advertencia dinámicamente
@@ -354,54 +365,6 @@ function calcularCercaOI() {
     document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
 }
 
-// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca" (OD)
-function calcularAddOD() {
-    // Obtener los valores de ESF de "lejos" y "cerca" para OD
-    const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
-    const esfCercaOD = parseFloat(document.getElementById('od-cerca-esf').value) || 0;
-
-    // Calcular ADD como la diferencia entre "cerca" y "lejos" para OD
-    let addOD = esfCercaOD - esfLejosOD;
-
-    // Asegurar que ADD no supere MAX_ADD
-    if (addOD > MAX_ADD) {
-        addOD = MAX_ADD;
-        // Recalcular la parte de "cerca" con el valor máximo de ADD
-        const esfCercaODAjustado = ajustarValorAPasos((esfLejosOD + addOD).toString());
-        document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
-    }
-
-    // Ajustar el valor de ADD a pasos de 0.25
-    const addODAjustado = ajustarValorAPasos(addOD.toString());
-
-    // Actualizar el campo de ADD para OD
-    document.getElementById('add-od').value = addODAjustado;
-}
-
-// Función para calcular y actualizar ADD basada en la diferencia entre "lejos" y "cerca" (OI)
-function calcularAddOI() {
-    // Obtener los valores de ESF de "lejos" y "cerca" para OI
-    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
-    const esfCercaOI = parseFloat(document.getElementById('oi-cerca-esf').value) || 0;
-
-    // Calcular ADD como la diferencia entre "cerca" y "lejos" para OI
-    let addOI = esfCercaOI - esfLejosOI;
-
-    // Asegurar que ADD no supere MAX_ADD
-    if (addOI > MAX_ADD) {
-        addOI = MAX_ADD;
-        // Recalcular la parte de "cerca" con el valor máximo de ADD
-        const esfCercaOIAjustado = ajustarValorAPasos((esfLejosOI + addOI).toString());
-        document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
-    }
-
-    // Ajustar el valor de ADD a pasos de 0.25
-    const addOIAjustado = ajustarValorAPasos(addOI.toString());
-
-    // Actualizar el campo de ADD para OI
-    document.getElementById('add-oi').value = addOIAjustado;
-}
-
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
 function sincronizarCambios(event) {
     const input = event.target;
@@ -413,15 +376,6 @@ function sincronizarCambios(event) {
             calcularCercaOD();
         } else if (id.includes('oi')) {
             calcularCercaOI();
-        }
-    }
-
-    // Si se modifica "cerca", actualizar ADD
-    if (id.includes('cerca-esf') && input.value !== '') {
-        if (id.includes('od')) {
-            calcularAddOD();
-        } else if (id.includes('oi')) {
-            calcularAddOI();
         }
     }
 
@@ -439,28 +393,14 @@ function sincronizarCambios(event) {
             }
         }
     }
-
-    // Sincronizar el eje de "cerca" con "lejos" si se modifica "cerca"
-    if (id.includes('cerca-eje')) {
-        if (id.includes('od')) {
-            document.getElementById('od-lejos-eje').value = input.value;
-        } else if (id.includes('oi')) {
-            document.getElementById('oi-lejos-eje').value = input.value;
-        }
-    }
 }
 
 // Función para agregar eventos de sincronización
 function agregarEventosSincronizacion() {
     const inputsLejos = document.querySelectorAll('.seccion-lejos input');
-    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
     const inputsAdd = document.querySelectorAll('.seccion-add input');
 
     inputsLejos.forEach(input => {
-        input.addEventListener('input', sincronizarCambios);
-    });
-
-    inputsCerca.forEach(input => {
         input.addEventListener('input', sincronizarCambios);
     });
 
