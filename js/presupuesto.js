@@ -1,7 +1,5 @@
 // presupuesto.js
 
-//Oskrkun 9.23.6.3.25
-
 // Variables para establecer los máximos de ADD, ESF y CIL
 const MAX_ADD = 3.25;
 const MAX_ESF = 25.00; // Máximo valor para ESF
@@ -65,10 +63,10 @@ function crearAdvertencias() {
     contenedorErrores.id = 'contenedor-errores';
     contenedorErrores.style.marginTop = '10px';
 
-    // Insertar el contenedor de errores debajo de la sección de lejos
-    const seccionLejos = document.getElementById('seccion-lejos');
-    if (seccionLejos) {
-        seccionLejos.insertAdjacentElement('afterend', contenedorErrores);
+    // Insertar el contenedor de errores debajo de la sección de cerca
+    const seccionCerca = document.getElementById('seccion-cerca');
+    if (seccionCerca) {
+        seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
     }
 }
 
@@ -101,60 +99,75 @@ function validarInput(event) {
 
     // Validación específica para EJE
     if (id.includes('eje')) {
-        // Solo permitir números enteros entre 0 y 180
-        if (!/^\d*$/.test(value)) {
-            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
-
-        // Asegurar que el valor esté en el rango de 0 a 180
-        const valorNumerico = parseInt(value, 10);
-        if (valorNumerico < 0 || valorNumerico > 180) {
-            console.error(`Error: El valor en ${id} debe estar entre 0 y 180.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
+        validarEje(input, value);
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
-        // Solo permitir números positivos y punto decimal
-        if (!/^\d*\.?\d*$/.test(value)) {
-            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números positivos y punto decimal.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
-
-        // Asegurar que el valor esté en el rango de 0 a MAX_ADD
-        const valorNumerico = parseFloat(value);
-        if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
-            console.error(`Error: El valor en ${id} debe estar entre 0 y ${MAX_ADD}.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
+        validarADD(input, value);
     }
     // Validación para ESF y CIL
     else {
-        // Permitir los símbolos +, - y punto decimal mientras se escribe
-        if (!/^[+-]?\d*\.?\d*$/.test(value)) {
-            console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
-
-        // Validar que no haya valores de 3 cifras
-        if (value.length > 5) { // Considerando el signo y el punto decimal
-            console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
-            input.value = value.slice(0, -1); // Eliminar el último carácter no válido
-            return;
-        }
-
-        // Validar que el valor esté dentro del rango permitido
-        const valorNumerico = parseFloat(value);
-        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+        validarEsfOCil(input, value, id);
     }
 
     console.log(`Input ${id} validado correctamente.`);
+}
+
+// Función para validar el EJE
+function validarEje(input, value) {
+    // Solo permitir números enteros entre 0 y 180
+    if (!/^\d*$/.test(value)) {
+        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Asegurar que el valor esté en el rango de 0 a 180
+    const valorNumerico = parseInt(value, 10);
+    if (valorNumerico < 0 || valorNumerico > 180) {
+        console.error(`Error: El valor en ${input.id} debe estar entre 0 y 180.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+}
+
+// Función para validar ADD
+function validarADD(input, value) {
+    // Solo permitir números positivos y punto decimal
+    if (!/^\d*\.?\d*$/.test(value)) {
+        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números positivos y punto decimal.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Asegurar que el valor esté en el rango de 0 a MAX_ADD
+    const valorNumerico = parseFloat(value);
+    if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
+        console.error(`Error: El valor en ${input.id} debe estar entre 0 y ${MAX_ADD}.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+}
+
+// Función para validar ESF y CIL
+function validarEsfOCil(input, value, id) {
+    // Permitir los símbolos +, - y punto decimal mientras se escribe
+    if (!/^[+-]?\d*\.?\d*$/.test(value)) {
+        console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Validar que no haya valores de 3 cifras
+    if (value.length > 5) { // Considerando el signo y el punto decimal
+        console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Validar que el valor esté dentro del rango permitido
+    const valorNumerico = parseFloat(value);
+    mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
 }
 
 // Función para ajustar el valor a pasos de 0.25
@@ -250,10 +263,10 @@ function revisarErroresYActualizarCerca() {
     const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
 
     if (addOD !== 0) {
-        calcularCercaOD();
+        calcularCerca('od');
     }
     if (addOI !== 0) {
-        calcularCercaOI();
+        calcularCerca('oi');
     }
 
     // Actualizar la lista de errores en la interfaz
@@ -334,44 +347,24 @@ function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
     actualizarErrores();
 }
 
-// Función para calcular y actualizar la parte de "cerca" basada en ADD (OD)
-function calcularCercaOD() {
-    // Obtener los valores de ESF de "lejos" y ADD para OD
-    const esfLejosOD = parseFloat(document.getElementById('od-lejos-esf').value) || 0;
-    const addOD = parseFloat(document.getElementById('add-od').value) || 0;
+// Función genérica para calcular y actualizar la parte de "cerca"
+function calcularCerca(ojo) {
+    // Obtener los valores de ESF de "lejos" y ADD para el ojo especificado
+    const esfLejos = parseFloat(document.getElementById(`${ojo}-lejos-esf`).value) || 0;
+    const add = parseFloat(document.getElementById(`add-${ojo}`).value) || 0;
 
-    // Calcular el valor de ESF para "cerca" en OD
-    const esfCercaOD = esfLejosOD + addOD;
-
-    // Ajustar el valor a pasos de 0.25
-    const esfCercaODAjustado = ajustarValorAPasos(esfCercaOD.toString());
-
-    // Actualizar el campo de ESF en "cerca" para OD
-    document.getElementById('od-cerca-esf').value = esfCercaODAjustado;
-
-    // Copiar el cilindro y el eje de "lejos" a "cerca" para OD
-    document.getElementById('od-cerca-cil').value = document.getElementById('od-lejos-cil').value;
-    document.getElementById('od-cerca-eje').value = document.getElementById('od-lejos-eje').value;
-}
-
-// Función para calcular y actualizar la parte de "cerca" basada en ADD (OI)
-function calcularCercaOI() {
-    // Obtener los valores de ESF de "lejos" y ADD para OI
-    const esfLejosOI = parseFloat(document.getElementById('oi-lejos-esf').value) || 0;
-    const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
-
-    // Calcular el valor de ESF para "cerca" en OI
-    const esfCercaOI = esfLejosOI + addOI;
+    // Calcular el valor de ESF para "cerca"
+    const esfCerca = esfLejos + add;
 
     // Ajustar el valor a pasos de 0.25
-    const esfCercaOIAjustado = ajustarValorAPasos(esfCercaOI.toString());
+    const esfCercaAjustado = ajustarValorAPasos(esfCerca.toString());
 
-    // Actualizar el campo de ESF en "cerca" para OI
-    document.getElementById('oi-cerca-esf').value = esfCercaOIAjustado;
+    // Actualizar el campo de ESF en "cerca" para el ojo especificado
+    document.getElementById(`${ojo}-cerca-esf`).value = esfCercaAjustado;
 
-    // Copiar el cilindro y el eje de "lejos" a "cerca" para OI
-    document.getElementById('oi-cerca-cil').value = document.getElementById('oi-lejos-cil').value;
-    document.getElementById('oi-cerca-eje').value = document.getElementById('oi-lejos-eje').value;
+    // Copiar el cilindro y el eje de "lejos" a "cerca" para el ojo especificado
+    document.getElementById(`${ojo}-cerca-cil`).value = document.getElementById(`${ojo}-lejos-cil`).value;
+    document.getElementById(`${ojo}-cerca-eje`).value = document.getElementById(`${ojo}-lejos-eje`).value;
 }
 
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
@@ -381,25 +374,16 @@ function sincronizarCambios(event) {
 
     // Si se modifica ADD, actualizar "cerca"
     if (id.includes('add') && input.value !== '') {
-        if (id.includes('od')) {
-            calcularCercaOD();
-        } else if (id.includes('oi')) {
-            calcularCercaOI();
-        }
+        const ojo = id.includes('od') ? 'od' : 'oi';
+        calcularCerca(ojo);
     }
 
     // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
     if (id.includes('lejos-esf')) {
-        if (id.includes('od')) {
-            const addOD = parseFloat(document.getElementById('add-od').value) || 0;
-            if (addOD !== 0) {
-                calcularCercaOD();
-            }
-        } else if (id.includes('oi')) {
-            const addOI = parseFloat(document.getElementById('add-oi').value) || 0;
-            if (addOI !== 0) {
-                calcularCercaOI();
-            }
+        const ojo = id.includes('od') ? 'od' : 'oi';
+        const add = parseFloat(document.getElementById(`add-${ojo}`).value) || 0;
+        if (add !== 0) {
+            calcularCerca(ojo);
         }
     }
 
