@@ -1,0 +1,58 @@
+CREATE OR REPLACE FUNCTION cargar_productos_filtrados(p_tipo_lente_id INT, p_tratamientos INT[])
+RETURNS TABLE (
+    id INT,
+    nombre TEXT,
+    tipo_lente TEXT,
+    material TEXT,
+    indice_refraccion TEXT,
+    laboratorio TEXT,
+    min_esf FLOAT,
+    max_esf FLOAT,
+    cil FLOAT,
+    precio FLOAT,
+    tratamientos TEXT[]
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        p.id,
+        p.nombre,
+        tl.nombre AS tipo_lente,
+        m.nombre AS material,
+        ir.valor AS indice_refraccion,
+        l.nombre AS laboratorio,
+        p.min_esf,
+        p.max_esf,
+        p.cil,
+        (SELECT hp.precio
+         FROM historico_precios hp
+         WHERE hp.producto_id = p.id
+         ORDER BY hp.fecha DESC
+         LIMIT 1) AS precio,
+        ARRAY(
+            SELECT t.nombre
+            FROM producto_tratamiento pt
+            JOIN tratamientos t ON pt.tratamiento_id = t.id
+            WHERE pt.producto_id = p.id
+        ) AS tratamientos
+    FROM
+        productos p
+    LEFT JOIN
+        tipos_lentes tl ON p.tipo_lente_id = tl.id
+    LEFT JOIN
+        materiales m ON p.material_id = m.id
+    LEFT JOIN
+        indices_refraccion ir ON p.indice_refraccion_id = ir.id
+    LEFT JOIN
+        laboratorios l ON p.laboratorio_id = l.id
+    WHERE
+        (p_tipo_lente_id IS NULL OR p.tipo_lente_id = p_tipo_lente_id)
+        AND (p_tratamientos IS NULL OR ARRAY(
+            SELECT pt.tratamiento_id
+            FROM producto_tratamiento pt
+            WHERE pt.producto_id = p.id
+        ) @> p_tratamientos)
+    GROUP BY
+        p.id, tl.nombre, m.nombre, ir.valor, l.nombre;
+END;
+$$ LANGUAGE plpgsql;
