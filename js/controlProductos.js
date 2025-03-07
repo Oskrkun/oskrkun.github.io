@@ -31,16 +31,7 @@ export async function cargarTiposLentes() {
 
             // Agregar evento para permitir solo un checkbox seleccionado
             tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', function () {
-                    if (this.checked) {
-                        // Desmarcar todos los otros radios
-                        tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(otherRadio => {
-                            if (otherRadio !== this) {
-                                otherRadio.checked = false;
-                            }
-                        });
-                    }
-                });
+                radio.addEventListener('change', cargarProductosFiltrados);
             });
         } else {
             console.error('Contenedor de tipos de lentes no encontrado.');
@@ -80,9 +71,7 @@ export async function cargarTratamientos() {
 
             // Agregar evento para manejar la selección de tratamientos
             tratamientosContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    console.log('Tratamiento seleccionado:', this.value, this.checked);
-                });
+                checkbox.addEventListener('change', cargarProductosFiltrados);
             });
         } else {
             console.error('Contenedor de tratamientos no encontrado.');
@@ -93,33 +82,25 @@ export async function cargarTratamientos() {
 }
 
 // Función para verificar si la receta está dentro de los rangos permitidos
-function verificarRecetaEnRango(productos) {
+function verificarRecetaEnRango(producto) {
     const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
     const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
     const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
     const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
-    // Si no hay receta en ningún ojo, no hacer ninguna verificación
-    if (esfOD === null && cilOD === null && esfOI === null && cilOI === null) {
-        return true; // No hay receta, mostrar todos los productos
-    }
+    const minEsf = parseFloat(producto.min_esf) || -Infinity;
+    const maxEsf = parseFloat(producto.max_esf) || Infinity;
+    const cil = parseFloat(producto.cil) || Infinity;
 
-    // Verificar si al menos un producto cumple con los rangos de la receta
-    return productos.some(producto => {
-        const minEsf = parseFloat(producto.min_esf) || -Infinity;
-        const maxEsf = parseFloat(producto.max_esf) || Infinity;
-        const cil = parseFloat(producto.cil) || Infinity;
+    // Verificar OD
+    const odEnRango = (esfOD === null || (esfOD >= minEsf && esfOD <= maxEsf)) &&
+                      (cilOD === null || Math.abs(cilOD) <= cil);
 
-        // Verificar OD
-        const odEnRango = (esfOD === null || (esfOD >= minEsf && esfOD <= maxEsf)) &&
-                          (cilOD === null || Math.abs(cilOD) <= cil);
+    // Verificar OI
+    const oiEnRango = (esfOI === null || (esfOI >= minEsf && esfOI <= maxEsf)) &&
+                      (cilOI === null || Math.abs(cilOI) <= cil);
 
-        // Verificar OI
-        const oiEnRango = (esfOI === null || (esfOI >= minEsf && esfOI <= maxEsf)) &&
-                          (cilOI === null || Math.abs(cilOI) <= cil);
-
-        return odEnRango || oiEnRango;
-    });
+    return odEnRango || oiEnRango;
 }
 
 // Función para cargar productos filtrados
@@ -143,43 +124,52 @@ export async function cargarProductosFiltrados() {
 
         console.log('Productos filtrados cargados:', productos);
 
-        // Verificar si la receta está dentro de los rangos permitidos
-        const recetaEnRango = verificarRecetaEnRango(productos);
-
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
         if (tbody) {
             tbody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
 
-            // Verificar si hay productos y si la receta está en rango
-            if (productos && productos.length > 0 && recetaEnRango) {
+            // Verificar si hay productos
+            if (productos && productos.length > 0) {
                 productos.forEach(producto => {
-                    const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
-                    const precio = formatearPrecio(producto.precio); // Formatear el precio
+                    // Verificar si la receta está dentro de los rangos permitidos
+                    if (verificarRecetaEnRango(producto)) {
+                        const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
+                        const precio = formatearPrecio(producto.precio); // Formatear el precio
 
-                    const min_esf = formatearNumero(producto.min_esf);
-                    const max_esf = formatearNumero(producto.max_esf);
-                    const cil = formatearNumero(producto.cil);
+                        const min_esf = formatearNumero(producto.min_esf);
+                        const max_esf = formatearNumero(producto.max_esf);
+                        const cil = formatearNumero(producto.cil);
 
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${producto.nombre}</td>
+                            <td>${producto.tipo_lente}</td>
+                            <td>${producto.material}</td>
+                            <td>${producto.laboratorio}</td>
+                            <td>${min_esf}</td>
+                            <td>${max_esf}</td>
+                            <td>${cil}</td>
+                            <td>${precio}</td>
+                            <td>${tratamientos}</td>
+                        `;
+                        tbody.appendChild(row);
+                    }
+                });
+
+                // Si no hay productos que cumplan con la receta, mostrar un mensaje
+                if (tbody.innerHTML === '') {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${producto.nombre}</td>
-                        <td>${producto.tipo_lente}</td>
-                        <td>${producto.material}</td>
-                        <td>${producto.laboratorio}</td>
-                        <td>${min_esf}</td>
-                        <td>${max_esf}</td>
-                        <td>${cil}</td>
-                        <td>${precio}</td>
-                        <td>${tratamientos}</td>
+                        <td colspan="9" style="text-align: center;">No hay productos disponibles para la receta ingresada.</td>
                     `;
                     tbody.appendChild(row);
-                });
+                }
             } else {
-                // Si no hay productos o la receta no está en rango, mostrar un mensaje en la tabla
+                // Si no hay productos, mostrar un mensaje en la tabla
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="9" style="text-align: center;">${productos.length === 0 ? 'No hay productos disponibles.' : 'La receta no está dentro de los rangos permitidos para los productos seleccionados.'}</td>
+                    <td colspan="9" style="text-align: center;">No hay productos disponibles.</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -229,5 +219,13 @@ export function agregarEventosFiltrado() {
 
     tratamientosCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', cargarProductosFiltrados);
+    });
+}
+
+// Función para agregar eventos de cambio en los inputs de la receta
+export function agregarEventosReceta() {
+    const inputsReceta = document.querySelectorAll('.vista-previa input');
+    inputsReceta.forEach(input => {
+        input.addEventListener('blur', cargarProductosFiltrados);
     });
 }
