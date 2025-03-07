@@ -41,6 +41,7 @@
 }
 
 /* Estilos comunes para títulos de sección */
+#vista-previa,
 #tipoLentesSection h2,
 #tratamientosSection h2 {
     color: var(--color-primario);
