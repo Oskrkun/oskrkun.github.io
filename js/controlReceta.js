@@ -410,8 +410,12 @@ export function transponerReceta() {
     const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || 0;
 
     // Verificar si los cilindros son del mismo signo o diferentes
-    if ((cilOD > 0 && cilOI > 0) || (cilOD < 0 && cilOI < 0)) {
-        // Ambos cilindros son positivos o ambos son negativos: transposición completa en ambos ojos
+    if (cilOD > 0 && cilOI > 0) {
+        // Ambos cilindros son positivos: cambiar ambos a negativos
+        transponerOjo('od');
+        transponerOjo('oi');
+    } else if (cilOD < 0 && cilOI < 0) {
+        // Ambos cilindros son negativos: cambiar ambos a positivos
         transponerOjo('od');
         transponerOjo('oi');
     } else if (cilOD > 0 || cilOI > 0) {
