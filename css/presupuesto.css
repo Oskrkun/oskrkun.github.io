@@ -267,3 +267,28 @@ input[type="text"] {
         padding: 4px;
     }
 }
+
+/* Estilos para el ícono de flecha */
+.toggle-icon {
+    margin-left: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Estilos para el contenido de las secciones */
+.section-content {
+    max-height: 1000px; /* Altura máxima cuando está expandido */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+/* Estilos para las secciones contraídas */
+.collapsed .section-content {
+    max-height: 0;
+    overflow: hidden;
+}
+
+/* Estilos para la flecha cuando la sección está contraída */
+.collapsed .toggle-icon {
+    transform: rotate(180deg);
+}
