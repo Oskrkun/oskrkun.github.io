@@ -276,3 +276,68 @@ input[type="text"] {
     margin: 0;
     transform: scale(1.2);
 }
+
+/* Estilos para la sección de tratamientos */
+#tratamientosSection {
+    background-color: var(--color-fondo-contenedor);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 800px;
+}
+
+#tratamientosSection h2 {
+    color: var(--color-primario);
+    margin-bottom: 15px;
+}
+
+#tratamientosTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 10px;
+}
+
+#tratamientosTable th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#tratamientosTable th:nth-child(2) {
+    text-align: center;
+}
+
+#tratamientosTable td {
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto);
+    padding: 12px 15px;
+    text-align: left;
+    border-radius: 0;
+}
+
+#tratamientosTable td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+#tratamientosTable td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+}
+
+#tratamientosTable tr:hover td {
+    background-color: var(--color-fondo-hover);
+    cursor: pointer;
+}
+
+#tratamientosTable input[type="radio"] {
+    margin: 0;
+    transform: scale(1.2);
+}
