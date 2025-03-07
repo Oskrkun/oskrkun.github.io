@@ -29,7 +29,8 @@
 /* Estilos comunes para contenedores */
 .vista-previa,
 #tipoLentesSection,
-#tratamientosSection {
+#tratamientosSection,
+.Productos {
     background-color: var(--color-fondo-contenedor);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -41,11 +42,49 @@
 }
 
 /* Estilos comunes para títulos de sección */
-#vista-previa,
+#vista-previa h2,
 #tipoLentesSection h2,
-#tratamientosSection h2 {
+#tratamientosSection h2,
+.Productos h2 {
     color: var(--color-primario);
     margin-bottom: 15px;
+    cursor: pointer; /* Hace que el h2 sea clickeable */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--color-fondo-fila);
+    border-radius: 5px;
+}
+
+/* Estilos para el ícono de flecha */
+.toggle-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 10px;
+}
+
+/* Estilos para la flecha cuando la sección está contraída */
+.collapsed .toggle-icon {
+    transform: rotate(0deg); /* Flecha hacia abajo */
+}
+
+/* Estilos para la flecha cuando la sección está expandida */
+.toggle-icon {
+    transform: rotate(180deg); /* Flecha hacia arriba */
+}
+
+/* Estilos para el contenido de las secciones */
+.section-content {
+    max-height: 1000px; /* Altura máxima cuando está expandido */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+/* Estilos para las secciones contraídas */
+.collapsed .section-content {
+    max-height: 0;
+    overflow: hidden;
 }
 
 /* Estilos comunes para tablas */
@@ -60,7 +99,6 @@ th, td {
     padding: 12px 15px;
     text-align: center;
     white-space: nowrap;
-    /*min-width: 100px;*/
 }
 
 thead th {
@@ -266,31 +304,6 @@ input[type="text"] {
         width: 50px;
         padding: 4px;
     }
-}
-
-/* Estilos para el ícono de flecha */
-.toggle-icon {
-    margin-left: 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-/* Estilos para el contenido de las secciones */
-.section-content {
-    max-height: 1000px; /* Altura máxima cuando está expandido */
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-/* Estilos para las secciones contraídas */
-.collapsed .section-content {
-    max-height: 0;
-    overflow: hidden;
-}
-
-/* Estilos para la flecha cuando la sección está contraída */
-.collapsed .toggle-icon {
-    transform: rotate(180deg);
 }
 
 /* Estilos para la sección de productos */
