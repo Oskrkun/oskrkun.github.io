@@ -32,6 +32,52 @@ import {
     agregarEventosFiltrado
 } from './controlProductos.js';
 
+// Función para manejar la contracción/expansión de las secciones
+function toggleSection(event) {
+    // Asegúrate de que el evento se haya disparado correctamente
+    if (!event || !event.currentTarget) {
+        console.error('Evento no válido');
+        return;
+    }
+
+    // Selecciona el ícono dentro del h2
+    const icon = event.currentTarget.querySelector('.toggle-icon');
+    if (!icon) {
+        console.error('No se encontró el ícono .toggle-icon');
+        return;
+    }
+
+    // Obtén el atributo data-target
+    const targetId = icon.getAttribute('data-target');
+    if (!targetId) {
+        console.error('No se encontró el atributo data-target en el ícono');
+        return;
+    }
+
+    // Encuentra el contenido de la sección
+    const sectionContent = document.getElementById(targetId);
+    if (!sectionContent) {
+        console.error('No se encontró el contenido de la sección con el ID:', targetId);
+        return;
+    }
+
+    // Encuentra la sección padre
+    const section = sectionContent.parentElement;
+    if (!section) {
+        console.error('No se encontró la sección padre');
+        return;
+    }
+
+    // Alternar la clase 'collapsed'
+    if (section.classList.contains('collapsed')) {
+        // Expandir la sección
+        section.classList.remove('collapsed');
+    } else {
+        // Contraer la sección
+        section.classList.add('collapsed');
+    }
+}
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -99,52 +145,6 @@ function deshabilitarCamposCerca() {
     inputsCerca.forEach(input => {
         input.disabled = true; // Deshabilitar los campos de "cerca"
     });
-}
-
-// Función para manejar la contracción/expansión de las secciones
-function toggleSection(event) {
-    // Asegúrate de que el evento se haya disparado correctamente
-    if (!event || !event.currentTarget) {
-        console.error('Evento no válido');
-        return;
-    }
-
-    // Selecciona el ícono dentro del h2
-    const icon = event.currentTarget.querySelector('.toggle-icon');
-    if (!icon) {
-        console.error('No se encontró el ícono .toggle-icon');
-        return;
-    }
-
-    // Obtén el atributo data-target
-    const targetId = icon.getAttribute('data-target');
-    if (!targetId) {
-        console.error('No se encontró el atributo data-target en el ícono');
-        return;
-    }
-
-    // Encuentra el contenido de la sección
-    const sectionContent = document.getElementById(targetId);
-    if (!sectionContent) {
-        console.error('No se encontró el contenido de la sección con el ID:', targetId);
-        return;
-    }
-
-    // Encuentra la sección padre
-    const section = sectionContent.parentElement;
-    if (!section) {
-        console.error('No se encontró la sección padre');
-        return;
-    }
-
-    // Alternar la clase 'collapsed'
-    if (section.classList.contains('collapsed')) {
-        // Expandir la sección
-        section.classList.remove('collapsed');
-    } else {
-        // Contraer la sección
-        section.classList.add('collapsed');
-    }
 }
 
 // Agregar eventos a los íconos de flecha
