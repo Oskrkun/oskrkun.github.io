@@ -103,7 +103,7 @@ function deshabilitarCamposCerca() {
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
-    const icon = event.target;
+    const icon = event.currentTarget.querySelector('.toggle-icon'); // Selecciona el ícono dentro del h2
     const targetId = icon.getAttribute('data-target');
     const sectionContent = document.getElementById(targetId);
     const section = sectionContent.parentElement;
@@ -111,15 +111,21 @@ function toggleSection(event) {
     if (section.classList.contains('collapsed')) {
         // Expandir la sección
         section.classList.remove('collapsed');
-        icon.classList.remove('fa-chevron-up');
-        icon.classList.add('fa-chevron-down');
     } else {
         // Contraer la sección
         section.classList.add('collapsed');
-        icon.classList.remove('fa-chevron-down');
-        icon.classList.add('fa-chevron-up');
     }
 }
+
+// Agregar eventos a los íconos de flecha
+document.querySelectorAll('.toggle-icon').forEach(icon => {
+    icon.addEventListener('click', toggleSection);
+});
+
+// Inicializar el presupuesto cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    initPresupuesto();
+});
 
 // Agregar eventos a los íconos de flecha
 document.querySelectorAll('.toggle-icon').forEach(icon => {
