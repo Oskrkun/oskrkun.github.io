@@ -29,7 +29,8 @@ import {
     cargarProductosFiltrados,
     formatearNumero,
     formatearPrecio,
-    agregarEventosFiltrado
+    agregarEventosFiltrado,
+    agregarEventosReceta
 } from './controlProductos.js';
 
 // Función para manejar la contracción/expansión de las secciones
@@ -141,6 +142,9 @@ export async function initPresupuesto() {
 
     // Agregar eventos de clic a los títulos de las secciones
     agregarEventosToggleSection();
+
+    // Agregar eventos de cambio en los inputs de la receta
+    agregarEventosReceta();
 }
 
 // Función para agregar evento al botón de rotación
