@@ -119,8 +119,12 @@ export async function cargarProductosFiltrados() {
 
         // Filtrar productos según los valores más altos de ESF y CIL
         const productosFiltrados = productos.filter(producto => {
+            // Verificar si el producto cumple con el ESF más alto
             const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-            const cumpleCil = cilMasAlto === null || (producto.cil >= cilMasAlto);
+
+            // Verificar si el producto cumple con el CIL más alto
+            const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);  // Lógica corregida
+
             return cumpleEsf && cumpleCil;
         });
 
