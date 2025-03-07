@@ -1,5 +1,4 @@
 // presupuesto.js
-// Oskrkun 14.55.6.3.25
 import { supabaseClient } from './supabaseConfig.js';
 import {
     MAX_ADD,
@@ -38,13 +37,13 @@ export async function initPresupuesto() {
     const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
-        input.addEventListener('focus', onInputFocus); // Evento al entrar al input
-        input.addEventListener('blur', onInputBlur); // Evento al salir del input
+        input.addEventListener('focus', onInputFocus);
+        input.addEventListener('blur', onInputBlur);
 
         // Agregar evento para borrar el contenido al recibir el foco
         input.addEventListener('focus', function () {
             if (this.value !== '') {
-                this.value = ''; // Borrar el contenido si no está vacío
+                this.value = '';
             }
         });
     });
@@ -174,7 +173,6 @@ async function cargarTratamientos() {
             tratamientosContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     console.log('Tratamiento seleccionado:', this.value, this.checked);
-                    // Aquí puedes agregar lógica para manejar la selección de tratamientos
                 });
             });
         } else {
