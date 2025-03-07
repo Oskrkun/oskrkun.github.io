@@ -92,24 +92,13 @@ export async function cargarProductosFiltrados() {
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
-        // Obtener los valores de la receta
-        const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
-        const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
-        const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
-        const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
-
         console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
         console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
-        console.log('Valores de la receta:', { esfOD, cilOD, esfOI, cilOI });
 
         // Llamar a la función de Supabase para obtener los productos filtrados
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
-            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null,
-            p_esf_od: esfOD,
-            p_cil_od: cilOD,
-            p_esf_oi: esfOI,
-            p_cil_oi: cilOI
+            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
         });
 
         if (error) throw error;
