@@ -410,21 +410,31 @@ export function transponerReceta() {
     const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || 0;
 
     // Verificar si los cilindros son del mismo signo o diferentes
-    if (cilOD > 0 && cilOI > 0) {
-        // Ambos cilindros son positivos: cambiar ambos a negativos
-        transponerOjo('od');
-        transponerOjo('oi');
-    } else if (cilOD < 0 && cilOI < 0) {
-        // Ambos cilindros son negativos: cambiar ambos a positivos
-        transponerOjo('od');
-        transponerOjo('oi');
-    } else if (cilOD > 0 || cilOI > 0) {
-        // Uno de los cilindros es positivo: cambiar solo el positivo a negativo
-        if (cilOD > 0) {
-            cambiarSignoCilindro('od');
+    if (cilOD !== 0 && cilOI !== 0) {
+        // Ambos cilindros tienen valores: transponer ambos
+        if (cilOD > 0 && cilOI > 0) {
+            // Ambos cilindros son positivos: cambiar ambos a negativos
+            transponerOjo('od');
+            transponerOjo('oi');
+        } else if (cilOD < 0 && cilOI < 0) {
+            // Ambos cilindros son negativos: cambiar ambos a positivos
+            transponerOjo('od');
+            transponerOjo('oi');
+        } else if (cilOD > 0 || cilOI > 0) {
+            // Uno de los cilindros es positivo: cambiar solo el positivo a negativo
+            if (cilOD > 0) {
+                cambiarSignoCilindro('od');
+            }
+            if (cilOI > 0) {
+                cambiarSignoCilindro('oi');
+            }
         }
-        if (cilOI > 0) {
-            cambiarSignoCilindro('oi');
+    } else if (cilOD !== 0 || cilOI !== 0) {
+        // Solo un cilindro tiene valor: transponer solo ese ojo
+        if (cilOD !== 0) {
+            transponerOjo('od');
+        } else if (cilOI !== 0) {
+            transponerOjo('oi');
         }
     }
 
@@ -435,7 +445,7 @@ export function transponerReceta() {
 function transponerOjo(ojo) {
     const esf = parseFloat(document.getElementById(`${ojo}-lejos-esf`).value) || 0;
     const cil = parseFloat(document.getElementById(`${ojo}-lejos-cil`).value) || 0;
-    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0;
+    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0; // Si el eje está vacío, se toma como 0
 
     // Cambiar el signo del cilindro
     const cilTranspuesto = -cil;
@@ -462,7 +472,7 @@ function transponerOjo(ojo) {
 function cambiarSignoCilindro(ojo) {
     const esf = parseFloat(document.getElementById(`${ojo}-lejos-esf`).value) || 0;
     const cil = parseFloat(document.getElementById(`${ojo}-lejos-cil`).value) || 0;
-    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0;
+    const eje = parseInt(document.getElementById(`${ojo}-lejos-eje`).value) || 0; // Si el eje está vacío, se toma como 0
 
     // Cambiar el signo del cilindro
     const cilTranspuesto = -cil;
