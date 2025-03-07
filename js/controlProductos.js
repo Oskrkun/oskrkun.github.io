@@ -92,6 +92,36 @@ export async function cargarTratamientos() {
     }
 }
 
+// Función para verificar si la receta está dentro de los rangos permitidos
+function verificarRecetaEnRango(productos) {
+    const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
+    const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
+    const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
+    const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
+
+    // Si no hay receta en ningún ojo, no hacer ninguna verificación
+    if (esfOD === null && cilOD === null && esfOI === null && cilOI === null) {
+        return true; // No hay receta, mostrar todos los productos
+    }
+
+    // Verificar si al menos un producto cumple con los rangos de la receta
+    return productos.some(producto => {
+        const minEsf = parseFloat(producto.min_esf) || -Infinity;
+        const maxEsf = parseFloat(producto.max_esf) || Infinity;
+        const cil = parseFloat(producto.cil) || Infinity;
+
+        // Verificar OD
+        const odEnRango = (esfOD === null || (esfOD >= minEsf && esfOD <= maxEsf)) &&
+                          (cilOD === null || Math.abs(cilOD) <= cil);
+
+        // Verificar OI
+        const oiEnRango = (esfOI === null || (esfOI >= minEsf && esfOI <= maxEsf)) &&
+                          (cilOI === null || Math.abs(cilOI) <= cil);
+
+        return odEnRango || oiEnRango;
+    });
+}
+
 // Función para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     console.log('Cargando productos filtrados...');
@@ -113,13 +143,16 @@ export async function cargarProductosFiltrados() {
 
         console.log('Productos filtrados cargados:', productos);
 
+        // Verificar si la receta está dentro de los rangos permitidos
+        const recetaEnRango = verificarRecetaEnRango(productos);
+
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
         if (tbody) {
             tbody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
 
-            // Verificar si hay productos
-            if (productos && productos.length > 0) {
+            // Verificar si hay productos y si la receta está en rango
+            if (productos && productos.length > 0 && recetaEnRango) {
                 productos.forEach(producto => {
                     const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
                     const precio = formatearPrecio(producto.precio); // Formatear el precio
@@ -143,10 +176,10 @@ export async function cargarProductosFiltrados() {
                     tbody.appendChild(row);
                 });
             } else {
-                // Si no hay productos, mostrar un mensaje en la tabla
+                // Si no hay productos o la receta no está en rango, mostrar un mensaje en la tabla
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="9" style="text-align: center;">No hay productos disponibles.</td>
+                    <td colspan="9" style="text-align: center;">${productos.length === 0 ? 'No hay productos disponibles.' : 'La receta no está dentro de los rangos permitidos para los productos seleccionados.'}</td>
                 `;
                 tbody.appendChild(row);
             }
