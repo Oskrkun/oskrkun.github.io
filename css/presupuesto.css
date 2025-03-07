@@ -219,16 +219,21 @@ input[type="text"] {
     text-align: center;
 }
 
+/* Eliminar hover en todas las filas */
 #tipoLentesTable tr:hover td,
 #tratamientosTable tr:hover td {
-    background-color: var(--color-fondo-hover);
-    cursor: pointer;
+    background-color: var(--color-fondo-fila); /* Mantener el color original */
+    cursor: default; /* Cursor por defecto */
 }
 
+/* Permitir interacción solo en checkboxes y radio buttons */
+#tipoLentesTable input[type="checkbox"],
 #tipoLentesTable input[type="radio"],
+#tratamientosTable input[type="checkbox"],
 #tratamientosTable input[type="radio"] {
-    margin: 0;
-    transform: scale(1.2);
+    pointer-events: auto; /* Permitir interacción */
+    transform: scale(1.5); /* Escala 1.5 */
+    margin: 0; /* Sin margen */
 }
 
 /* Estilos responsivos */
