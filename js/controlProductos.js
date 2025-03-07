@@ -98,9 +98,13 @@ export async function cargarProductosFiltrados() {
         const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
         const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
-        // Determinar los valores más altos de ESF y CIL
-        const esfMasAlto = obtenerValorMasAlto(odLejosEsf, oiLejosEsf);
-        const cilMasAlto = obtenerValorMasAlto(odLejosCil, oiLejosCil);
+        // Transponer internamente los valores de ESF y CIL
+        const { esfOD, cilOD } = transponerInternamente(odLejosEsf, odLejosCil);
+        const { esfOI, cilOI } = transponerInternamente(oiLejosEsf, oiLejosCil);
+
+        // Determinar los valores más altos de ESF y CIL (usando los valores transpuestos)
+        const esfMasAlto = obtenerValorMasAlto(esfOD, esfOI);
+        const cilMasAlto = obtenerValorMasAlto(cilOD, cilOI);
 
         console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
         console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
@@ -119,12 +123,8 @@ export async function cargarProductosFiltrados() {
 
         // Filtrar productos según los valores más altos de ESF y CIL
         const productosFiltrados = productos.filter(producto => {
-            // Verificar si el producto cumple con el ESF más alto
             const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-
-            // Verificar si el producto cumple con el CIL más alto
-            const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);  // Lógica corregida
-
+            const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);
             return cumpleEsf && cumpleCil;
         });
 
@@ -170,6 +170,22 @@ export async function cargarProductosFiltrados() {
     } catch (error) {
         console.error('Error cargando productos filtrados:', error);
     }
+}
+
+// Función para transponer internamente los valores de ESF y CIL
+function transponerInternamente(esf, cil) {
+    if (cil === null || cil === 0) {
+        // Si no hay cilindro, no se hace transposición
+        return { esf, cil };
+    }
+
+    // Cambiar el signo del cilindro
+    const cilTranspuesto = -cil;
+
+    // Ajustar el esférico
+    const esfTranspuesto = esf !== null ? esf + cil : null;
+
+    return { esf: esfTranspuesto, cil: cilTranspuesto };
 }
 
 // Función auxiliar para obtener el valor más alto de ESF o CIL
