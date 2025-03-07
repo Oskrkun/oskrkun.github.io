@@ -83,14 +83,20 @@ export async function cargarTratamientos() {
 
 // Función para verificar si la receta está dentro de los rangos permitidos
 function verificarRecetaEnRango(producto) {
+    console.log('Verificando receta en rango para el producto:', producto.nombre);
+
     const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
     const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
     const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
     const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
+    console.log('Valores de la receta:', { esfOD, cilOD, esfOI, cilOI });
+
     const minEsf = parseFloat(producto.min_esf) || -Infinity;
     const maxEsf = parseFloat(producto.max_esf) || Infinity;
     const cil = parseFloat(producto.cil) || Infinity;
+
+    console.log('Rangos del producto:', { minEsf, maxEsf, cil });
 
     // Verificar OD
     const odEnRango = (esfOD === null || (esfOD >= minEsf && esfOD <= maxEsf)) &&
@@ -99,6 +105,8 @@ function verificarRecetaEnRango(producto) {
     // Verificar OI
     const oiEnRango = (esfOI === null || (esfOI >= minEsf && esfOI <= maxEsf)) &&
                       (cilOI === null || Math.abs(cilOI) <= cil);
+
+    console.log('Resultado de la verificación:', { odEnRango, oiEnRango });
 
     return odEnRango || oiEnRango;
 }
@@ -113,6 +121,9 @@ export async function cargarProductosFiltrados() {
 
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
+
+        console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
+        console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
 
         // Llamar a la función de Supabase para obtener los productos filtrados
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
@@ -132,6 +143,8 @@ export async function cargarProductosFiltrados() {
             // Verificar si hay productos
             if (productos && productos.length > 0) {
                 let productosFiltrados = productos.filter(producto => verificarRecetaEnRango(producto));
+
+                console.log('Productos filtrados después de la verificación:', productosFiltrados);
 
                 if (productosFiltrados.length > 0) {
                     productosFiltrados.forEach(producto => {
