@@ -78,6 +78,19 @@ function toggleSection(event) {
     }
 }
 
+// Función para agregar eventos de clic a los títulos de las secciones
+function agregarEventosToggleSection() {
+    // Selecciona todos los h2 que contienen íconos de flecha
+    const headers = document.querySelectorAll('h2');
+    headers.forEach(header => {
+        // Verifica si el h2 contiene un ícono .toggle-icon
+        if (header.querySelector('.toggle-icon')) {
+            // Agrega el evento de clic al h2
+            header.addEventListener('click', toggleSection);
+        }
+    });
+}
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -125,6 +138,9 @@ export async function initPresupuesto() {
 
     // Agregar eventos para filtrar productos cuando cambian las selecciones
     agregarEventosFiltrado();
+
+    // Agregar eventos de clic a los títulos de las secciones
+    agregarEventosToggleSection();
 }
 
 // Función para agregar evento al botón de rotación
@@ -146,11 +162,6 @@ function deshabilitarCamposCerca() {
         input.disabled = true; // Deshabilitar los campos de "cerca"
     });
 }
-
-// Agregar eventos a los íconos de flecha
-document.querySelectorAll('.toggle-icon').forEach(icon => {
-    icon.addEventListener('click', toggleSection);
-});
 
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
