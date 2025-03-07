@@ -131,9 +131,10 @@ export async function cargarProductosFiltrados() {
 
             // Verificar si hay productos
             if (productos && productos.length > 0) {
-                productos.forEach(producto => {
-                    // Verificar si la receta está dentro de los rangos permitidos
-                    if (verificarRecetaEnRango(producto)) {
+                let productosFiltrados = productos.filter(producto => verificarRecetaEnRango(producto));
+
+                if (productosFiltrados.length > 0) {
+                    productosFiltrados.forEach(producto => {
                         const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
                         const precio = formatearPrecio(producto.precio); // Formatear el precio
 
@@ -154,11 +155,9 @@ export async function cargarProductosFiltrados() {
                             <td>${tratamientos}</td>
                         `;
                         tbody.appendChild(row);
-                    }
-                });
-
-                // Si no hay productos que cumplan con la receta, mostrar un mensaje
-                if (tbody.innerHTML === '') {
+                    });
+                } else {
+                    // Si no hay productos que cumplan con la receta, mostrar un mensaje
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td colspan="9" style="text-align: center;">No hay productos disponibles para la receta ingresada.</td>
