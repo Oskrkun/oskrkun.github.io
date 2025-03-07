@@ -26,30 +26,33 @@
     text-align: center;
 }
 
-/* Contenedor de la tabla */
-.vista-previa {
+/* Estilos comunes para contenedores */
+.vista-previa,
+#tipoLentesSection,
+#tratamientosSection {
     background-color: var(--color-fondo-contenedor);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 800px;
-    /*overflow-x: auto;*/
-	margin-bottom: 10px;
-	/*padding: 20px;*/
+    margin-bottom: 20px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
-/* Espacio entre secciones */
-.espacio-seccion {
-    height: 20px;
+/* Estilos comunes para títulos de sección */
+#tipoLentesSection h2,
+#tratamientosSection h2 {
+    color: var(--color-primario);
+    margin-bottom: 15px;
 }
 
-/* Estilos de la tabla */
+/* Estilos comunes para tablas */
 table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 5px 10px;
-    table-layout: auto;
+    border-spacing: 0 10px;
+    margin-top: 10px;
 }
 
 th, td {
@@ -66,34 +69,26 @@ thead th {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Celda invisible */
+tbody td {
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos específicos para celdas invisibles */
 thead th.invisible {
     background-color: transparent;
     box-shadow: none;
     color: transparent;
 }
 
-tbody td {
-    background-color: var(--color-fondo-fila);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Eliminar hover en todas las celdas */
-tbody td:hover {
-    background-color: var(--color-fondo-fila); /* Mantener el color original, sin hover */
-}
-
-.espacio {
-    /*padding: 10px;*/
-}
-
-/* Estilo para la primera columna */
+/* Estilos para la primera columna */
 .primer-columna {
     white-space: nowrap;
     min-width: auto;
     width: auto;
 }
 
+/* Estilos para inputs de texto */
 input[type="text"] {
     width: 80px;
     padding: 8px;
@@ -114,6 +109,126 @@ input[type="text"] {
 .seccion-add input[type="text"] {
     background-color: white;
     color: var(--color-texto);
+}
+
+/* Estilos para la celda con el botón de flecha */
+#arrow-trasp {
+    background-color: transparent;
+    color: white;
+    position: relative;
+    padding: 20px 0;
+    border: none;
+    box-shadow: none;
+}
+
+#arrow-trasp button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+}
+
+#arrow-trasp button i {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    scale: 1.2;
+}
+
+/* Estilos para la clase advertenciaReceta */
+.advertenciaReceta {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
+    display: block;
+}
+
+/* Estilos para evitar selección de texto y eventos de puntero */
+.seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
+.seccion-cerca table, .seccion-cerca th, .seccion-cerca td,
+.seccion-add table, .seccion-add th, .seccion-add td {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+}
+
+/* Permitir interacción solo en los inputs dentro de estas secciones */
+.seccion-lejos input[type="text"],
+.seccion-cerca input[type="text"],
+.seccion-add input[type="text"] {
+    pointer-events: auto;
+}
+
+/* Estilos para tablas de tipos de lentes y tratamientos */
+#tipoLentesTable,
+#tratamientosTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 10px;
+}
+
+#tipoLentesTable th,
+#tratamientosTable th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#tipoLentesTable th:nth-child(2),
+#tratamientosTable th:nth-child(2) {
+    text-align: center;
+}
+
+#tipoLentesTable td,
+#tratamientosTable td {
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto);
+    padding: 12px 15px;
+    text-align: left;
+    border-radius: 0;
+}
+
+#tipoLentesTable td:first-child,
+#tratamientosTable td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+#tipoLentesTable td:last-child,
+#tratamientosTable td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+}
+
+#tipoLentesTable tr:hover td,
+#tratamientosTable tr:hover td {
+    background-color: var(--color-fondo-hover);
+    cursor: pointer;
+}
+
+#tipoLentesTable input[type="radio"],
+#tratamientosTable input[type="radio"] {
+    margin: 0;
+    transform: scale(1.2);
 }
 
 /* Estilos responsivos */
@@ -145,199 +260,4 @@ input[type="text"] {
         width: 50px;
         padding: 4px;
     }
-}
-
-/* Estilos para la clase advertenciaReceta */
-.advertenciaReceta {
-    color: red;
-    font-weight: bold;
-    font-size: 14px;
-    margin-left: 10px;
-    display: block;
-}
-
-/* Aplicar las reglas solo a las tablas de lejos, cerca y ADD */
-.seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
-.seccion-cerca table, .seccion-cerca th, .seccion-cerca td,
-.seccion-add table, .seccion-add th, .seccion-add td {
-    user-select: none; /* Evita que el texto sea seleccionable */
-    -webkit-user-select: none; /* Compatibilidad con navegadores basados en WebKit */
-    -moz-user-select: none; /* Compatibilidad con Firefox */
-    -ms-user-select: none; /* Compatibilidad con Internet Explorer/Edge */
-    pointer-events: none; /* Desactiva eventos de puntero (clics, hover, etc.) */
-}
-
-/* Permitir interacción solo en los inputs dentro de estas secciones */
-.seccion-lejos input[type="text"],
-.seccion-cerca input[type="text"],
-.seccion-add input[type="text"] {
-    pointer-events: auto; /* Reactiva los eventos de puntero para los inputs */
-}
-
-/* Estilos para la celda con el botón de flecha */
-#arrow-trasp {
-    background-color: transparent;
-    color: white;
-    position: relative;
-    padding: 20px 0;
-    border: none;
-    box-shadow: none;
-}
-
-/* Estilos para el botón con el ícono de flecha */
-#arrow-trasp button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 1.2em;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    pointer-events: auto; /* Permitir interacción con el botón */
-}
-
-/* Estilos para el ícono de FontAwesome */
-#arrow-trasp button i {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    scale: 1.2;
-}
-
-/* Estilos para la sección de tipos de lentes */
-#tipoLentesSection {
-    background-color: var(--color-fondo-contenedor);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-	max-width: 800px;
-}
-
-#tipoLentesSection h2 {
-    color: var(--color-primario);
-    margin-bottom: 15px;
-}
-
-#tipoLentesTable {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    margin-top: 10px;
-}
-
-#tipoLentesTable th {
-    background-color: var(--color-primario);
-    color: white;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-#tipoLentesTable th:nth-child(2) {
-    text-align: center;
-}
-
-#tipoLentesTable td {
-    background-color: var(--color-fondo-fila);
-    color: var(--color-texto);
-    padding: 12px 15px;
-    text-align: left;
-    border-radius: 0;
-}
-
-#tipoLentesTable td:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-#tipoLentesTable td:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: center;
-}
-
-#tipoLentesTable tr:hover td {
-    background-color: var(--color-fondo-hover);
-    cursor: pointer;
-}
-
-#tipoLentesTable input[type="radio"] {
-    margin: 0;
-    transform: scale(1.2);
-}
-
-/* Estilos para la sección de tratamientos */
-#tratamientosSection {
-    background-color: var(--color-fondo-contenedor);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    box-sizing: border-box;
-    max-width: 800px;
-}
-
-#tratamientosSection h2 {
-    color: var(--color-primario);
-    margin-bottom: 15px;
-}
-
-#tratamientosSection {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    margin-top: 10px;
-}
-
-#tratamientosSection th {
-    background-color: var(--color-primario);
-    color: white;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-#tratamientosSection th:nth-child(2) {
-    text-align: center;
-}
-
-#tratamientosSection td {
-    background-color: var(--color-fondo-fila);
-    color: var(--color-texto);
-    padding: 12px 15px;
-    text-align: left;
-    border-radius: 0;
-}
-
-#tratamientosSection td:first-child {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-}
-
-#tratamientosSection td:last-child {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    text-align: center;
-}
-
-#tratamientosSection tr:hover td {
-    background-color: var(--color-fondo-hover);
-    cursor: pointer;
-}
-
-#tratamientosSection input[type="radio"] {
-    margin: 0;
-    transform: scale(1.2);
 }
