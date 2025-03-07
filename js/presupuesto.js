@@ -66,8 +66,11 @@ export async function initPresupuesto() {
     // Cargar tratamientos desde Supabase
     await cargarTratamientos();
 
-    // Cargar productos desde Supabase
-    await cargarProductos();
+    // Cargar productos filtrados
+    await cargarProductosFiltrados();
+
+    // Agregar eventos para filtrar productos cuando cambian las selecciones
+    agregarEventosFiltrado();
 }
 
 // Función para agregar evento al botón de rotación
@@ -182,17 +185,26 @@ async function cargarTratamientos() {
     }
 }
 
-// Función para cargar los productos desde Supabase
-async function cargarProductos() {
-    console.log('Cargando productos...');
+// Función para cargar productos filtrados
+async function cargarProductosFiltrados() {
+    console.log('Cargando productos filtrados...');
 
     try {
-        // Obtener datos de Supabase
-        const { data: productos, error } = await supabaseClient.rpc('cargar_productos');
+        // Obtener el tipo de lente seleccionado
+        const tipoLenteSeleccionado = document.querySelector('input[name="tipoLente"]:checked')?.value;
+
+        // Obtener los tratamientos seleccionados
+        const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
+
+        // Llamar a la función de Supabase para obtener los productos filtrados
+        const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
+            p_tipo_lente_id: tipoLenteSeleccionado || null,
+            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
+        });
 
         if (error) throw error;
 
-        console.log('Productos cargados:', productos);
+        console.log('Productos filtrados cargados:', productos);
 
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
@@ -220,9 +232,6 @@ async function cargarProductos() {
                         <td>${cil}</td>
                         <td>${precio}</td>
                         <td>${tratamientos}</td>
-                        <td>
-                            <i class="fas fa-trash-alt" style="color: red; cursor: pointer;" data-producto-id="${producto.id}"></i>
-                        </td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -230,7 +239,7 @@ async function cargarProductos() {
                 // Si no hay productos, mostrar un mensaje en la tabla
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="10" style="text-align: center;">No hay productos disponibles.</td>
+                    <td colspan="9" style="text-align: center;">No hay productos disponibles.</td>
                 `;
                 tbody.appendChild(row);
             }
@@ -238,8 +247,22 @@ async function cargarProductos() {
             console.error('Cuerpo de la tabla de productos no encontrado.');
         }
     } catch (error) {
-        console.error('Error cargando productos:', error);
+        console.error('Error cargando productos filtrados:', error);
     }
+}
+
+// Función para actualizar la lista de productos cuando cambian las selecciones
+function agregarEventosFiltrado() {
+    const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
+    const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
+
+    tipoLenteRadios.forEach(radio => {
+        radio.addEventListener('change', cargarProductosFiltrados);
+    });
+
+    tratamientosCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', cargarProductosFiltrados);
+    });
 }
 
 // Función para formatear números con signo y dos decimales
