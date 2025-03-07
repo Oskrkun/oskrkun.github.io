@@ -65,6 +65,9 @@ export async function initPresupuesto() {
 
     // Cargar tratamientos desde Supabase
     await cargarTratamientos();
+
+    // Cargar productos desde Supabase
+    await cargarProductos();
 }
 
 // Función para agregar evento al botón de rotación
@@ -179,38 +182,6 @@ async function cargarTratamientos() {
     }
 }
 
-
-
-// Función para manejar la contracción/expansión de las secciones
-function toggleSection(event) {
-    const icon = event.target;
-    const targetId = icon.getAttribute('data-target');
-    const sectionContent = document.getElementById(targetId);
-    const section = sectionContent.parentElement;
-
-    if (section.classList.contains('collapsed')) {
-        // Expandir la sección
-        section.classList.remove('collapsed');
-        icon.classList.remove('fa-chevron-up');
-        icon.classList.add('fa-chevron-down');
-    } else {
-        // Contraer la sección
-        section.classList.add('collapsed');
-        icon.classList.remove('fa-chevron-down');
-        icon.classList.add('fa-chevron-up');
-    }
-}
-
-// Agregar eventos a los íconos de flecha
-document.querySelectorAll('.toggle-icon').forEach(icon => {
-    icon.addEventListener('click', toggleSection);
-});
-
-// Inicializar el presupuesto cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    initPresupuesto();
-});
-
 // Función para cargar los productos desde Supabase
 async function cargarProductos() {
     console.log('Cargando productos...');
@@ -298,8 +269,32 @@ function formatearPrecio(precio) {
     })}`;
 }
 
+// Función para manejar la contracción/expansión de las secciones
+function toggleSection(event) {
+    const icon = event.target;
+    const targetId = icon.getAttribute('data-target');
+    const sectionContent = document.getElementById(targetId);
+    const section = sectionContent.parentElement;
+
+    if (section.classList.contains('collapsed')) {
+        // Expandir la sección
+        section.classList.remove('collapsed');
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
+    } else {
+        // Contraer la sección
+        section.classList.add('collapsed');
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+    }
+}
+
+// Agregar eventos a los íconos de flecha
+document.querySelectorAll('.toggle-icon').forEach(icon => {
+    icon.addEventListener('click', toggleSection);
+});
+
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     initPresupuesto();
-    cargarProductos(); // Cargar la lista de productos al iniciar
 });
