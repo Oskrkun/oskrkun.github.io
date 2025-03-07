@@ -81,36 +81,6 @@ export async function cargarTratamientos() {
     }
 }
 
-// Función para verificar si la receta está dentro de los rangos permitidos
-function verificarRecetaEnRango(producto) {
-    console.log('Verificando receta en rango para el producto:', producto.nombre);
-
-    const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
-    const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
-    const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
-    const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
-
-    console.log('Valores de la receta:', { esfOD, cilOD, esfOI, cilOI });
-
-    const minEsf = parseFloat(producto.min_esf) || -Infinity;
-    const maxEsf = parseFloat(producto.max_esf) || Infinity;
-    const cil = parseFloat(producto.cil) || Infinity;
-
-    console.log('Rangos del producto:', { minEsf, maxEsf, cil });
-
-    // Verificar OD
-    const odEnRango = (esfOD === null || (esfOD >= minEsf && esfOD <= maxEsf)) &&
-                      (cilOD === null || Math.abs(cilOD) <= cil);
-
-    // Verificar OI
-    const oiEnRango = (esfOI === null || (esfOI >= minEsf && esfOI <= maxEsf)) &&
-                      (cilOI === null || Math.abs(cilOI) <= cil);
-
-    console.log('Resultado de la verificación:', { odEnRango, oiEnRango });
-
-    return odEnRango || oiEnRango;
-}
-
 // Función para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     console.log('Cargando productos filtrados...');
@@ -122,13 +92,24 @@ export async function cargarProductosFiltrados() {
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
+        // Obtener los valores de la receta
+        const esfOD = parseFloat(document.getElementById('od-lejos-esf').value) || null;
+        const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || null;
+        const esfOI = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
+        const cilOI = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
+
         console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
         console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
+        console.log('Valores de la receta:', { esfOD, cilOD, esfOI, cilOI });
 
         // Llamar a la función de Supabase para obtener los productos filtrados
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
-            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
+            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null,
+            p_esf_od: esfOD,
+            p_cil_od: cilOD,
+            p_esf_oi: esfOI,
+            p_cil_oi: cilOI
         });
 
         if (error) throw error;
@@ -142,41 +123,28 @@ export async function cargarProductosFiltrados() {
 
             // Verificar si hay productos
             if (productos && productos.length > 0) {
-                let productosFiltrados = productos.filter(producto => verificarRecetaEnRango(producto));
+                productos.forEach(producto => {
+                    const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
+                    const precio = formatearPrecio(producto.precio); // Formatear el precio
 
-                console.log('Productos filtrados después de la verificación:', productosFiltrados);
+                    const min_esf = formatearNumero(producto.min_esf);
+                    const max_esf = formatearNumero(producto.max_esf);
+                    const cil = formatearNumero(producto.cil);
 
-                if (productosFiltrados.length > 0) {
-                    productosFiltrados.forEach(producto => {
-                        const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
-                        const precio = formatearPrecio(producto.precio); // Formatear el precio
-
-                        const min_esf = formatearNumero(producto.min_esf);
-                        const max_esf = formatearNumero(producto.max_esf);
-                        const cil = formatearNumero(producto.cil);
-
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${producto.nombre}</td>
-                            <td>${producto.tipo_lente}</td>
-                            <td>${producto.material}</td>
-                            <td>${producto.laboratorio}</td>
-                            <td>${min_esf}</td>
-                            <td>${max_esf}</td>
-                            <td>${cil}</td>
-                            <td>${precio}</td>
-                            <td>${tratamientos}</td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                } else {
-                    // Si no hay productos que cumplan con la receta, mostrar un mensaje
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td colspan="9" style="text-align: center;">No hay productos disponibles para la receta ingresada.</td>
+                        <td>${producto.nombre}</td>
+                        <td>${producto.tipo_lente}</td>
+                        <td>${producto.material}</td>
+                        <td>${producto.laboratorio}</td>
+                        <td>${min_esf}</td>
+                        <td>${max_esf}</td>
+                        <td>${cil}</td>
+                        <td>${precio}</td>
+                        <td>${tratamientos}</td>
                     `;
                     tbody.appendChild(row);
-                }
+                });
             } else {
                 // Si no hay productos, mostrar un mensaje en la tabla
                 const row = document.createElement('tr');
