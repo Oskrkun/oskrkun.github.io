@@ -210,3 +210,96 @@ document.querySelectorAll('.toggle-icon').forEach(icon => {
 document.addEventListener('DOMContentLoaded', () => {
     initPresupuesto();
 });
+
+// Función para cargar los productos desde Supabase
+async function cargarProductos() {
+    console.log('Cargando productos...');
+
+    try {
+        // Obtener datos de Supabase
+        const { data: productos, error } = await supabaseClient.rpc('cargar_productos');
+
+        if (error) throw error;
+
+        console.log('Productos cargados:', productos);
+
+        // Llenar la tabla de productos
+        const tbody = document.querySelector('#productTable tbody');
+        if (tbody) {
+            tbody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+
+            // Verificar si hay productos
+            if (productos && productos.length > 0) {
+                productos.forEach(producto => {
+                    const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
+                    const precio = formatearPrecio(producto.precio); // Formatear el precio
+
+                    const min_esf = formatearNumero(producto.min_esf);
+                    const max_esf = formatearNumero(producto.max_esf);
+                    const cil = formatearNumero(producto.cil);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${producto.nombre}</td>
+                        <td>${producto.tipo_lente}</td>
+                        <td>${producto.material}</td>
+                        <td>${producto.laboratorio}</td>
+                        <td>${min_esf}</td>
+                        <td>${max_esf}</td>
+                        <td>${cil}</td>
+                        <td>${precio}</td>
+                        <td>${tratamientos}</td>
+                        <td>
+                            <i class="fas fa-trash-alt" style="color: red; cursor: pointer;" data-producto-id="${producto.id}"></i>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                // Si no hay productos, mostrar un mensaje en la tabla
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="10" style="text-align: center;">No hay productos disponibles.</td>
+                `;
+                tbody.appendChild(row);
+            }
+        } else {
+            console.error('Cuerpo de la tabla de productos no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+    }
+}
+
+// Función para formatear números con signo y dos decimales
+function formatearNumero(numero) {
+    if (numero === null || numero === undefined || numero === '') return 'N/A';
+
+    const num = parseFloat(numero);
+    if (isNaN(num)) return 'N/A';
+
+    return num.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+        signDisplay: 'always',
+    });
+}
+
+// Función para formatear el precio con el símbolo $
+function formatearPrecio(precio) {
+    if (precio === null || precio === undefined || precio === '') return 'N/A';
+
+    const num = parseFloat(precio);
+    if (isNaN(num)) return 'N/A';
+
+    return `$ ${num.toLocaleString('es-AR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })}`;
+}
+
+// Inicializar el presupuesto cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    initPresupuesto();
+    cargarProductos(); // Cargar la lista de productos al iniciar
+});

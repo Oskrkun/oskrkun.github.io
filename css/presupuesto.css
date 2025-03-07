@@ -292,3 +292,20 @@ input[type="text"] {
 .collapsed .toggle-icon {
     transform: rotate(180deg);
 }
+
+/* Estilos para la sección de productos */
+.Productos {
+    background-color: var(--color-fondo-contenedor);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.Productos h2 {
+    color: var(--color-primario);
+    margin-bottom: 15px;
+}
