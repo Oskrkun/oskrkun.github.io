@@ -142,7 +142,7 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
 
     // Verificar si el producto cumple con el CIL más alto
     const cumpleCil = cilMasAlto === null || (
-        cilMasAlto <= producto.cil // CIL del producto debe ser más negativo o igual
+        producto.cil <= cilMasAlto // CIL del producto debe ser más negativo o igual (menor o igual a -5)
     );
     console.log(`¿Cumple con CIL? ${cumpleCil}`);
 
