@@ -382,3 +382,22 @@ input[type="text"] {
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(76, 175, 80, 0.6); /* Verde */
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 10px #4CAF50 !important; /* Sombra verde */
 }
+
+/* Estilos para el h2 */
+#ProductosSection h2 {
+    display: flex; /* Convertir el h2 en un contenedor flexible */
+    align-items: center; /* Alinear verticalmente los elementos hijos */
+    white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+}
+
+/* Estilos para el contador de productos */
+.contador-productos {
+    margin-left: 4px; /* Un pequeño espacio entre el texto y el contador */
+    font-size: 0.9em; /* Tamaño de fuente ligeramente más pequeño */
+    color: #666; /* Color del texto del contador */
+}
+
+/* Estilos para la flecha */
+.toggle-icon {
+    margin-left: auto; /* Empuja la flecha hacia la derecha */
+}
