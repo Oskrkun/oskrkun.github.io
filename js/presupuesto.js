@@ -21,7 +21,7 @@ import {
     esEsfOCil,
     transponerReceta,
     sincronizarTodo,
-	limpiarCerca
+    limpiarCerca
 } from './controlReceta.js';
 
 import {
@@ -33,6 +33,8 @@ import {
     agregarEventosFiltrado,
     agregarEventosReceta
 } from './controlProductos.js';
+
+import { initCalculosPresupuesto } from './calculosPresupuesto.js';
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
@@ -133,6 +135,30 @@ function agregarEventoBotonBorrar() {
     }
 }
 
+// Función para agregar evento al botón de rotación
+function agregarEventoBotonRotacion() {
+    const botonRotacion = document.querySelector('#arrow-trasp button');
+    if (botonRotacion) {
+        botonRotacion.addEventListener('click', () => {
+            console.log('Botón de transposición presionado');
+            transponerReceta(); // Realizar la transposición
+            sincronizarTodo(); // Sincronizar cambios después de la transposición
+
+            // Disparar un evento personalizado para notificar que la receta fue transpuesta
+            const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
+            document.dispatchEvent(eventoTranspuesto);
+        });
+    }
+}
+
+// Función para deshabilitar los campos de "cerca"
+function deshabilitarCamposCerca() {
+    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
+    inputsCerca.forEach(input => {
+        input.disabled = true; // Deshabilitar los campos de "cerca"
+    });
+}
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -189,30 +215,9 @@ export async function initPresupuesto() {
 
     // Agregar eventos de cambio en los inputs de la receta
     agregarEventosReceta();
-}
 
-// Función para agregar evento al botón de rotación
-function agregarEventoBotonRotacion() {
-    const botonRotacion = document.querySelector('#arrow-trasp button');
-    if (botonRotacion) {
-        botonRotacion.addEventListener('click', () => {
-            console.log('Botón de transposición presionado');
-            transponerReceta(); // Realizar la transposición
-            sincronizarTodo(); // Sincronizar cambios después de la transposición
-
-            // Disparar un evento personalizado para notificar que la receta fue transpuesta
-            const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
-            document.dispatchEvent(eventoTranspuesto);
-        });
-    }
-}
-
-// Función para deshabilitar los campos de "cerca"
-function deshabilitarCamposCerca() {
-    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
-    inputsCerca.forEach(input => {
-        input.disabled = true; // Deshabilitar los campos de "cerca"
-    });
+    // Inicializar el módulo de cálculos del presupuesto
+    initCalculosPresupuesto();
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
