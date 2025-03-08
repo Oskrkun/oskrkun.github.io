@@ -147,26 +147,6 @@ export async function initPresupuesto() {
     agregarEventosReceta();
 }
 
-// Función para agregar evento al botón de rotación
-function agregarEventoBotonRotacion() {
-    const botonRotacion = document.querySelector('#arrow-trasp button');
-    if (botonRotacion) {
-        botonRotacion.addEventListener('click', () => {
-            console.log('Botón de transposición presionado');
-            transponerReceta(); // Realizar la transposición
-            sincronizarTodo(); // Sincronizar cambios después de la transposición
-        });
-    }
-}
-
-// Función para deshabilitar los campos de "cerca"
-function deshabilitarCamposCerca() {
-    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
-    inputsCerca.forEach(input => {
-        input.disabled = true; // Deshabilitar los campos de "cerca"
-    });
-}
-
 function agregarEventoBotonRotacion() {
     const botonRotacion = document.querySelector('#arrow-trasp button');
     if (botonRotacion) {
@@ -181,6 +161,16 @@ function agregarEventoBotonRotacion() {
         });
     }
 }
+
+// Función para deshabilitar los campos de "cerca"
+function deshabilitarCamposCerca() {
+    const inputsCerca = document.querySelectorAll('.seccion-cerca input');
+    inputsCerca.forEach(input => {
+        input.disabled = true; // Deshabilitar los campos de "cerca"
+    });
+}
+
+
 
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
