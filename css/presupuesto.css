@@ -457,3 +457,53 @@ input[type="text"] {
 .toggle-icon {
     margin-left: auto; /* Empuja la flecha hacia la derecha */
 }
+
+/* Estilos para la sección de Producto Seleccionado */
+#productoSeleccionadoTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 10px;
+}
+
+#productoSeleccionadoTable td {
+    padding: 12px 15px;
+    text-align: left;
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#productoSeleccionadoTable td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+#productoSeleccionadoTable td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#productoSeleccionadoTable input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+#productoSeleccionadoTable input[type="text"]:read-only {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+#productoSeleccionadoTable input[type="text"]:focus {
+    border-color: #4CAF50 !important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(76, 175, 80, 0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(76, 175, 80, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 10px #4CAF50 !important;
+}

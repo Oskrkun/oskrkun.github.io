@@ -163,7 +163,46 @@
         </h2>
         <div id="producto-seleccionado-content" class="section-content">
             <div class="table-container">
-                <span>Ningún producto seleccionado.</span>
+                <table id="productoSeleccionadoTable">
+                    <tbody>
+                        <tr>
+                            <td class="primer-columna">Producto:</td>
+                            <td><input type="text" id="producto-nombre" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Tratamientos:</td>
+                            <td><input type="text" id="producto-tratamientos" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Precio Base:</td>
+                            <td><input type="text" id="producto-precio-base" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Armado:</td>
+                            <td><input type="text" id="producto-armado"></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">IVA:</td>
+                            <td><input type="text" id="producto-iva"></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Multiplicador:</td>
+                            <td><input type="text" id="producto-multiplicador"></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Ganancia:</td>
+                            <td><input type="text" id="producto-ganancia" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Armazón:</td>
+                            <td><input type="text" id="producto-armazon" value="$0"></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Precio FINAL:</td>
+                            <td><input type="text" id="producto-precio-final" readonly></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
