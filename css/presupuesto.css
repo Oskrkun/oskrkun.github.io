@@ -151,7 +151,8 @@ input[type="text"] {
 }
 
 /* Estilos para la celda con el botón de flecha */
-#arrow-trasp {
+#arrow-trasp,
+#refresh-erase button {
     background-color: transparent;
     color: white;
     position: relative;
@@ -160,7 +161,8 @@ input[type="text"] {
     box-shadow: none;
 }
 
-#arrow-trasp button {
+#arrow-trasp button,
+#refresh-erase button {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -180,7 +182,8 @@ input[type="text"] {
     pointer-events: auto;
 }
 
-#arrow-trasp button i {
+#arrow-trasp button i,
+#refresh-erase button i {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     scale: 1.2;
