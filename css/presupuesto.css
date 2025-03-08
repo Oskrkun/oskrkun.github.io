@@ -198,7 +198,7 @@ input[type="text"] {
     display: block;
 }
 
-/* Estilos para evitar selección de texto y eventos de puntero */
+/* Estilos para evitar selección de texto y eventos de puntero en las secciones de receta */
 .seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
 .seccion-cerca table, .seccion-cerca th, .seccion-cerca td,
 .seccion-add table, .seccion-add th, .seccion-add td {
@@ -261,7 +261,7 @@ input[type="text"] {
     text-align: center;
 }
 
-/* Eliminar hover en todas las filas */
+/* Eliminar hover en todas las filas de tipos de lentes y tratamientos */
 #tipoLentesTable tr:hover td,
 #tratamientosTable tr:hover td {
     background-color: var(--color-fondo-fila); /* Mantener el color original */
@@ -367,12 +367,17 @@ input[type="text"] {
     text-align: center;
 }
 
-/* Eliminar hover en todas las filas */
+/* Habilitar hover en las filas de la tabla de productos */
 #productTable tr:hover td {
-    background-color: var(--color-fondo-fila); /* Mantener el color original */
-    cursor: default; /* Cursor por defecto */
+    background-color: var(--color-fondo-hover); /* Cambiar el color al hacer hover */
+    cursor: pointer; /* Cambiar el cursor a pointer */
 }
 
+/* Estilo para la fila seleccionada */
+#productTable tr.selected td {
+    background-color: var(--color-primario); /* Cambiar el color de fondo */
+    color: white; /* Cambiar el color del texto */
+}
 
 /* Estilos para los inputs enfocados en la sección de la receta */
 .seccion-lejos input[type="text"]:focus,
