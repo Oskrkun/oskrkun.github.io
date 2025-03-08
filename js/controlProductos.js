@@ -1,6 +1,25 @@
 // controlProductos.js
 import { supabaseClient } from './supabaseConfig.js';
 
+// Función para actualizar el contador de productos en el h2
+function actualizarContadorProductos(cantidad) {
+    const h2Productos = document.querySelector('#ProductosSection h2');
+    if (h2Productos) {
+        // Buscar el span que contiene el contador
+        let contadorSpan = h2Productos.querySelector('.contador-productos');
+        
+        // Si no existe, crearlo
+        if (!contadorSpan) {
+            contadorSpan = document.createElement('span');
+            contadorSpan.classList.add('contador-productos');
+            h2Productos.insertBefore(contadorSpan, h2Productos.querySelector('.toggle-icon'));
+        }
+
+        // Actualizar el texto del contador
+        contadorSpan.textContent = `(${cantidad})`;
+    }
+}
+
 // Función para cargar los tipos de lentes desde Supabase
 export async function cargarTiposLentes() {
     console.log('Cargando tipos de lentes...');
@@ -167,6 +186,9 @@ export async function cargarProductosFiltrados() {
         } else {
             console.error('Cuerpo de la tabla de productos no encontrado.');
         }
+
+        // Actualizar el contador de productos
+        actualizarContadorProductos(productosFiltrados.length);
     } catch (error) {
         console.error('Error cargando productos filtrados:', error);
     }
