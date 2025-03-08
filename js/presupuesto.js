@@ -34,6 +34,12 @@ import {
     agregarEventosReceta
 } from './controlProductos.js';
 
+import { 
+	manejarSeleccionProducto, 
+	agregarEventosCalculos, 
+	deshabilitarClicEnCeldasDeshabilitadas 
+} from './calculosPresupuesto.js';
+
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
     // Asegúrate de que el evento se haya disparado correctamente
@@ -189,6 +195,13 @@ export async function initPresupuesto() {
 
     // Agregar eventos de cambio en los inputs de la receta
     agregarEventosReceta();
+	
+	// Agregar eventos para manejar la selección de productos y cálculos
+    manejarSeleccionProducto();
+    agregarEventosCalculos();
+    deshabilitarClicEnCeldasDeshabilitadas();
+
+
 }
 
 // Función para agregar evento al botón de rotación
