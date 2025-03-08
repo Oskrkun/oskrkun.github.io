@@ -402,6 +402,11 @@ input[type="text"] {
     z-index: 2; /* Asegurar que el contenido de la celda esté por encima del pseudo-elemento */
 }
 
+/* Fondo normal para las celdas no seleccionadas */
+#productTable tr td {
+    background-color: var(--color-fondo-fila); /* Fondo normal de las celdas */
+}
+
 /* Eliminar bordes entre celdas */
 #productTable {
     border-collapse: separate; /* Mantener separación entre celdas */
@@ -411,6 +416,13 @@ input[type="text"] {
 #productTable td {
     border: none; /* Eliminar bordes entre celdas */
 }
+
+/* Eliminar el estilo de foco en las celdas de la tabla */
+#productTable td:focus {
+    outline: none; /* Eliminar el borde de foco */
+    background-color: transparent; /* Eliminar el fondo de foco */
+}
+
 /*---------------------------------------------------------------------------------*/
 
 /* Estilos para los inputs enfocados en la sección de la receta */

@@ -229,17 +229,18 @@ export async function cargarProductosFiltrados() {
                     `;
 
                     // Agregar evento de clic a la fila
-                    row.addEventListener('click', () => {
-                        // Si la fila ya está seleccionada, deseleccionarla
-                        if (row.classList.contains('selected')) {
-                            row.classList.remove('selected');
-                        } else {
-                            // Deseleccionar todas las filas
-                            tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
-                            // Seleccionar la fila clickeada
-                            row.classList.add('selected');
-                        }
-                    });
+					row.addEventListener('click', () => {
+						// Si la fila ya está seleccionada, deseleccionarla
+						if (row.classList.contains('selected')) {
+							row.classList.remove('selected');
+						} else {
+							// Deseleccionar todas las filas
+							tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+							// Seleccionar la fila clickeada
+							row.classList.add('selected');
+						}
+					});
+					
 
                     tbody.appendChild(row);
                 });
