@@ -402,7 +402,8 @@ input[type="text"] {
 
 /* Asegurar que las celdas de la fila seleccionada no tengan bordes individuales */
 #productTable tr.selected td {
-    background-color: white; /* Fondo blanco */
+	
+    background-color: #88e98c; 
     color: var(--color-texto); /* Color de texto normal */
     position: relative; /* Para que el pseudo-elemento se posicione correctamente */
     z-index: 2; /* Asegurar que el contenido de la celda esté por encima del pseudo-elemento */
