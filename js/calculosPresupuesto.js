@@ -10,16 +10,20 @@ export function manejarSeleccionProducto() {
             const filaSeleccionada = event.target.closest('tr');
             if (filaSeleccionada) {
                 console.log('Fila seleccionada:', filaSeleccionada);
-                if (!filaSeleccionada.classList.contains('selected')) {
-                    console.log('Deseleccionando todas las filas...');
-                    tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+
+                // Verificar si la fila ya está seleccionada
+                const yaSeleccionada = filaSeleccionada.classList.contains('selected');
+
+                // Deseleccionar todas las filas primero
+                tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+
+                // Si la fila no estaba seleccionada, seleccionarla
+                if (!yaSeleccionada) {
                     console.log('Seleccionando la fila clickeada...');
                     filaSeleccionada.classList.add('selected');
-                    console.log('Rellenando campos del producto seleccionado...');
                     rellenarCamposProductoSeleccionado(filaSeleccionada);
                 } else {
                     console.log('Deseleccionando la fila y limpiando campos...');
-                    filaSeleccionada.classList.remove('selected');
                     limpiarCamposProductoSeleccionado();
                 }
             } else {
