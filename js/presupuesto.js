@@ -110,7 +110,14 @@ function borrarReceta() {
         input.value = ''; // Limpiar el valor del input
     });
 
+    // Limpiar la parte de "cerca" para ambos ojos
+    limpiarCerca('od');
+    limpiarCerca('oi');
+
     console.log('Receta borrada.');
+
+    // Revisar errores y actualizar la parte de "cerca"
+    revisarErroresYActualizarCerca();
 
     // Disparar un evento personalizado para notificar que la receta fue borrada
     const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
