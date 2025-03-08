@@ -1,5 +1,25 @@
 // calculosPresupuesto.js
 
+// Array con los precios de montaje
+const ListaPrecioMontaje = [
+    { nombre: 'Monofocal', precio: 230 },
+    { nombre: 'Laboratorio', precio: 250 },
+    { nombre: 'Bifocal', precio: 280 },
+    { nombre: 'Progresivos', precio: 355 },
+    { nombre: 'Armado Especial', precio: 560 }
+];
+
+// Función para redondear el precio a un número que termine en 90
+function redondearPrecio(precio) {
+    const redondeo = Math.ceil((precio + 10) / 100) * 100 - 10;
+    return redondeo;
+}
+
+// Función para formatear el precio con el símbolo de moneda
+function formatearPrecio(precio) {
+    return `$${precio.toFixed(2)}`;
+}
+
 // Función para manejar el clic en una fila de la tabla de productos
 export function manejarSeleccionProducto() {
     console.log('Iniciando manejarSeleccionProducto...');
@@ -41,10 +61,13 @@ function rellenarCamposProductoSeleccionado(fila) {
     document.getElementById('producto-nombre').value = nombre;
     document.getElementById('producto-tratamientos').value = tratamientos;
     document.getElementById('producto-precio-base').value = precio;
-    document.getElementById('producto-armado').value = '350';
+
+    // Cargar la lista desplegable de montaje
+    cargarListaMontaje();
+
     document.getElementById('producto-iva').value = '22';
     document.getElementById('producto-multiplicador').value = '2.2';
-    document.getElementById('producto-armazon').value = '$0';
+    document.getElementById('producto-armazon').value = '$0.00';
 
     console.log('Calculando precio de los cristales...');
     calcularPrecioCristales();
@@ -52,18 +75,23 @@ function rellenarCamposProductoSeleccionado(fila) {
     calcularPrecioFinal();
 }
 
-// Función para limpiar los campos del producto seleccionado
-function limpiarCamposProductoSeleccionado() {
-    console.log('Limpiando campos del producto seleccionado...');
-    document.getElementById('producto-nombre').value = '';
-    document.getElementById('producto-tratamientos').value = '';
-    document.getElementById('producto-precio-base').value = '';
-    document.getElementById('producto-armado').value = '';
-    document.getElementById('producto-iva').value = '';
-    document.getElementById('producto-multiplicador').value = '';
-    document.getElementById('Precio-Cristales').value = '';
-    document.getElementById('producto-armazon').value = '';
-    document.getElementById('producto-precio-final').value = '';
+// Función para cargar la lista desplegable de montaje
+function cargarListaMontaje() {
+    const selectMontaje = document.getElementById('producto-armado');
+    selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
+
+    ListaPrecioMontaje.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.precio;
+        option.textContent = `${item.nombre} (${formatearPrecio(item.precio)})`;
+        selectMontaje.appendChild(option);
+    });
+
+    // Agregar evento para recalcular al cambiar el armado
+    selectMontaje.addEventListener('change', () => {
+        calcularPrecioCristales();
+        calcularPrecioFinal();
+    });
 }
 
 // Función para calcular el precio de los cristales
@@ -72,7 +100,7 @@ function calcularPrecioCristales() {
     const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
     const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
     const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
-    const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.5;
+    const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
 
     console.log('Precio base:', precioBase);
     console.log('Armado:', armado);
@@ -81,10 +109,16 @@ function calcularPrecioCristales() {
 
     const precioConArmado = precioBase + armado;
     const precioConIva = precioConArmado * (1 + iva / 100);
-    const precioCristales = precioConIva * multiplicador;
+    let precioCristales = precioConIva * multiplicador;
+
+    // Verificar si el redondeo está activo
+    const redondearPreciosCheckbox = document.getElementById('redondear-precios');
+    if (redondearPreciosCheckbox && redondearPreciosCheckbox.checked) {
+        precioCristales = redondearPrecio(precioCristales);
+    }
 
     console.log('Precio de los cristales:', precioCristales);
-    document.getElementById('Precio-Cristales').value = `$${precioCristales.toFixed(2)}`;
+    document.getElementById('Precio-Cristales').value = formatearPrecio(precioCristales);
 }
 
 // Función para calcular el precio final
@@ -98,13 +132,13 @@ function calcularPrecioFinal() {
 
     const precioFinal = precioCristales + precioArmazon;
     console.log('Precio final:', precioFinal);
-    document.getElementById('producto-precio-final').value = `$${precioFinal.toFixed(2)}`;
+    document.getElementById('producto-precio-final').value = formatearPrecio(precioFinal);
 }
 
 // Función para agregar eventos a los campos editables
 export function agregarEventosCalculos() {
     console.log('Agregando eventos a los campos editables...');
-    const camposEditables = ['producto-armado', 'producto-iva', 'producto-multiplicador', 'producto-armazon'];
+    const camposEditables = ['producto-iva', 'producto-multiplicador', 'producto-armazon'];
     camposEditables.forEach(id => {
         const campo = document.getElementById(id);
         if (campo) {
@@ -113,23 +147,24 @@ export function agregarEventosCalculos() {
                 calcularPrecioCristales();
                 calcularPrecioFinal();
             });
+            campo.addEventListener('blur', () => {
+                if (campo.value && !isNaN(campo.value)) {
+                    campo.value = formatearPrecio(parseFloat(campo.value));
+                }
+            });
         } else {
             console.error(`No se encontró el campo con ID: ${id}`);
         }
     });
-}
 
-// Función para deshabilitar el clic en celdas deshabilitadas
-export function deshabilitarClicEnCeldasDeshabilitadas() {
-    console.log('Deshabilitando clic en celdas deshabilitadas...');
-    const celdasDeshabilitadas = document.querySelectorAll('#productoSeleccionadoTable input[readonly]');
-    celdasDeshabilitadas.forEach(celda => {
-        celda.addEventListener('click', (event) => {
-            console.log('Clic en celda deshabilitada detectado.');
-            event.preventDefault();
-            event.stopPropagation();
+    // Agregar evento al checkbox de redondeo
+    const redondearPreciosCheckbox = document.getElementById('redondear-precios');
+    if (redondearPreciosCheckbox) {
+        redondearPreciosCheckbox.addEventListener('change', () => {
+            calcularPrecioCristales();
+            calcularPrecioFinal();
         });
-    });
+    }
 }
 
 // Inicializar todo cuando el DOM esté listo
@@ -137,5 +172,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM completamente cargado, inicializando...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    deshabilitarClicEnCeldasDeshabilitadas();
 });
