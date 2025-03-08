@@ -37,7 +37,7 @@ import {
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-    deshabilitarClicEnCeldasDeshabilitadas,
+    //deshabilitarClicEnCeldasDeshabilitadas,
 	inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
 
@@ -193,7 +193,7 @@ export async function initPresupuesto() {
 
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    deshabilitarClicEnCeldasDeshabilitadas();
+    //deshabilitarClicEnCeldasDeshabilitadas();
 	inicializarProductoSeleccionado();
 }
 
