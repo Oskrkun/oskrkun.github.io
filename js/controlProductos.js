@@ -53,9 +53,16 @@ export async function cargarTiposLentes() {
                 tipoLentesContainer.appendChild(row);
             });
 
-            // Agregar evento para permitir solo un checkbox seleccionado
+            // Agregar evento para permitir desmarcar el radio button
             tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', cargarProductosFiltrados);
+                radio.addEventListener('change', function () {
+                    if (this.checked && this === document.querySelector('input[name="tipoLente"]:checked')) {
+                        // Si el radio button ya está seleccionado, desmarcarlo
+                        this.checked = false;
+                    }
+                    // Llamar a la función de filtrado en cualquier caso
+                    cargarProductosFiltrados();
+                });
             });
         } else {
             console.error('Contenedor de tipos de lentes no encontrado.');
