@@ -65,10 +65,8 @@ function rellenarCamposProductoSeleccionado(fila) {
     // Cargar la lista desplegable de montaje
     cargarListaMontaje();
 
-    // Inicializar el multiplicador
-    document.getElementById('producto-multiplicador').value = '2.2'; // Valor inicial del multiplicador
-
     document.getElementById('producto-iva').value = '$ 22';
+    document.getElementById('producto-multiplicador').value = '$ 2.2';
     document.getElementById('producto-armazon').value = '$ 0.00';
 
     console.log('Calculando precio de los cristales...');
@@ -101,7 +99,7 @@ function calcularPrecioCristales() {
     console.log('Calculando precio de los cristales...');
     const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
     const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
-    const iva = parseFloat(document.getElementById('producto-iva').value.replace('$', '')) || 0;
+    const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
     const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
 
     console.log('Precio base:', precioBase);
@@ -172,12 +170,6 @@ export function agregarEventosCalculos() {
 // Inicializar todo cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM completamente cargado, inicializando...');
-    cargarListaMontaje(); // Inicializar la lista de montaje
     manejarSeleccionProducto();
     agregarEventosCalculos();
-
-    // Inicializar el multiplicador si no hay producto seleccionado
-    if (!document.querySelector('#productTable tbody tr.selected')) {
-        document.getElementById('producto-multiplicador').value = '2.2';
-    }
 });
