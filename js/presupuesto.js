@@ -37,7 +37,7 @@ import {
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-    deshabilitarClicEnCeldasDeshabilitadas 
+   // deshabilitarClicEnCeldasDeshabilitadas 
 } from './calculosPresupuesto.js';
 
 // Función para manejar la contracción/expansión de las secciones
