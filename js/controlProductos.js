@@ -5,18 +5,11 @@ import { supabaseClient } from './supabaseConfig.js';
 function actualizarContadorProductos(cantidad) {
     const h2Productos = document.querySelector('#ProductosSection h2');
     if (h2Productos) {
-        // Buscar el span que contiene el contador
-        let contadorSpan = h2Productos.querySelector('.contador-productos');
-        
-        // Si no existe, crearlo
-        if (!contadorSpan) {
-            contadorSpan = document.createElement('span');
-            contadorSpan.classList.add('contador-productos');
-            h2Productos.insertBefore(contadorSpan, h2Productos.querySelector('.toggle-icon'));
-        }
+        // Obtener el texto original del h2 sin el número de productos
+        const textoOriginal = h2Productos.textContent.replace(/\(\d+\)/, '').trim();
 
-        // Actualizar el texto del contador
-        contadorSpan.textContent = `(${cantidad})`;
+        // Actualizar el contenido del h2 con el texto original y el número de productos
+        h2Productos.textContent = `${textoOriginal} (${cantidad})`;
     }
 }
 
