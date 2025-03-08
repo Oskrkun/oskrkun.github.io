@@ -65,9 +65,9 @@ function rellenarCamposProductoSeleccionado(fila) {
     // Cargar la lista desplegable de montaje
     cargarListaMontaje();
 
-    document.getElementById('producto-iva').value = '22';
-    document.getElementById('producto-multiplicador').value = '2.2';
-    document.getElementById('producto-armazon').value = '$0.00';
+    document.getElementById('producto-iva').value = '$ 22';
+    document.getElementById('producto-multiplicador').value = '$ 2.2';
+    document.getElementById('producto-armazon').value = '$ 0.00';
 
     console.log('Calculando precio de los cristales...');
     calcularPrecioCristales();
