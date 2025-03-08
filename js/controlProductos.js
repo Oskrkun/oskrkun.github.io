@@ -53,20 +53,9 @@ export async function cargarTiposLentes() {
                 tipoLentesContainer.appendChild(row);
             });
 
-            // Agregar evento para permitir desmarcar el radio button
+            // Agregar evento para permitir solo un checkbox seleccionado
             tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('click', function (event) {
-                    const previouslyChecked = document.querySelector('input[name="tipoLente"]:checked');
-
-                    if (previouslyChecked && previouslyChecked === this) {
-                        // Si el radio button ya está seleccionado, desmarcarlo
-                        this.checked = false;
-                        event.preventDefault(); // Evitar que el radio button se marque nuevamente
-                    }
-
-                    // Llamar a la función de filtrado en cualquier caso
-                    cargarProductosFiltrados();
-                });
+                radio.addEventListener('change', cargarProductosFiltrados);
             });
         } else {
             console.error('Contenedor de tipos de lentes no encontrado.');
@@ -153,7 +142,8 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
 
     // Verificar si el producto cumple con el CIL más alto
     const cumpleCil = cilMasAlto === null || (
-        producto.cil <= cilMasAlto // CIL del producto debe ser menor o igual que el CIL más alto
+        Math.sign(cilMasAlto) === Math.sign(producto.cil) && // Mismo signo
+        cilMasAlto <= producto.cil // CIL del producto debe ser más negativo o igual
     );
     console.log(`¿Cumple con CIL? ${cumpleCil}`);
 
