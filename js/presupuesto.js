@@ -21,8 +21,7 @@ import {
     esEsfOCil,
     transponerReceta,
     sincronizarTodo,
-	limpiarCerca,
-    revisarErroresYActualizarCerca
+	limpiarCerca
 } from './controlReceta.js';
 
 import {
