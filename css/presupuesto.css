@@ -92,7 +92,7 @@ table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 th, td {
@@ -219,7 +219,7 @@ input[type="text"] {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 #tipoLentesTable th,
@@ -328,7 +328,7 @@ input[type="text"] {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 10px;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
     overflow-x: auto; /* Habilitar barra de desplazamiento horizontal */
     display: block; /* Necesario para que overflow-x funcione */
 }
