@@ -375,8 +375,12 @@ input[type="text"] {
 
 /* Estilo para la fila seleccionada */
 #productTable tr.selected td {
-    background-color: var(--color-primario); /* Cambiar el color de fondo */
-    color: white; /* Cambiar el color del texto */
+    border: 2px solid #4CAF50 !important; /* Borde verde */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(76, 175, 80, 0.6); /* Sombra verde */
+    background-color: white; /* Fondo blanco */
+    color: var(--color-texto); /* Color de texto normal */
+    position: relative; /* Para que la sombra se vea correctamente */
+    z-index: 1; /* Asegurar que la sombra no se solape con otras filas */
 }
 
 /* Estilos para los inputs enfocados en la sección de la receta */
