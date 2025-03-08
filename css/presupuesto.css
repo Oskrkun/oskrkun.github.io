@@ -373,15 +373,45 @@ input[type="text"] {
     cursor: pointer; /* Cambiar el cursor a pointer */
 }
 
+
+/*---------------------------------------------------------------------------------*/
 /* Estilo para la fila seleccionada */
-#productTable tr.selected td {
-    border: 2px solid #4CAF50 !important; /* Borde verde */
+#productTable tr.selected {
+    position: relative; /* Necesario para posicionar el pseudo-elemento */
+}
+
+#productTable tr.selected::after {
+    content: ''; /* Crear el pseudo-elemento */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #4CAF50; /* Borde verde */
+    border-radius: 8px; /* Bordes redondeados */
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(76, 175, 80, 0.6); /* Sombra verde */
+    pointer-events: none; /* Evitar que el pseudo-elemento bloquee los clics */
+    z-index: 1; /* Asegurar que esté por encima del contenido de la fila */
+}
+
+/* Asegurar que las celdas de la fila seleccionada no tengan bordes individuales */
+#productTable tr.selected td {
     background-color: white; /* Fondo blanco */
     color: var(--color-texto); /* Color de texto normal */
-    position: relative; /* Para que la sombra se vea correctamente */
-    z-index: 1; /* Asegurar que la sombra no se solape con otras filas */
+    position: relative; /* Para que el pseudo-elemento se posicione correctamente */
+    z-index: 2; /* Asegurar que el contenido de la celda esté por encima del pseudo-elemento */
 }
+
+/* Eliminar bordes entre celdas */
+#productTable {
+    border-collapse: separate; /* Mantener separación entre celdas */
+    border-spacing: 0 10px; /* Espaciado vertical entre filas */
+}
+
+#productTable td {
+    border: none; /* Eliminar bordes entre celdas */
+}
+/*---------------------------------------------------------------------------------*/
 
 /* Estilos para los inputs enfocados en la sección de la receta */
 .seccion-lejos input[type="text"]:focus,
