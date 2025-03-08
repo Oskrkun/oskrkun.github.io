@@ -99,7 +99,7 @@ function cargarListaMontaje() {
 }
 
 // Función para inicializar la tabla de producto seleccionado
-function inicializarProductoSeleccionado() {
+export function inicializarProductoSeleccionado() {
     console.log('Inicializando la tabla de producto seleccionado...');
 
     // Cargar la lista desplegable de montaje
