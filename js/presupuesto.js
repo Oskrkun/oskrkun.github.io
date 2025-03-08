@@ -192,7 +192,7 @@ export async function initPresupuesto() {
 
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    deshabilitarClicEnCeldasDeshabilitadas();
+    //deshabilitarClicEnCeldasDeshabilitadas();
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
