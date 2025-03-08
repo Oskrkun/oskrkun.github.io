@@ -276,7 +276,8 @@ input[type="text"] {
 #tipoLentesTable input[type="checkbox"],
 #tipoLentesTable input[type="radio"],
 #tratamientosTable input[type="checkbox"],
-#tratamientosTable input[type="radio"] {
+#tratamientosTable input[type="radio"],
+#redondear-precios { /* Agregar el checkbox de redondeo */
     pointer-events: auto; /* Permitir interacción */
     transform: scale(1.5); /* Escala 1.5 */
     margin: 0; /* Sin margen */
