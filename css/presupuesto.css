@@ -152,7 +152,7 @@ input[type="text"] {
 
 /* Estilos para la celda con el botón de flecha */
 #arrow-trasp,
-#refresh-erase button {
+#refresh-erase {
     background-color: transparent;
     color: white;
     position: relative;
