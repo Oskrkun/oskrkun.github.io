@@ -55,11 +55,15 @@ export async function cargarTiposLentes() {
 
             // Agregar evento para permitir desmarcar el radio button
             tipoLentesContainer.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.addEventListener('change', function () {
-                    if (this.checked && this === document.querySelector('input[name="tipoLente"]:checked')) {
+                radio.addEventListener('click', function (event) {
+                    const previouslyChecked = document.querySelector('input[name="tipoLente"]:checked');
+
+                    if (previouslyChecked && previouslyChecked === this) {
                         // Si el radio button ya está seleccionado, desmarcarlo
                         this.checked = false;
+                        event.preventDefault(); // Evitar que el radio button se marque nuevamente
                     }
+
                     // Llamar a la función de filtrado en cualquier caso
                     cargarProductosFiltrados();
                 });
