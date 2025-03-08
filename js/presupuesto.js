@@ -20,7 +20,9 @@ import {
     agregarEventosSincronizacion,
     esEsfOCil,
     transponerReceta,
-    sincronizarTodo
+    sincronizarTodo,
+	limpiarCerca,
+    revisarErroresYActualizarCerca
 } from './controlReceta.js';
 
 import {
