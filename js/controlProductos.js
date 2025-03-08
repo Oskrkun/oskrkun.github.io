@@ -106,6 +106,30 @@ export async function cargarTratamientos() {
     }
 }
 
+// Función para realizar la transposición oftalmológica
+function transponerCilindrico(esf, cil) {
+    console.log(`Transponiendo valores - ESF: ${esf}, CIL: ${cil}`);
+    if (cil > 0) {
+        // Transposición: cambiar el signo del CIL y ajustar el ESF
+        const nuevoCil = -cil;
+        const nuevoEsf = esf + cil;
+        console.log(`Valores transpuestos - Nuevo ESF: ${nuevoEsf}, Nuevo CIL: ${nuevoCil}`);
+        return { esf: nuevoEsf, cil: nuevoCil };
+    }
+    // Si el CIL es negativo, no se realiza la transposición
+    console.log('No se necesita transposición, CIL ya es negativo.');
+    return { esf, cil };
+}
+
+// Función para determinar el valor más alto de ESF o CIL
+function obtenerValorMasAlto(valor1, valor2) {
+    console.log(`Comparando valores para obtener el más alto: ${valor1} y ${valor2}`);
+    if (valor1 === null && valor2 === null) return null;
+    if (valor1 === null) return valor2;
+    if (valor2 === null) return valor1;
+    return Math.min(valor1, valor2); // En ESF y CIL, el valor más alto es el más negativo
+}
+
 // Función para filtrar productos por graduación (ESF y CIL)
 function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
     console.log(`Filtrando producto: ${producto.nombre}`);
@@ -117,7 +141,7 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
     console.log(`¿Cumple con ESF? ${cumpleEsf}`);
 
     // Verificar si el producto cumple con el CIL más alto
-    const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);
+    const cumpleCil = cilMasAlto === null || (Math.abs(cilMasAlto) >= Math.abs(producto.cil)); // Corregido
     console.log(`¿Cumple con CIL? ${cumpleCil}`);
 
     // Devolver true si cumple con ambos filtros
@@ -146,9 +170,16 @@ export async function cargarProductosFiltrados() {
         console.log('Valores de la receta - OD ESF:', odLejosEsf, 'OD CIL:', odLejosCil);
         console.log('Valores de la receta - OI ESF:', oiLejosEsf, 'OI CIL:', oiLejosCil);
 
-        // Determinar los valores más altos de ESF y CIL
-        const esfMasAlto = obtenerValorMasAlto(odLejosEsf, oiLejosEsf);
-        const cilMasAlto = obtenerValorMasAlto(odLejosCil, oiLejosCil);
+        // Realizar la transposición oftalmológica si es necesario
+        const odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
+        const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
+
+        console.log('Valores transpuestos - OD:', odTranspuesto);
+        console.log('Valores transpuestos - OI:', oiTranspuesto);
+
+        // Determinar los valores más altos de ESF y CIL (después de la transposición)
+        const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
+        const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
 
         console.log('ESF más alto:', esfMasAlto);
         console.log('CIL más alto:', cilMasAlto);
@@ -213,15 +244,6 @@ export async function cargarProductosFiltrados() {
     } catch (error) {
         console.error('Error cargando productos filtrados:', error);
     }
-}
-
-// Función auxiliar para obtener el valor más alto de ESF o CIL
-function obtenerValorMasAlto(valor1, valor2) {
-    console.log(`Comparando valores para obtener el más alto: ${valor1} y ${valor2}`);
-    if (valor1 === null && valor2 === null) return null;
-    if (valor1 === null) return valor2;
-    if (valor2 === null) return valor1;
-    return Math.min(valor1, valor2); // En ESF y CIL, el valor más alto es el más negativo
 }
 
 // Función para formatear números con signo y dos decimales
