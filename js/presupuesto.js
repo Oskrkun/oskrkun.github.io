@@ -92,6 +92,39 @@ function agregarEventosToggleSection() {
     });
 }
 
+// Función para borrar todos los inputs de "lejos" y "ADD"
+function borrarReceta() {
+    console.log('Borrando receta...');
+
+    // Seleccionar todos los inputs de "lejos" y "ADD"
+    const inputsLejos = document.querySelectorAll('.seccion-lejos input');
+    const inputsAdd = document.querySelectorAll('.seccion-add input');
+
+    // Borrar los valores de los inputs de "lejos"
+    inputsLejos.forEach(input => {
+        input.value = ''; // Limpiar el valor del input
+    });
+
+    // Borrar los valores de los inputs de "ADD"
+    inputsAdd.forEach(input => {
+        input.value = ''; // Limpiar el valor del input
+    });
+
+    console.log('Receta borrada.');
+
+    // Disparar un evento personalizado para notificar que la receta fue borrada
+    const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
+    document.dispatchEvent(eventoRecetaBorrada);
+}
+
+// Función para agregar el evento al botón de "refresh-erase"
+function agregarEventoBotonBorrar() {
+    const botonBorrar = document.querySelector('#refresh-erase button');
+    if (botonBorrar) {
+        botonBorrar.addEventListener('click', borrarReceta);
+    }
+}
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -128,6 +161,9 @@ export async function initPresupuesto() {
     // Agregar evento al botón de rotación
     agregarEventoBotonRotacion();
 
+    // Agregar evento al botón de borrar
+    agregarEventoBotonBorrar();
+
     // Cargar tipos de lentes desde Supabase
     await cargarTiposLentes();
 
@@ -147,6 +183,7 @@ export async function initPresupuesto() {
     agregarEventosReceta();
 }
 
+// Función para agregar evento al botón de rotación
 function agregarEventoBotonRotacion() {
     const botonRotacion = document.querySelector('#arrow-trasp button');
     if (botonRotacion) {
@@ -169,8 +206,6 @@ function deshabilitarCamposCerca() {
         input.disabled = true; // Deshabilitar los campos de "cerca"
     });
 }
-
-
 
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {

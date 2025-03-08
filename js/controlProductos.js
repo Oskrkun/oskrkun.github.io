@@ -249,6 +249,12 @@ document.addEventListener('recetaTranspuesta', () => {
     cargarProductosFiltrados();
 });
 
+// Escuchar el evento personalizado 'recetaBorrada'
+document.addEventListener('recetaBorrada', () => {
+    console.log('Receta borrada detectada, actualizando lista de productos...');
+    cargarProductosFiltrados();
+});
+
 // Función para agregar eventos de cambio en los inputs de la receta
 export function agregarEventosReceta() {
     const inputsReceta = document.querySelectorAll('.vista-previa input');
