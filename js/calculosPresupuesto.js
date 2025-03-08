@@ -43,7 +43,7 @@ function rellenarCamposProductoSeleccionado(fila) {
     document.getElementById('producto-precio-base').value = precio;
     document.getElementById('producto-armado').value = '350';
     document.getElementById('producto-iva').value = '22';
-    document.getElementById('producto-multiplicador').value = '2.5';
+    document.getElementById('producto-multiplicador').value = '2.2';
     document.getElementById('producto-armazon').value = '$0';
 
     console.log('Calculando precio de los cristales...');
