@@ -228,6 +228,7 @@ input[type="text"] {
 }
 
 #tipoLentesTable th,
+#productoSeleccionadoTable th,
 #tratamientosTable th {
     background-color: var(--color-primario);
     color: white;
@@ -242,6 +243,7 @@ input[type="text"] {
 }
 
 #tipoLentesTable td,
+#productoSeleccionadoTable td,
 #tratamientosTable td {
     background-color: var(--color-fondo-fila);
     color: var(--color-texto);
