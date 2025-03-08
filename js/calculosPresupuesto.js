@@ -105,10 +105,16 @@ function inicializarProductoSeleccionado() {
     // Cargar la lista desplegable de montaje
     cargarListaMontaje();
 
-    // Inicializar los campos editables
-    document.getElementById('producto-iva').value = '22';
-    document.getElementById('producto-multiplicador').value = '2.2';
-    document.getElementById('producto-armazon').value = '$ 0.00';
+    // Inicializar los campos editables con valores por defecto
+    document.getElementById('producto-iva').value = '22'; // IVA por defecto
+    document.getElementById('producto-multiplicador').value = '2.2'; // Multiplicador por defecto
+    document.getElementById('producto-armazon').value = '$ 0.00'; // Armazón por defecto
+
+    // Seleccionar el primer valor de la lista de montaje
+    const selectMontaje = document.getElementById('producto-armado');
+    if (selectMontaje && selectMontaje.options.length > 0) {
+        selectMontaje.selectedIndex = 0; // Seleccionar el primer elemento
+    }
 
     // Calcular precios iniciales
     calcularPrecioCristales();

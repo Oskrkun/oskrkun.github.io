@@ -37,7 +37,8 @@ import {
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-   // deshabilitarClicEnCeldasDeshabilitadas 
+    deshabilitarClicEnCeldasDeshabilitadas,
+	inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
 
 // Función para manejar la contracción/expansión de las secciones
@@ -192,7 +193,8 @@ export async function initPresupuesto() {
 
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    //deshabilitarClicEnCeldasDeshabilitadas();
+    deshabilitarClicEnCeldasDeshabilitadas();
+	inicializarProductoSeleccionado();
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
