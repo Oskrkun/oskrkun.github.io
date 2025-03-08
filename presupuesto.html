@@ -179,7 +179,11 @@
                         </tr>
                         <tr>
                             <td class="primer-columna">Armado:</td>
-                            <td><input type="text" id="producto-armado"></td>
+                            <td>
+                                <select id="producto-armado">
+                                    <!-- Opciones de montaje se llenarán dinámicamente -->
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td class="primer-columna">IVA:</td>
@@ -189,13 +193,19 @@
                             <td class="primer-columna">Multiplicador:</td>
                             <td><input type="text" id="producto-multiplicador"></td>
                         </tr>
-						<tr>
+                        <tr>
+                            <td class="primer-columna">Redondear Precios:</td>
+                            <td>
+                                <input type="checkbox" id="redondear-precios" checked>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="primer-columna">Precio Cristales:</td>
-                            <td><input type="text" id="Precio-Cristales"  readonly></td>
+                            <td><input type="text" id="Precio-Cristales" readonly></td>
                         </tr>
                         <tr>
                             <td class="primer-columna">Armazón:</td>
-                            <td><input type="text" id="producto-armazon" value="$0"></td>
+                            <td><input type="text" id="producto-armazon" value="$0.00"></td>
                         </tr>
                         <tr>
                             <td class="primer-columna">Precio FINAL:</td>
