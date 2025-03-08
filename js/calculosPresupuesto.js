@@ -65,8 +65,9 @@ function rellenarCamposProductoSeleccionado(fila) {
     // Cargar la lista desplegable de montaje
     cargarListaMontaje();
 
-    document.getElementById('producto-iva').value = '$ 22';
-    document.getElementById('producto-multiplicador').value = '$ 2.2';
+    // Inicializar el IVA, multiplicador y armazón
+    document.getElementById('producto-iva').value = '22';
+    document.getElementById('producto-multiplicador').value = '2.2';
     document.getElementById('producto-armazon').value = '$ 0.00';
 
     console.log('Calculando precio de los cristales...');
@@ -87,11 +88,31 @@ function cargarListaMontaje() {
         selectMontaje.appendChild(option);
     });
 
+    // Seleccionar el primer elemento de la lista por defecto
+    selectMontaje.selectedIndex = 0;
+
     // Agregar evento para recalcular al cambiar el armado
     selectMontaje.addEventListener('change', () => {
         calcularPrecioCristales();
         calcularPrecioFinal();
     });
+}
+
+// Función para inicializar la tabla de producto seleccionado
+function inicializarProductoSeleccionado() {
+    console.log('Inicializando la tabla de producto seleccionado...');
+
+    // Cargar la lista desplegable de montaje
+    cargarListaMontaje();
+
+    // Inicializar los campos editables
+    document.getElementById('producto-iva').value = '22';
+    document.getElementById('producto-multiplicador').value = '2.2';
+    document.getElementById('producto-armazon').value = '$ 0.00';
+
+    // Calcular precios iniciales
+    calcularPrecioCristales();
+    calcularPrecioFinal();
 }
 
 // Función para calcular el precio de los cristales
@@ -172,4 +193,5 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM completamente cargado, inicializando...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
+    inicializarProductoSeleccionado(); // Inicializar la tabla de producto seleccionado
 });
