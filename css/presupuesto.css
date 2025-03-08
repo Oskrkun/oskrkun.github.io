@@ -8,6 +8,8 @@
     --color-fondo-fila: #f9f9f9;
     --color-fondo-hover: #e0e0e0;
     --color-borde: #ddd;
+	--color-fondo-fila: #f9f9f9; /* Fondo normal de las filas */
+    --color-texto: #333; /* Color de texto normal */
 }
 
 /* Estilos generales */
