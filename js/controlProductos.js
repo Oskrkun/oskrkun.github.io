@@ -243,6 +243,12 @@ export function agregarEventosFiltrado() {
     });
 }
 
+// Escuchar el evento personalizado 'recetaTranspuesta'
+document.addEventListener('recetaTranspuesta', () => {
+    console.log('Receta transpuesta detectada, actualizando lista de productos...');
+    cargarProductosFiltrados();
+});
+
 // Función para agregar eventos de cambio en los inputs de la receta
 export function agregarEventosReceta() {
     const inputsReceta = document.querySelectorAll('.vista-previa input');

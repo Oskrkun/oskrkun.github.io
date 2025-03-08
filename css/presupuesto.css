@@ -314,7 +314,7 @@ input[type="text"] {
     width: 100%;
     max-width: 800px;
     margin-bottom: 20px;
-    padding: 20px;
+    padding: 5px;
     box-sizing: border-box;
 }
 
@@ -392,7 +392,7 @@ input[type="text"] {
 
 /* Estilos para el contador de productos */
 .contador-productos {
-    margin-left: 4px; /* Un pequeño espacio entre el texto y el contador */
+    margin-left: 20px; /* Un pequeño espacio entre el texto y el contador */
     font-size: 0.9em; /* Tamaño de fuente ligeramente más pequeño */
     color: #666; /* Color del texto del contador */
 }

@@ -167,6 +167,21 @@ function deshabilitarCamposCerca() {
     });
 }
 
+function agregarEventoBotonRotacion() {
+    const botonRotacion = document.querySelector('#arrow-trasp button');
+    if (botonRotacion) {
+        botonRotacion.addEventListener('click', () => {
+            console.log('Botón de transposición presionado');
+            transponerReceta(); // Realizar la transposición
+            sincronizarTodo(); // Sincronizar cambios después de la transposición
+
+            // Disparar un evento personalizado para notificar que la receta fue transpuesta
+            const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
+            document.dispatchEvent(eventoTranspuesto);
+        });
+    }
+}
+
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     initPresupuesto();
