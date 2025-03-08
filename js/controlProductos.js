@@ -3,6 +3,7 @@ import { supabaseClient } from './supabaseConfig.js';
 
 // Función para actualizar el contador de productos en el h2
 function actualizarContadorProductos(cantidad) {
+    console.log('Actualizando contador de productos...');
     const h2Productos = document.querySelector('#ProductosSection h2');
     if (h2Productos) {
         // Buscar el span que contiene el contador
@@ -17,6 +18,9 @@ function actualizarContadorProductos(cantidad) {
 
         // Actualizar el texto del contador
         contadorSpan.textContent = `(${cantidad})`;
+        console.log(`Contador de productos actualizado a: ${cantidad}`);
+    } else {
+        console.error('No se encontró el elemento h2 en la sección de productos.');
     }
 }
 
@@ -38,6 +42,7 @@ export async function cargarTiposLentes() {
             tipoLentesContainer.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
 
             tiposLentes.forEach(tipoLente => {
+                console.log(`Agregando tipo de lente: ${tipoLente.nombre}`);
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${tipoLente.nombre}</td>
@@ -78,6 +83,7 @@ export async function cargarTratamientos() {
             tratamientosContainer.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
 
             tratamientos.forEach(tratamiento => {
+                console.log(`Agregando tratamiento: ${tratamiento.nombre}`);
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${tratamiento.nombre}</td>
@@ -100,6 +106,24 @@ export async function cargarTratamientos() {
     }
 }
 
+// Función para filtrar productos por graduación (ESF y CIL)
+function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
+    console.log(`Filtrando producto: ${producto.nombre}`);
+    console.log(`ESF más alto: ${esfMasAlto}, CIL más alto: ${cilMasAlto}`);
+    console.log(`Producto - min_esf: ${producto.min_esf}, max_esf: ${producto.max_esf}, cil: ${producto.cil}`);
+
+    // Verificar si el producto cumple con el ESF más alto
+    const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
+    console.log(`¿Cumple con ESF? ${cumpleEsf}`);
+
+    // Verificar si el producto cumple con el CIL más alto
+    const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);
+    console.log(`¿Cumple con CIL? ${cumpleCil}`);
+
+    // Devolver true si cumple con ambos filtros
+    return cumpleEsf && cumpleCil;
+}
+
 // Función para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     console.log('Cargando productos filtrados...');
@@ -107,9 +131,11 @@ export async function cargarProductosFiltrados() {
     try {
         // Obtener el tipo de lente seleccionado
         const tipoLenteSeleccionado = document.querySelector('input[name="tipoLente"]:checked')?.value;
+        console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
 
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
+        console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
 
         // Obtener los valores de ESF y CIL de la receta
         const odLejosEsf = parseFloat(document.getElementById('od-lejos-esf').value) || null;
@@ -117,16 +143,17 @@ export async function cargarProductosFiltrados() {
         const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
         const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
+        console.log('Valores de la receta - OD ESF:', odLejosEsf, 'OD CIL:', odLejosCil);
+        console.log('Valores de la receta - OI ESF:', oiLejosEsf, 'OI CIL:', oiLejosCil);
+
         // Determinar los valores más altos de ESF y CIL
         const esfMasAlto = obtenerValorMasAlto(odLejosEsf, oiLejosEsf);
         const cilMasAlto = obtenerValorMasAlto(odLejosCil, oiLejosCil);
 
-        console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
-        console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
         console.log('ESF más alto:', esfMasAlto);
         console.log('CIL más alto:', cilMasAlto);
 
-        // Llamar a la función de Supabase para obtener los productos filtrados
+        // Llamar a la función de Supabase para obtener los productos filtrados (tratamientos y tipo de lente)
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
             p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
@@ -136,16 +163,8 @@ export async function cargarProductosFiltrados() {
 
         console.log('Productos filtrados cargados:', productos);
 
-        // Filtrar productos según los valores más altos de ESF y CIL
-        const productosFiltrados = productos.filter(producto => {
-            // Verificar si el producto cumple con el ESF más alto
-            const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-
-            // Verificar si el producto cumple con el CIL más alto
-            const cumpleCil = cilMasAlto === null || (cilMasAlto >= producto.cil);  // Lógica corregida
-
-            return cumpleEsf && cumpleCil;
-        });
+        // Filtrar productos por graduación (ESF y CIL)
+        const productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
 
         console.log('Productos filtrados por ESF y CIL:', productosFiltrados);
 
@@ -156,6 +175,7 @@ export async function cargarProductosFiltrados() {
 
             if (productosFiltrados && productosFiltrados.length > 0) {
                 productosFiltrados.forEach(producto => {
+                    console.log(`Agregando producto a la tabla: ${producto.nombre}`);
                     const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
                     const precio = formatearPrecio(producto.precio);
                     const min_esf = formatearNumero(producto.min_esf);
@@ -177,6 +197,7 @@ export async function cargarProductosFiltrados() {
                     tbody.appendChild(row);
                 });
             } else {
+                console.log('No hay productos disponibles después del filtrado.');
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td colspan="9" style="text-align: center;">No hay productos disponibles.</td>
@@ -196,6 +217,7 @@ export async function cargarProductosFiltrados() {
 
 // Función auxiliar para obtener el valor más alto de ESF o CIL
 function obtenerValorMasAlto(valor1, valor2) {
+    console.log(`Comparando valores para obtener el más alto: ${valor1} y ${valor2}`);
     if (valor1 === null && valor2 === null) return null;
     if (valor1 === null) return valor2;
     if (valor2 === null) return valor1;
@@ -231,6 +253,7 @@ export function formatearPrecio(precio) {
 
 // Función para agregar eventos de filtrado
 export function agregarEventosFiltrado() {
+    console.log('Agregando eventos de filtrado...');
     const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
     const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
 
@@ -257,6 +280,7 @@ document.addEventListener('recetaBorrada', () => {
 
 // Función para agregar eventos de cambio en los inputs de la receta
 export function agregarEventosReceta() {
+    console.log('Agregando eventos de cambio en los inputs de la receta...');
     const inputsReceta = document.querySelectorAll('.vista-previa input');
     inputsReceta.forEach(input => {
         input.addEventListener('blur', cargarProductosFiltrados);
