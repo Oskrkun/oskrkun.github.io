@@ -101,6 +101,9 @@ function cargarListaMontaje() {
     });
 }
 
+
+
+
 // Función para inicializar la tabla de producto seleccionado
 export function inicializarProductoSeleccionado() {
     console.log('Inicializando la tabla de producto seleccionado...');
@@ -151,18 +154,44 @@ function calcularPrecioCristales() {
     document.getElementById('Precio-Cristales').value = formatearPrecio(precioCristales);
 }
 
+// Función para formatear el precio final con el formato deseado
+function formatearPrecioFinal(precio) {
+    // Convertir el número a una cadena con dos decimales
+    const precioFormateado = precio.toFixed(2);
+
+    // Separar la parte entera de los decimales
+    const [parteEntera, parteDecimal] = precioFormateado.split('.');
+
+    // Agregar puntos como separadores de miles
+    const parteEnteraFormateada = parteEntera
+        .split('')
+        .reverse()
+        .join('')
+        .match(/.{1,3}/g)
+        .join('.')
+        .split('')
+        .reverse()
+        .join('');
+
+    // Combinar la parte entera y los decimales con el símbolo de moneda
+    return `$ ${parteEnteraFormateada},${parteDecimal}`;
+}
+
 // Función para calcular el precio final
 function calcularPrecioFinal() {
     console.log('Calculando precio final...');
-    const precioCristales = parseFloat(document.getElementById('Precio-Cristales').value.replace('$', '')) || 0;
-    const precioArmazon = parseFloat(document.getElementById('producto-armazon').value.replace('$', '')) || 0;
+    const precioCristales = parseFloat(document.getElementById('Precio-Cristales').value.replace('$', '').replace(/\./g, '').replace(',', '.')) || 0;
+    const precioArmazon = parseFloat(document.getElementById('producto-armazon').value.replace('$', '').replace(/\./g, '').replace(',', '.')) || 0;
 
     console.log('Precio de los cristales:', precioCristales);
     console.log('Precio del armazón:', precioArmazon);
 
     const precioFinal = precioCristales + precioArmazon;
     console.log('Precio final:', precioFinal);
-    document.getElementById('producto-precio-final').value = formatearPrecio(precioFinal);
+
+    // Formatear el precio final correctamente
+    const precioFinalFormateado = formatearPrecioFinal(precioFinal);
+    document.getElementById('producto-precio-final').value = precioFinalFormateado;
 }
 
 // Función para agregar eventos a los campos editables

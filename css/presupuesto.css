@@ -525,6 +525,7 @@ input[type="text"] {
     color: var(--color-texto);
     font-size: 1em;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	text-align: center;
 }
 
 #producto-armado:focus {
