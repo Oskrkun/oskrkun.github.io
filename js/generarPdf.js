@@ -74,28 +74,28 @@ export function generarPDF() {
             console.log('Contenido del elemento temporal:', elemento.innerHTML);
 
             // Configuración de html2pdf
-            const opciones = {
-                margin: 10,
-                filename: `Presupuesto_${cliente}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            };
+			const opciones = {
+				margin: 10, // Márgenes reducidos
+				filename: `Presupuesto_${cliente}.pdf`,
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2, useCORS: true }, // Asegura que las imágenes se carguen correctamente
+				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, // Formato A4
+			};
 
-            console.log('Configuración de html2pdf:', opciones);
+			console.log('Configuración de html2pdf:', opciones);
 
-            // Generar el PDF
-            console.log('Generando PDF...');
-            html2pdf()
-                .set(opciones)
-                .from(elemento)
-                .save()
-                .then(() => {
-                    console.log('PDF generado y descargado correctamente.');
-                })
-                .catch(error => {
-                    console.error('Error al generar el PDF:', error);
-                });
+			// Generar el PDF
+			console.log('Generando PDF...');
+			html2pdf()
+				.set(opciones)
+				.from(elemento)
+				.save()
+				.then(() => {
+					console.log('PDF generado y descargado correctamente.');
+				})
+				.catch(error => {
+					console.error('Error al generar el PDF:', error);
+				});
         })
         .catch(error => {
             console.error('Error al cargar la plantilla:', error);
