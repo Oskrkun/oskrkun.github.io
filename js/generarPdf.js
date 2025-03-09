@@ -15,14 +15,14 @@ export function generarPDF() {
     console.log('Generando PDF...');
 
     // Capturar los datos de la tabla
-    const vendedor = document.getElementById('vendedor').value;
-    const cliente = document.getElementById('cliente').value;
-    const producto = document.getElementById('producto-nombre').value;
-    const tratamientos = document.getElementById('producto-tratamientos').value;
-    const precioCristales = document.getElementById('Precio-Cristales').value;
-    const armazonModelo = document.getElementById('armazon-modelo').value;
-    const precioArmazon = document.getElementById('producto-armazon').value;
-    const precioFinal = document.getElementById('producto-precio-final').value;
+    const vendedor = document.getElementById('vendedor').value || "";
+    const cliente = document.getElementById('cliente').value || "";
+    const producto = document.getElementById('producto-nombre').value || "";
+    const tratamientos = document.getElementById('producto-tratamientos').value || "";
+    const precioCristales = document.getElementById('Precio-Cristales').value || "";
+    const armazonModelo = document.getElementById('armazon-modelo').value || "";
+    const precioArmazon = document.getElementById('producto-armazon').value || "";
+    const precioFinal = document.getElementById('producto-precio-final').value || "";
 
     console.log('Datos capturados:', {
         vendedor,
@@ -69,6 +69,9 @@ export function generarPDF() {
             const elemento = document.createElement('div');
             elemento.innerHTML = contenido;
             console.log('Elemento temporal creado:', elemento);
+
+            // Mostrar el contenido del elemento temporal en la consola
+            console.log('Contenido del elemento temporal:', elemento.innerHTML);
 
             // Configuración de html2pdf
             const opciones = {
