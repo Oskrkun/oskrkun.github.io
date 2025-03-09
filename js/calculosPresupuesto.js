@@ -30,6 +30,44 @@ function desformatearMoneda(texto) {
     return parseFloat(texto.replace(/[^0-9,-]/g, '').replace(',', '.'));
 }
 
+// Función para validar que el input solo contenga números, puntos o comas
+function validarInputNumerico(event) {
+    const input = event.target;
+    const valor = input.value;
+    const nuevoValor = valor.replace(/[^0-9.,]/g, ''); // Solo permite números, puntos y comas
+    input.value = nuevoValor;
+}
+
+// Función para limpiar el campo al enfocarse
+function limpiarCampoAlEnfocarse(event) {
+    const input = event.target;
+    input.value = '';
+}
+
+// Función para restaurar el valor por defecto si el campo está vacío al perder el foco
+function restaurarValorPorDefecto(event) {
+    const input = event.target;
+    if (input.value === '') {
+        switch (input.id) {
+            case 'producto-iva':
+                input.value = '22';
+                break;
+            case 'producto-multiplicador':
+                input.value = '2.2';
+                break;
+            case 'producto-armazon':
+                input.value = formatearMoneda(0);
+                break;
+        }
+    } else {
+        // Formatear el valor si es necesario
+        if (input.id === 'producto-armazon') {
+            const valorNumerico = desformatearMoneda(input.value);
+            input.value = formatearMoneda(valorNumerico);
+        }
+    }
+}
+
 // Función para manejar el clic en una fila de la tabla de productos
 export function manejarSeleccionProducto() {
     console.log('Iniciando manejarSeleccionProducto...');
@@ -150,7 +188,10 @@ export function agregarEventosCalculos() {
     camposEditables.forEach(id => {
         const campo = document.getElementById(id);
         if (campo) {
-            campo.addEventListener('input', calcularPrecios);
+            campo.addEventListener('input', validarInputNumerico);
+            campo.addEventListener('focus', limpiarCampoAlEnfocarse);
+            campo.addEventListener('blur', restaurarValorPorDefecto);
+            campo.addEventListener('blur', calcularPrecios);
         } else {
             console.error(`No se encontró el campo con ID: ${id}`);
         }
