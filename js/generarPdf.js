@@ -70,8 +70,8 @@ export function generarPDF() {
                 .then(() => {
                     // Generar el PDF
                     html2canvas(elemento, {
-                        scale: 2,
-                        useCORS: true,
+                        scale: 2, // Aumentar la escala para mejor calidad
+                        useCORS: true, // Permitir CORS para imágenes externas
                     }).then(canvas => {
                         // Verificar si el elemento todavía está en el DOM antes de eliminarlo
                         if (elemento.parentNode) {
@@ -84,19 +84,23 @@ export function generarPDF() {
                         // Acceder a jsPDF desde el objeto global
                         const { jsPDF } = window.jspdf;
 
-                        // Crear un nuevo documento PDF
+                        // Calcular las dimensiones del contenido
+                        const contentWidth = canvas.width; // Ancho del contenido en píxeles
+                        const contentHeight = canvas.height; // Alto del contenido en píxeles
+
+                        // Convertir las dimensiones de píxeles a milímetros (1 píxel ≈ 0.264583 mm)
+                        const mmWidth = contentWidth * 0.264583;
+                        const mmHeight = contentHeight * 0.264583;
+
+                        // Crear un nuevo documento PDF con el tamaño personalizado
                         const doc = new jsPDF({
-                            orientation: 'portrait',
+                            orientation: mmWidth > mmHeight ? 'landscape' : 'portrait', // Orientación basada en las dimensiones
                             unit: 'mm',
-                            format: 'a4',
+                            format: [mmWidth, mmHeight], // Tamaño personalizado
                         });
 
-                        // Calcular las dimensiones de la imagen para que se ajuste al PDF
-                        const imgWidth = 210; // Ancho de A4 en mm
-                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
                         // Agregar la imagen al PDF
-                        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                        doc.addImage(imgData, 'PNG', 0, 0, mmWidth, mmHeight);
 
                         // Guardar el PDF
                         doc.save(`Presupuesto_${cliente}.pdf`);
