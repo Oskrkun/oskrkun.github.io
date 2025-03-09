@@ -75,12 +75,17 @@ export function generarPDF() {
 
             // Configuración de html2pdf
 			const opciones = {
-				margin: [5, 10, 10, 10], // [top, right, bottom, left]
+				margin: [0, 10, 10, 10], // Reduce el margen superior
 				filename: `Presupuesto_${cliente}.pdf`,
 				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 1, useCORS: true },
-				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+				html2canvas: { scale: 1, useCORS: true }, // Reduce el escalado para evitar cortes
+				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, // Configuración estándar
 			};
+
+			// Generar el PDF con los nuevos estilos aplicados
+			const elemento = document.createElement('div');
+			elemento.classList.add('pdf-content'); // Aplica la clase de estilos al contenedor
+			elemento.innerHTML = contenido;
 
 			html2pdf()
 				.set(opciones)
@@ -89,7 +94,7 @@ export function generarPDF() {
 				.then(() => {
 					console.log('PDF generado y descargado correctamente.');
 				})
-				.catch(error => {
+				.catch((error) => {
 					console.error('Error al generar el PDF:', error);
 				});
         })
