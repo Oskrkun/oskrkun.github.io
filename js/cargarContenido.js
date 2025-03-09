@@ -47,21 +47,24 @@ export async function cargarContenido(seccion) {
                 break;
 
             case 'presupuesto':
-				// Cargar el CSS de Presupuesto
-				const linkPresupuesto = document.createElement('link');
-				linkPresupuesto.rel = 'stylesheet';
-				linkPresupuesto.href = 'css/presupuesto.css'; // Ruta al archivo CSS de Presupuesto
-				document.head.appendChild(linkPresupuesto);
+                // Cargar el CSS de Presupuesto
+                const linkPresupuesto = document.createElement('link');
+                linkPresupuesto.rel = 'stylesheet';
+                linkPresupuesto.href = 'css/presupuesto.css'; // Ruta al archivo CSS de Presupuesto
+                document.head.appendChild(linkPresupuesto);
 
-				// Cargar el HTML de Presupuesto
-				contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
+                // Cargar el HTML de Presupuesto
+                contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
 
-				// Esperar a que el DOM se actualice antes de inicializar el Presupuesto
-				await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
+                // Esperar a que el DOM se actualice antes de inicializar el Presupuesto
+                await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
 
-				// Inicializar el Presupuesto después de cargar el contenido
-				await import('./presupuesto.js').then(module => module.initPresupuesto()); // Llamar a la función de inicialización del Presupuesto
-				break;
+                // Inicializar el Presupuesto después de cargar el contenido
+                await import('./presupuesto.js').then(module => module.initPresupuesto()); // Llamar a la función de inicialización del Presupuesto
+
+                // Cargar el script para generar PDF
+                await import('./js/generarPdf.js'); // Cargar generarPdf.js
+                break;
 
             case 'clientes':
                 contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());

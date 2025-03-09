@@ -62,5 +62,12 @@ function generarPDF() {
         });
 }
 
-// Asignar la función al botón de PDF
-document.getElementById('generar-pdf').addEventListener('click', generarPDF);
+// Esperar a que el DOM esté completamente cargado antes de agregar el evento
+document.addEventListener('DOMContentLoaded', () => {
+    const botonGenerarPDF = document.getElementById('generar-pdf');
+    if (botonGenerarPDF) {
+        botonGenerarPDF.addEventListener('click', generarPDF);
+    } else {
+        console.error('No se encontró el botón de generar PDF.');
+    }
+});
