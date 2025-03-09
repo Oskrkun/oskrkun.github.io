@@ -52,7 +52,10 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Rellenando campos del producto seleccionado...');
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
-    const precio = fila.cells[7].textContent.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
+    
+    // Extraer el precio base y convertirlo correctamente a número flotante
+    const precioTexto = fila.cells[7].textContent.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
+    const precio = parseFloat(precioTexto);
 
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
