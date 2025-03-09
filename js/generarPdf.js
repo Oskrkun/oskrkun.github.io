@@ -22,13 +22,33 @@ function generarPDF() {
     const precioArmazon = document.getElementById('producto-armazon').value;
     const precioFinal = document.getElementById('producto-precio-final').value;
 
+    console.log('Datos capturados:', {
+        vendedor,
+        cliente,
+        producto,
+        tratamientos,
+        precioCristales,
+        armazonModelo,
+        precioArmazon,
+        precioFinal,
+    });
+
     // Obtener la fecha actual y formatearla
     const fecha = formatearFecha(new Date());
+    console.log('Fecha formateada:', fecha);
 
     // Cargar la plantilla HTML desde la carpeta "res"
+    console.log('Cargando plantilla HTML...');
     fetch('../res/plantilla-pdf.html') // Ruta ajustada
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error al cargar la plantilla: ${response.statusText}`);
+            }
+            return response.text();
+        })
         .then(plantilla => {
+            console.log('Plantilla cargada correctamente.');
+
             // Reemplazar los placeholders con los datos capturados
             const contenido = plantilla
                 .replace('{{fecha}}', fecha)
@@ -41,9 +61,12 @@ function generarPDF() {
                 .replace('{{precioArmazon}}', precioArmazon)
                 .replace('{{precioFinal}}', precioFinal);
 
+            console.log('Contenido de la plantilla reemplazado:', contenido);
+
             // Crear un elemento temporal para el contenido del PDF
             const elemento = document.createElement('div');
             elemento.innerHTML = contenido;
+            console.log('Elemento temporal creado:', elemento);
 
             // Configuración de html2pdf
             const opciones = {
@@ -51,11 +74,23 @@ function generarPDF() {
                 filename: `Presupuesto_${cliente}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             };
 
+            console.log('Configuración de html2pdf:', opciones);
+
             // Generar el PDF
-            html2pdf().set(opciones).from(elemento).save();
+            console.log('Generando PDF...');
+            html2pdf()
+                .set(opciones)
+                .from(elemento)
+                .save()
+                .then(() => {
+                    console.log('PDF generado y descargado correctamente.');
+                })
+                .catch(error => {
+                    console.error('Error al generar el PDF:', error);
+                });
         })
         .catch(error => {
             console.error('Error al cargar la plantilla:', error);
@@ -64,8 +99,10 @@ function generarPDF() {
 
 // Esperar a que el DOM esté completamente cargado antes de agregar el evento
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM completamente cargado, buscando el botón de generar PDF...');
     const botonGenerarPDF = document.getElementById('generar-pdf');
     if (botonGenerarPDF) {
+        console.log('Botón de generar PDF encontrado, agregando evento...');
         botonGenerarPDF.addEventListener('click', generarPDF);
     } else {
         console.error('No se encontró el botón de generar PDF.');
