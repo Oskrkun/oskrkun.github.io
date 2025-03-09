@@ -24,33 +24,13 @@ export function generarPDF() {
     const precioArmazon = document.getElementById('producto-armazon').value || "";
     const precioFinal = document.getElementById('producto-precio-final').value || "";
 
-    console.log('Datos capturados:', {
-        vendedor,
-        cliente,
-        producto,
-        tratamientos,
-        precioCristales,
-        armazonModelo,
-        precioArmazon,
-        precioFinal,
-    });
-
     // Obtener la fecha actual y formatearla
     const fecha = formatearFecha(new Date());
-    console.log('Fecha formateada:', fecha);
 
-    // Cargar la plantilla HTML desde la carpeta "res"
-    console.log('Cargando plantilla HTML...');
+    // Cargar la plantilla HTML
     fetch('../res/plantilla-pdf.html')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al cargar la plantilla: ${response.statusText}`);
-            }
-            return response.text();
-        })
+        .then(response => response.text())
         .then(plantilla => {
-            console.log('Plantilla cargada correctamente.');
-
             // Reemplazar los placeholders con los datos capturados
             const contenido = plantilla
                 .replace('{{fecha}}', fecha)
@@ -63,39 +43,56 @@ export function generarPDF() {
                 .replace('{{precioArmazon}}', precioArmazon)
                 .replace('{{precioFinal}}', precioFinal);
 
-            console.log('Contenido de la plantilla reemplazado:', contenido);
-
             // Crear un elemento temporal para el contenido del PDF
             const elemento = document.createElement('div');
-            elemento.classList.add('pdf-content'); // Aplica la clase para estilos específicos
+            elemento.classList.add('pdf-content');
             elemento.innerHTML = contenido;
 
-            // Generar el PDF con jsPDF
-            const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
-            const doc = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4',
+            // Agregar el elemento al DOM (fuera de la pantalla)
+            elemento.style.position = 'absolute';
+            elemento.style.left = '-9999px';
+            document.body.appendChild(elemento);
+
+            // Esperar a que las imágenes se carguen
+            const images = elemento.querySelectorAll('img');
+            const imagePromises = Array.from(images).map(img => {
+                return new Promise((resolve, reject) => {
+                    if (img.complete) {
+                        resolve();
+                    } else {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                    }
+                });
             });
 
-            // Usar html2canvas para convertir el HTML en una imagen
-            html2canvas(elemento, {
-                scale: 2, // Aumentar la escala para mejor calidad
-                useCORS: true, // Permitir CORS para imágenes externas
-            }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png', 1.0); // Convertir a imagen PNG
-
-                // Añadir la imagen al PDF
-                const imgWidth = 210; // Ancho de A4 en mm
-                const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calcular altura proporcional
-
-                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                doc.save(`Presupuesto_${cliente}.pdf`); // Guardar el PDF
-
-                console.log('PDF generado y descargado correctamente.');
-            }).catch(error => {
-                console.error('Error al generar el PDF:', error);
-            });
+            Promise.all(imagePromises)
+                .then(() => {
+                    // Generar el PDF
+                    html2canvas(elemento, {
+                        scale: 2,
+                        useCORS: true,
+                    }).then(canvas => {
+                        document.body.removeChild(elemento); // Eliminar el elemento después de capturarlo
+                        const imgData = canvas.toDataURL('image/png', 1.0);
+                        const doc = new jsPDF({
+                            orientation: 'portrait',
+                            unit: 'mm',
+                            format: 'a4',
+                        });
+                        const imgWidth = 210; // Ancho de A4 en mm
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                        doc.save(`Presupuesto_${cliente}.pdf`);
+                    }).catch(error => {
+                        console.error('Error al generar el PDF:', error);
+                        document.body.removeChild(elemento); // Asegurarse de eliminar el elemento en caso de error
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar imágenes:', error);
+                    document.body.removeChild(elemento);
+                });
         })
         .catch(error => {
             console.error('Error al cargar la plantilla:', error);
