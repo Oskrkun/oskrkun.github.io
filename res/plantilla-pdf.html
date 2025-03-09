@@ -24,8 +24,8 @@
 
     .contenedor-presupuesto {
         background-color: white;
-        padding: 10mm; /* Ajuste de padding */
-        max-width: 190mm; /* Ancho máximo para A4 */
+        padding: 10mm;
+        max-width: 140mm;
         width: 100%;
         box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
 		position: relative;
@@ -130,66 +130,64 @@
 </style>
 </head>
 <body>
-	<div class="pdf-content">
-		<div class="contenedor-presupuesto">
-			<!-- Encabezado con logo y título -->
-			<div class="encabezado">
-				<div class="logo-y-fecha">
-					<div class="logo">
-						<img src="res/logo.png" alt="Logo">
-					</div>
-					<div class="fecha">
-						Fecha: {{fecha}}
-					</div>
+	<div class="contenedor-presupuesto">
+		<!-- Encabezado con logo y título -->
+		<div class="encabezado">
+			<div class="logo-y-fecha">
+				<div class="logo">
+					<img src="..res/logo.png" alt="Logo">
 				</div>
-				<div class="titulo-presupuesto">
-					Presupuesto
+				<div class="fecha">
+					Fecha: {{fecha}}
 				</div>
 			</div>
-
-			<!-- Tabla de presupuesto -->
-			<table>
-				<tr>
-					<th>Vendedor:</th>
-					<td>{{vendedor}}</td>
-				</tr>
-				<tr>
-					<th>Cliente:</th>
-					<td>{{cliente}}</td>
-				</tr>
-				<tr>
-					<th>Producto:</th>
-					<td>{{producto}}</td>
-				</tr>
-				<tr>
-					<th>Tratamientos:</th>
-					<td>{{Tratamientos}}</td>
-				</tr>
-				<tr>
-					<th>Precio Cristales:</th>
-					<td>{{precioCristales}}</td>
-				</tr>
-				<tr>
-					<th>Armazón Modelo:</th>
-					<td>{{armazonModelo}}</td>
-				</tr>
-				<tr>
-					<th>Precio Armazón:</th>
-					<td>{{precioArmazon}}</td>
-				</tr>
-				<tr>
-					<th>Precio Final:</th>
-					<td class="total">{{precioFinal}}</td>
-				</tr>
-			</table>
-
-			<!-- Bloque de información -->
-			<div class="informacion">
-				<p><i class="fas fa-credit-card"></i> Aceptamos todas las tarjetas de 1 a 6 pagos sin recargo.</p>
-				<p><i class="fas fa-map-marker-alt"></i> Yaguarón 1408 Esquina Colonia.📍</p>
-				<p><i class="fas fa-calendar-alt"></i> Estamos de lunes a viernes de 10 a 18 hs y sábados de 9 a 13 hs.</p>
-				<p><i class="fas fa-phone"></i> Teléfono: 096 470 154</p>
+			<div class="titulo-presupuesto">
+				Presupuesto
 			</div>
+		</div>
+
+		<!-- Tabla de presupuesto -->
+		<table>
+			<tr>
+				<th>Vendedor:</th>
+				<td>{{vendedor}}</td>
+			</tr>
+			<tr>
+				<th>Cliente:</th>
+				<td>{{cliente}}</td>
+			</tr>
+			<tr>
+				<th>Producto:</th>
+				<td>{{producto}}</td>
+			</tr>
+			<tr>
+				<th>Tratamientos:</th>
+				<td>{{Tratamientos}}</td>
+			</tr>
+			<tr>
+				<th>Precio Cristales:</th>
+				<td>{{precioCristales}}</td>
+			</tr>
+			<tr>
+				<th>Armazón Modelo:</th>
+				<td>{{armazonModelo}}</td>
+			</tr>
+			<tr>
+				<th>Precio Armazón:</th>
+				<td>{{precioArmazon}}</td>
+			</tr>
+			<tr>
+				<th>Precio Final:</th>
+				<td class="total">{{precioFinal}}</td>
+			</tr>
+		</table>
+
+		<!-- Bloque de información -->
+		<div class="informacion">
+			<p><i class="fas fa-credit-card"></i> Aceptamos todas las tarjetas de 1 a 6 pagos sin recargo.</p>
+			<p><i class="fas fa-map-marker-alt"></i> Yaguarón 1408 Esquina Colonia.📍</p>
+			<p><i class="fas fa-calendar-alt"></i> Estamos de lunes a viernes de 10 a 18 hs y sábados de 9 a 13 hs.</p>
+			<p><i class="fas fa-phone"></i> Teléfono: 096 470 154</p>
 		</div>
 	</div>
 </body>
