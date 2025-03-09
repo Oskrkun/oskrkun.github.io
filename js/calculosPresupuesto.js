@@ -52,7 +52,7 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Rellenando campos del producto seleccionado...');
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
-    const precio = fila.cells[7].textContent.replace('$', '').trim();
+    const precio = fila.cells[7].textContent.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
 
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
@@ -124,7 +124,7 @@ export function inicializarProductoSeleccionado() {
 // Función para calcular el precio de los cristales
 function calcularPrecioCristales() {
     console.log('Calculando precio de los cristales...');
-    const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
+    const precioBase = parseFloat(document.getElementById('producto-precio-base').value.replace(/\./g, '').replace(',', '.')) || 0;
     const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
     const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
     const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
