@@ -75,17 +75,13 @@ export function generarPDF() {
 
             // Configuración de html2pdf
 			const opciones = {
-				margin: 10, // Márgenes reducidos
+				margin: [5, 10, 10, 10], // [top, right, bottom, left]
 				filename: `Presupuesto_${cliente}.pdf`,
 				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 2, useCORS: true }, // Asegura que las imágenes se carguen correctamente
-				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, // Formato A4
+				html2canvas: { scale: 2, useCORS: true },
+				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
 			};
 
-			console.log('Configuración de html2pdf:', opciones);
-
-			// Generar el PDF
-			console.log('Generando PDF...');
 			html2pdf()
 				.set(opciones)
 				.from(elemento)
