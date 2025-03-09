@@ -24,8 +24,6 @@
 
     .contenedor-presupuesto {
         background-color: white;
-        border-radius: 10px;
-        box-shadow: var(--sombra-caja);
         padding: 10mm; /* Ajuste de padding */
         max-width: 190mm; /* Ancho máximo para A4 */
         width: 100%;
@@ -122,15 +120,12 @@
         scale: 1.2;
     }
 	.pdf-content {
-    width: 100%; /* Asegura que el contenido ocupe toda la anchura */
-    height: auto; /* Permite que el contenido se ajuste automáticamente */
-    margin: 0; /* Elimina márgenes innecesarios */
-    padding: 10px; /* Opcional: agrega un pequeño espacio interno */
+		width: 100%;
+		height: auto;
+		margin: 0;
 	}
-
-	/* Asegúrate de que no haya saltos de página no deseados */
 	.pdf-content * {
-    page-break-inside: avoid;
+		page-break-inside: avoid;
 	}
 </style>
 </head>
