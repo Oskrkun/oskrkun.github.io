@@ -155,6 +155,7 @@
 </div>
 
 <!-- Nueva sección para Producto Seleccionado -->
+<!-- Nueva sección para Producto Seleccionado -->
 <div class="Productos">
     <section id="ProductoSeleccionadoSection" class="collapsed">
         <h2>
@@ -165,6 +166,17 @@
             <div class="table-container">
                 <table id="productoSeleccionadoTable">
                     <tbody>
+                        <!-- Nuevas filas agregadas al principio -->
+                        <tr>
+                            <td class="primer-columna">Vendedor:</td>
+                            <td><input type="text" id="vendedor" readonly></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Cliente:</td>
+                            <td><input type="text" id="cliente"></td>
+                        </tr>
+                        <!-- Fin de nuevas filas -->
+
                         <tr>
                             <td class="primer-columna">Producto:</td>
                             <td><input type="text" id="producto-nombre" readonly></td>
@@ -194,24 +206,38 @@
                             <td><input type="text" id="producto-multiplicador"></td>
                         </tr>
                         <tr>
-							<td class="primer-columna">Redondear Precios:</td>
-							<td>
-								<label for="redondear-precios">
-									<input type="checkbox" id="redondear-precios" checked>
-								</label>
-							</td>
-						</tr>
+                            <td class="primer-columna">Redondear Precios:</td>
+                            <td>
+                                <label for="redondear-precios">
+                                    <input type="checkbox" id="redondear-precios" checked>
+                                </label>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="primer-columna">Precio Cristales:</td>
                             <td><input type="text" id="Precio-Cristales" readonly></td>
                         </tr>
+                        <!-- Modificación de la fila de Armazón -->
                         <tr>
-                            <td class="primer-columna">Armazón:</td>
+                            <td class="primer-columna">Armazón Modelo:</td>
+                            <td><input type="text" id="armazon-modelo"></td>
+                        </tr>
+                        <tr>
+                            <td class="primer-columna">Armazón Precio:</td>
                             <td><input type="text" id="producto-armazon" value="$0.00"></td>
                         </tr>
+                        <!-- Fin de la modificación -->
                         <tr>
                             <td class="primer-columna">Precio FINAL:</td>
                             <td><input type="text" id="producto-precio-final" readonly></td>
+                        </tr>
+                        <!-- Botón de PDF al final de la tabla -->
+                        <tr>
+                            <td colspan="2" style="text-align: right;">
+                                <button id="generar-pdf">
+                                    <i class="fa-solid fa-file-pdf"></i> Generar PDF
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
