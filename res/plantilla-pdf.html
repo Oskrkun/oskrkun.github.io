@@ -6,121 +6,119 @@
     <title>Plantilla PDF</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --sombra-caja: 0 4px 8px rgba(0, 0, 0, 0.25);
-            --colorLetras: #4A90E2;
-        }
+    :root {
+        --sombra-caja: 0 4px 8px rgba(0, 0, 0, 0.25);
+        --colorLetras: #4A90E2;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
 
-        .contenedor-presupuesto {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: var(--sombra-caja);
-            padding: 20px;
-            max-width: 600px;
-            width: 100%;
-        }
+    .contenedor-presupuesto {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: var(--sombra-caja);
+        padding: 10mm; /* Ajuste de padding */
+        max-width: 190mm; /* Ancho máximo para A4 */
+        width: 100%;
+        box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    }
 
-        /* Encabezado con logo y título */
-        .encabezado {
-            display: flex;
-            flex-direction: column;
-        }
+    .encabezado {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
 
-        .logo-y-fecha {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
+    .logo-y-fecha {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
 
-        .logo {
-            text-align: left;
-        }
+    .logo img {
+        max-width: 60mm; /* Ajuste del tamaño del logo */
+        height: auto;
+    }
 
-        .logo img {
-            max-width: 200px;
-            height: auto;
-        }
+    .fecha {
+        font-size: 16px;
+        color: var(--colorLetras);
+        font-weight: bold;
+    }
 
-        .fecha {
-            font-size: 16px;
-            color: var(--colorLetras);
-            font-weight: bold;
-        }
+    .titulo-presupuesto {
+        font-size: 30px; /* Reducción del tamaño de la fuente */
+        color: var(--colorLetras);
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
 
-        .titulo-presupuesto {
-            font-size: 30px;
-            color: var(--colorLetras);
-            font-weight: bold;
-            text-align: center;
-        }
+    table {
+        width: 100%;
+        margin-bottom: 10px;
+        border-spacing: 0 15px;
+    }
 
-        /* Bloque de información */
-        .informacion {
-            background-color: #F9F9F9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: var(--sombra-caja);
-        }
+    th, td {
+        padding: 8px 10px; /* Reducción del padding */
+        text-align: left;
+        background-color: #F9F9F9;
+        border: none;
+    }
 
-        .informacion p {
-            margin: 8px 0;
-            color: #333;
-            font-size: 16px;
-        }
+    td:first-child {
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+    }
 
-        .informacion i {
-            margin-right: 12px;
-            color: var(--colorLetras);
-            scale: 1.2;
-        }
+    td:last-child {
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
 
-        /* Tabla de presupuesto */
-        table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-spacing: 0 15px;
-        }
+    tr {
+        box-shadow: var(--sombra-caja);
+        background-color: #F9F9F9;
+    }
 
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            background-color: #F9F9F9;
-            border: none; /* Elimina las líneas divisorias */
-        }
+    .total {
+        font-weight: bold;
+        color: var(--colorLetras);
+    }
 
-        td:first-child {
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
+    .informacion {
+        background-color: #F9F9F9;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-shadow: var(--sombra-caja);
+    }
 
-        td:last-child {
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
+    .informacion p {
+        margin: 5px 0; /* Reducción del margen */
+        color: #333;
+        font-size: 14px; /* Reducción del tamaño de la fuente */
+    }
 
-        tr {
-            box-shadow: var(--sombra-caja);
-            background-color: #F9F9F9; /* Color de fondo de las filas */
-        }
-
-        .total {
-            font-weight: bold;
-            color: var(--colorLetras);
-        }
-    </style>
+    .informacion i {
+        margin-right: 8px; /* Reducción del margen */
+        color: var(--colorLetras);
+        scale: 1.2;
+    }
+</style>
 </head>
 <body>
     <div class="contenedor-presupuesto">
