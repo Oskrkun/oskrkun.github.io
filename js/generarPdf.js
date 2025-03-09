@@ -99,23 +99,6 @@ export function generarPDF() {
         });
 }
 
-// Agregar estilos específicos para el contenido del PDF
-const estilosPDF = document.createElement('style');
-estilosPDF.innerHTML = `
-    .pdf-content {
-        width: 100%; /* Asegura que el contenido ocupe toda la anchura */
-        height: auto; /* Permite que el contenido se ajuste automáticamente */
-        margin: 0; /* Elimina márgenes innecesarios */
-        padding: 10px; /* Espaciado interno */
-        font-family: Arial, sans-serif; /* Fuente estándar para PDFs */
-    }
-
-    .pdf-content * {
-        page-break-inside: avoid; /* Evita cortes dentro de los elementos */
-    }
-`;
-document.head.appendChild(estilosPDF); // Inserta los estilos en el documento
-
 // Esperar a que el DOM esté completamente cargado antes de agregar el evento
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
