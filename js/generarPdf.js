@@ -1,5 +1,5 @@
 // js/generarPdf.js
-
+console.log('generarPdf.js cargado correctamente');
 // Función para formatear la fecha en formato "dia/mes/año"
 function formatearFecha(date) {
     const dia = String(date.getDate()).padStart(2, '0'); // Asegura 2 dígitos para el día
