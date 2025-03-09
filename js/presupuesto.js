@@ -37,9 +37,10 @@ import {
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-    //deshabilitarClicEnCeldasDeshabilitadas,
-	inicializarProductoSeleccionado
+    inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
+
+import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js'; // Importar funciones de autenticación
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
@@ -156,6 +157,23 @@ function deshabilitarCamposCerca() {
     });
 }
 
+// Función para llenar el campo "Vendedor" con el nick del usuario logueado
+async function llenarVendedor() {
+    console.log('Llenando campo Vendedor...');
+    const user = await verificarAutenticacion();
+    if (user) {
+        const { esAdmin, nick } = await verificarSiEsAdmin(user);
+        const vendedorInput = document.getElementById('vendedor');
+        if (vendedorInput) {
+            vendedorInput.value = nick || user.email; // Usar el nick si es admin, o el email si no
+        } else {
+            console.error('No se encontró el campo de Vendedor.');
+        }
+    } else {
+        console.error('No se pudo obtener el usuario logueado.');
+    }
+}
+
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
@@ -193,8 +211,10 @@ export async function initPresupuesto() {
 
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    //deshabilitarClicEnCeldasDeshabilitadas();
-	inicializarProductoSeleccionado();
+    inicializarProductoSeleccionado();
+
+    // Llenar el campo "Vendedor" con el nick del usuario logueado
+    await llenarVendedor();
 }
 
 // Inicializar el presupuesto cuando el DOM esté listo
