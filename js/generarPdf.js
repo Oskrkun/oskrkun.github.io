@@ -73,25 +73,49 @@ export function generarPDF() {
                         scale: 2,
                         useCORS: true,
                     }).then(canvas => {
-                        document.body.removeChild(elemento); // Eliminar el elemento después de capturarlo
+                        // Verificar si el elemento todavía está en el DOM antes de eliminarlo
+                        if (elemento.parentNode) {
+                            document.body.removeChild(elemento); // Eliminar el elemento después de capturarlo
+                        }
+
+                        // Convertir el canvas a una imagen PNG
                         const imgData = canvas.toDataURL('image/png', 1.0);
+
+                        // Acceder a jsPDF desde el objeto global
+                        const { jsPDF } = window.jspdf;
+
+                        // Crear un nuevo documento PDF
                         const doc = new jsPDF({
                             orientation: 'portrait',
                             unit: 'mm',
                             format: 'a4',
                         });
+
+                        // Calcular las dimensiones de la imagen para que se ajuste al PDF
                         const imgWidth = 210; // Ancho de A4 en mm
                         const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                        // Agregar la imagen al PDF
                         doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+                        // Guardar el PDF
                         doc.save(`Presupuesto_${cliente}.pdf`);
+
+                        console.log('PDF generado y descargado correctamente.');
                     }).catch(error => {
                         console.error('Error al generar el PDF:', error);
-                        document.body.removeChild(elemento); // Asegurarse de eliminar el elemento en caso de error
+                        // Asegurarse de eliminar el elemento en caso de error
+                        if (elemento.parentNode) {
+                            document.body.removeChild(elemento);
+                        }
                     });
                 })
                 .catch(error => {
                     console.error('Error al cargar imágenes:', error);
-                    document.body.removeChild(elemento);
+                    // Asegurarse de eliminar el elemento en caso de error
+                    if (elemento.parentNode) {
+                        document.body.removeChild(elemento);
+                    }
                 });
         })
         .catch(error => {
