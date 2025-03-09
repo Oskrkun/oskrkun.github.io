@@ -63,7 +63,7 @@ export async function cargarContenido(seccion) {
                 await import('./presupuesto.js').then(module => module.initPresupuesto()); // Llamar a la función de inicialización del Presupuesto
 
                 // Cargar el script para generar PDF
-                await import('./js/generarPdf.js'); // Cargar generarPdf.js
+                await import('../js/generarPdf.js'); // Cargar generarPdf.js
                 break;
 
             case 'clientes':
