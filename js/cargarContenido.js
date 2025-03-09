@@ -59,6 +59,17 @@ export async function cargarContenido(seccion) {
 				// Esperar a que el DOM se actualice antes de inicializar el Presupuesto
 				await new Promise(resolve => setTimeout(resolve, 0));
 
+				// Cargar la librería html2pdf
+				const scriptHtml2Pdf = document.createElement('script');
+				scriptHtml2Pdf.src = 'js/html2pdf.bundle.min.js';
+				scriptHtml2Pdf.onload = () => {
+					console.log('html2pdf cargado correctamente');
+				};
+				scriptHtml2Pdf.onerror = (error) => {
+					console.error('Error al cargar html2pdf:', error);
+				};
+				document.head.appendChild(scriptHtml2Pdf);
+
 				// Inicializar el Presupuesto después de cargar el contenido
 				await import('./presupuesto.js').then(module => module.initPresupuesto());
 
