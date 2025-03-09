@@ -163,9 +163,32 @@ export function agregarEventosCalculos() {
     }
 }
 
+// Función para inicializar la tabla de producto seleccionado
+export function inicializarProductoSeleccionado() {
+    console.log('Inicializando la tabla de producto seleccionado...');
+
+    // Cargar la lista desplegable de montaje
+    cargarListaMontaje();
+
+    // Inicializar los campos editables con valores por defecto
+    document.getElementById('producto-iva').value = '22'; // IVA por defecto
+    document.getElementById('producto-multiplicador').value = '2.2'; // Multiplicador por defecto
+    document.getElementById('producto-armazon').value = formatearMoneda(0); // Armazón por defecto
+
+    // Seleccionar el primer valor de la lista de montaje
+    const selectMontaje = document.getElementById('producto-armado');
+    if (selectMontaje && selectMontaje.options.length > 0) {
+        selectMontaje.selectedIndex = 0; // Seleccionar el primer elemento
+    }
+
+    // Calcular precios iniciales
+    calcularPrecios();
+}
+
 // Inicializar todo cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM completamente cargado, inicializando...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
+    inicializarProductoSeleccionado(); // Inicializar la tabla de producto seleccionado
 });
