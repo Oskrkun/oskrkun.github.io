@@ -67,41 +67,54 @@ export function generarPDF() {
 
             // Crear un elemento temporal para el contenido del PDF
             const elemento = document.createElement('div');
+            elemento.classList.add('pdf-content'); // Aplica la clase para estilos específicos
             elemento.innerHTML = contenido;
-            console.log('Elemento temporal creado:', elemento);
 
-            // Mostrar el contenido del elemento temporal en la consola
-            console.log('Contenido del elemento temporal:', elemento.innerHTML);
+            // Mostrar el contenido en la página como vista previa (para depurar)
+            document.body.appendChild(elemento); // Muestra el contenido en la página para verificar
 
             // Configuración de html2pdf
-			const opciones = {
-				margin: [0, 10, 10, 10], // Reduce el margen superior
-				filename: `Presupuesto_${cliente}.pdf`,
-				image: { type: 'jpeg', quality: 0.98 },
-				html2canvas: { scale: 1, useCORS: true }, // Reduce el escalado para evitar cortes
-				jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, // Configuración estándar
-			};
+            const opciones = {
+                margin: [0, 10, 10, 10], // Márgenes ajustados
+                filename: `Presupuesto_${cliente}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 1, useCORS: true }, // Escalado ajustado
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            };
 
-			// Generar el PDF con los nuevos estilos aplicados
-			const elemento = document.createElement('div');
-			elemento.classList.add('pdf-content'); // Aplica la clase de estilos al contenedor
-			elemento.innerHTML = contenido;
-
-			html2pdf()
-				.set(opciones)
-				.from(elemento)
-				.save()
-				.then(() => {
-					console.log('PDF generado y descargado correctamente.');
-				})
-				.catch((error) => {
-					console.error('Error al generar el PDF:', error);
-				});
+            // Generar el PDF
+            html2pdf()
+                .set(opciones)
+                .from(elemento)
+                .save()
+                .then(() => {
+                    console.log('PDF generado y descargado correctamente.');
+                })
+                .catch(error => {
+                    console.error('Error al generar el PDF:', error);
+                });
         })
         .catch(error => {
             console.error('Error al cargar la plantilla:', error);
         });
 }
+
+// Agregar estilos específicos para el contenido del PDF
+const estilosPDF = document.createElement('style');
+estilosPDF.innerHTML = `
+    .pdf-content {
+        width: 100%; /* Asegura que el contenido ocupe toda la anchura */
+        height: auto; /* Permite que el contenido se ajuste automáticamente */
+        margin: 0; /* Elimina márgenes innecesarios */
+        padding: 10px; /* Espaciado interno */
+        font-family: Arial, sans-serif; /* Fuente estándar para PDFs */
+    }
+
+    .pdf-content * {
+        page-break-inside: avoid; /* Evita cortes dentro de los elementos */
+    }
+`;
+document.head.appendChild(estilosPDF); // Inserta los estilos en el documento
 
 // Esperar a que el DOM esté completamente cargado antes de agregar el evento
 document.addEventListener('DOMContentLoaded', () => {
