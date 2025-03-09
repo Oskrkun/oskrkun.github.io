@@ -74,8 +74,16 @@ export async function cargarContenido(seccion) {
 				await import('./presupuesto.js').then(module => module.initPresupuesto());
 
 				// Cargar el script para generar PDF
-				await import('../js/generarPdf.js').then(() => {
+				await import('../js/generarPdf.js').then(module => {
 					console.log('generarPdf.js cargado correctamente');
+					// Vincular el evento click al botón
+					const botonGenerarPDF = document.getElementById('generar-pdf');
+					if (botonGenerarPDF) {
+						console.log('Botón de generar PDF encontrado, agregando evento...');
+						botonGenerarPDF.addEventListener('click', module.generarPDF);
+					} else {
+						console.error('No se encontró el botón de generar PDF.');
+					}
 				}).catch(error => {
 					console.error('Error al cargar generarPdf.js:', error);
 				});

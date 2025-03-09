@@ -1,5 +1,7 @@
 // js/generarPdf.js
+
 console.log('generarPdf.js cargado correctamente');
+
 // Función para formatear la fecha en formato "dia/mes/año"
 function formatearFecha(date) {
     const dia = String(date.getDate()).padStart(2, '0'); // Asegura 2 dígitos para el día
@@ -9,7 +11,7 @@ function formatearFecha(date) {
 }
 
 // Función para generar el PDF
-function generarPDF() {
+export function generarPDF() {
     console.log('Generando PDF...');
 
     // Capturar los datos de la tabla
@@ -39,7 +41,7 @@ function generarPDF() {
 
     // Cargar la plantilla HTML desde la carpeta "res"
     console.log('Cargando plantilla HTML...');
-    fetch('../res/plantilla-pdf.html') // Ruta ajustada
+    fetch('../res/plantilla-pdf.html')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error al cargar la plantilla: ${response.statusText}`);
@@ -99,12 +101,14 @@ function generarPDF() {
 
 // Esperar a que el DOM esté completamente cargado antes de agregar el evento
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM completamente cargado, buscando el botón de generar PDF...');
-    const botonGenerarPDF = document.getElementById('generar-pdf');
-    if (botonGenerarPDF) {
-        console.log('Botón de generar PDF encontrado, agregando evento...');
-        botonGenerarPDF.addEventListener('click', generarPDF);
-    } else {
-        console.error('No se encontró el botón de generar PDF.');
-    }
+    setTimeout(() => {
+        console.log('Buscando el botón de generar PDF...');
+        const botonGenerarPDF = document.getElementById('generar-pdf');
+        if (botonGenerarPDF) {
+            console.log('Botón de generar PDF encontrado, agregando evento...');
+            botonGenerarPDF.addEventListener('click', generarPDF);
+        } else {
+            console.error('No se encontró el botón de generar PDF.');
+        }
+    }, 1000); // Espera 1 segundo antes de buscar el botón
 });
