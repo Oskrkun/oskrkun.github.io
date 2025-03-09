@@ -15,9 +15,19 @@ function redondearPrecio(precio) {
     return redondeo;
 }
 
-// Función para formatear el precio con el símbolo de moneda
-function formatearPrecio(precio) {
-    return `$${precio.toFixed(2)}`;
+// Función para formatear un número al formato de moneda deseado ($ 20.090,00)
+function formatearMoneda(numero) {
+    return new Intl.NumberFormat('es-AR', {
+        style: 'currency',
+        currency: 'ARS',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(numero);
+}
+
+// Función para convertir un texto formateado a número
+function desformatearMoneda(texto) {
+    return parseFloat(texto.replace(/[^0-9,-]/g, '').replace(',', '.'));
 }
 
 // Función para manejar el clic en una fila de la tabla de productos
@@ -52,10 +62,10 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Rellenando campos del producto seleccionado...');
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
-    
-    // Extraer el precio base y convertirlo correctamente a número flotante
-    const precioTexto = fila.cells[7].textContent.replace('$', '').replace(/\./g, '').replace(',', '.').trim();
-    const precio = parseFloat(precioTexto);
+    const precioTexto = fila.cells[7].textContent;
+
+    // Convertir el precio a número
+    const precio = desformatearMoneda(precioTexto);
 
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
@@ -71,12 +81,10 @@ function rellenarCamposProductoSeleccionado(fila) {
     // Inicializar el IVA, multiplicador y armazón
     document.getElementById('producto-iva').value = '22';
     document.getElementById('producto-multiplicador').value = '2.2';
-    document.getElementById('producto-armazon').value = '$ 0.00';
+    document.getElementById('producto-armazon').value = formatearMoneda(0);
 
-    console.log('Calculando precio de los cristales...');
-    calcularPrecioCristales();
-    console.log('Calculando precio final...');
-    calcularPrecioFinal();
+    // Calcular precios
+    calcularPrecios();
 }
 
 // Función para cargar la lista desplegable de montaje
@@ -87,7 +95,7 @@ function cargarListaMontaje() {
     ListaPrecioMontaje.forEach(item => {
         const option = document.createElement('option');
         option.value = item.precio;
-        option.textContent = `${item.nombre} (${formatearPrecio(item.precio)})`;
+        option.textContent = `${item.nombre} (${formatearMoneda(item.precio)})`;
         selectMontaje.appendChild(option);
     });
 
@@ -95,103 +103,44 @@ function cargarListaMontaje() {
     selectMontaje.selectedIndex = 0;
 
     // Agregar evento para recalcular al cambiar el armado
-    selectMontaje.addEventListener('change', () => {
-        calcularPrecioCristales();
-        calcularPrecioFinal();
-    });
+    selectMontaje.addEventListener('change', calcularPrecios);
 }
 
+// Función para calcular los precios (cristales y final)
+function calcularPrecios() {
+    console.log('Calculando precios...');
 
-
-
-// Función para inicializar la tabla de producto seleccionado
-export function inicializarProductoSeleccionado() {
-    console.log('Inicializando la tabla de producto seleccionado...');
-
-    // Cargar la lista desplegable de montaje
-    cargarListaMontaje();
-
-    // Inicializar los campos editables con valores por defecto
-    document.getElementById('producto-iva').value = '22'; // IVA por defecto
-    document.getElementById('producto-multiplicador').value = '2.2'; // Multiplicador por defecto
-    document.getElementById('producto-armazon').value = '$ 0.00'; // Armazón por defecto
-
-    // Seleccionar el primer valor de la lista de montaje
-    const selectMontaje = document.getElementById('producto-armado');
-    if (selectMontaje && selectMontaje.options.length > 0) {
-        selectMontaje.selectedIndex = 0; // Seleccionar el primer elemento
-    }
-
-    // Calcular precios iniciales
-    calcularPrecioCristales();
-    calcularPrecioFinal();
-}
-
-// Función para calcular el precio de los cristales
-function calcularPrecioCristales() {
-    console.log('Calculando precio de los cristales...');
-    const precioBase = parseFloat(document.getElementById('producto-precio-base').value.replace(/\./g, '').replace(',', '.')) || 0;
+    // Obtener valores
+    const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
     const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
     const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
     const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
+    const precioArmazon = desformatearMoneda(document.getElementById('producto-armazon').value) || 0;
 
     console.log('Precio base:', precioBase);
     console.log('Armado:', armado);
     console.log('IVA:', iva);
     console.log('Multiplicador:', multiplicador);
+    console.log('Precio del armazón:', precioArmazon);
 
+    // Calcular precio de los cristales
     const precioConArmado = precioBase + armado;
     const precioConIva = precioConArmado * (1 + iva / 100);
     let precioCristales = precioConIva * multiplicador;
 
-    // Verificar si el redondeo está activo
+    // Redondear si es necesario
     const redondearPreciosCheckbox = document.getElementById('redondear-precios');
     if (redondearPreciosCheckbox && redondearPreciosCheckbox.checked) {
         precioCristales = redondearPrecio(precioCristales);
     }
 
     console.log('Precio de los cristales:', precioCristales);
-    document.getElementById('Precio-Cristales').value = formatearPrecio(precioCristales);
-}
+    document.getElementById('Precio-Cristales').value = formatearMoneda(precioCristales);
 
-// Función para formatear el precio final con el formato deseado
-function formatearPrecioFinal(precio) {
-    // Convertir el número a una cadena con dos decimales
-    const precioFormateado = precio.toFixed(2);
-
-    // Separar la parte entera de los decimales
-    const [parteEntera, parteDecimal] = precioFormateado.split('.');
-
-    // Agregar puntos como separadores de miles
-    const parteEnteraFormateada = parteEntera
-        .split('')
-        .reverse()
-        .join('')
-        .match(/.{1,3}/g)
-        .join('.')
-        .split('')
-        .reverse()
-        .join('');
-
-    // Combinar la parte entera y los decimales con el símbolo de moneda
-    return `$ ${parteEnteraFormateada},${parteDecimal}`;
-}
-
-// Función para calcular el precio final
-function calcularPrecioFinal() {
-    console.log('Calculando precio final...');
-    const precioCristales = parseFloat(document.getElementById('Precio-Cristales').value.replace('$', '').replace(/\./g, '').replace(',', '.')) || 0;
-    const precioArmazon = parseFloat(document.getElementById('producto-armazon').value.replace('$', '').replace(/\./g, '').replace(',', '.')) || 0;
-
-    console.log('Precio de los cristales:', precioCristales);
-    console.log('Precio del armazón:', precioArmazon);
-
+    // Calcular precio final
     const precioFinal = precioCristales + precioArmazon;
     console.log('Precio final:', precioFinal);
-
-    // Formatear el precio final correctamente
-    const precioFinalFormateado = formatearPrecioFinal(precioFinal);
-    document.getElementById('producto-precio-final').value = precioFinalFormateado;
+    document.getElementById('producto-precio-final').value = formatearMoneda(precioFinal);
 }
 
 // Función para agregar eventos a los campos editables
@@ -201,16 +150,7 @@ export function agregarEventosCalculos() {
     camposEditables.forEach(id => {
         const campo = document.getElementById(id);
         if (campo) {
-            campo.addEventListener('input', () => {
-                console.log(`Campo ${id} modificado.`);
-                calcularPrecioCristales();
-                calcularPrecioFinal();
-            });
-            campo.addEventListener('blur', () => {
-                if (campo.value && !isNaN(campo.value)) {
-                    campo.value = formatearPrecio(parseFloat(campo.value));
-                }
-            });
+            campo.addEventListener('input', calcularPrecios);
         } else {
             console.error(`No se encontró el campo con ID: ${id}`);
         }
@@ -219,10 +159,7 @@ export function agregarEventosCalculos() {
     // Agregar evento al checkbox de redondeo
     const redondearPreciosCheckbox = document.getElementById('redondear-precios');
     if (redondearPreciosCheckbox) {
-        redondearPreciosCheckbox.addEventListener('change', () => {
-            calcularPrecioCristales();
-            calcularPrecioFinal();
-        });
+        redondearPreciosCheckbox.addEventListener('change', calcularPrecios);
     }
 }
 
@@ -231,5 +168,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM completamente cargado, inicializando...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
-    inicializarProductoSeleccionado(); // Inicializar la tabla de producto seleccionado
 });
