@@ -4,10 +4,10 @@ console.log('generarPdf.js cargado correctamente');
 
 // Función para formatear la fecha en formato "dia/mes/año"
 function formatearFecha(date) {
-    const dia = String(date.getDate()).padStart(2, '0'); // Asegura 2 dígitos para el día
-    const mes = String(date.getMonth() + 1).padStart(2, '0'); // Asegura 2 dígitos para el mes
-    const año = date.getFullYear(); // Obtiene el año completo
-    return `${dia}/${mes}/${año}`; // Retorna la fecha en formato "dia/mes/año"
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const año = date.getFullYear();
+    return `${dia}/${mes}/${año}`;
 }
 
 // Función para generar el PDF
@@ -70,29 +70,32 @@ export function generarPDF() {
             elemento.classList.add('pdf-content'); // Aplica la clase para estilos específicos
             elemento.innerHTML = contenido;
 
-            // Mostrar el contenido en la página como vista previa (para depurar)
-            document.body.appendChild(elemento); // Muestra el contenido en la página para verificar
+            // Generar el PDF con jsPDF
+            const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+            });
 
-            // Configuración de html2pdf
-            const opciones = {
-                margin: [0, 10, 10, 10], // Márgenes ajustados
-                filename: `Presupuesto_${cliente}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 1, useCORS: true }, // Escalado ajustado
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            };
+            // Usar html2canvas para convertir el HTML en una imagen
+            html2canvas(elemento, {
+                scale: 2, // Aumentar la escala para mejor calidad
+                useCORS: true, // Permitir CORS para imágenes externas
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png', 1.0); // Convertir a imagen PNG
 
-            // Generar el PDF
-            html2pdf()
-                .set(opciones)
-                .from(elemento)
-                .save()
-                .then(() => {
-                    console.log('PDF generado y descargado correctamente.');
-                })
-                .catch(error => {
-                    console.error('Error al generar el PDF:', error);
-                });
+                // Añadir la imagen al PDF
+                const imgWidth = 210; // Ancho de A4 en mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calcular altura proporcional
+
+                doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                doc.save(`Presupuesto_${cliente}.pdf`); // Guardar el PDF
+
+                console.log('PDF generado y descargado correctamente.');
+            }).catch(error => {
+                console.error('Error al generar el PDF:', error);
+            });
         })
         .catch(error => {
             console.error('Error al cargar la plantilla:', error);
