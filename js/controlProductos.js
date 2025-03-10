@@ -309,6 +309,70 @@ export function agregarEventosFiltrado() {
     });
 }
 
+// Función para cargar los laboratorios desde Supabase
+export async function cargarLaboratorios() {
+    console.log('Cargando laboratorios...');
+
+    try {
+        // Obtener datos de Supabase
+        const { data: laboratorios, error } = await supabaseClient.rpc('cargar_laboratorios');
+
+        if (error) throw error;
+
+        console.log('Laboratorios cargados:', laboratorios);
+
+        // Llenar la lista desplegable de laboratorios
+        const laboratorioSelect = document.getElementById('laboratorio-select');
+        if (laboratorioSelect) {
+            laboratorioSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
+
+            laboratorios.forEach(laboratorio => {
+                console.log(`Agregando laboratorio: ${laboratorio.nombre}`);
+                const option = document.createElement('option');
+                option.value = laboratorio.id;
+                option.textContent = laboratorio.nombre;
+                laboratorioSelect.appendChild(option);
+            });
+        } else {
+            console.error('Elemento select de laboratorios no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando laboratorios:', error);
+    }
+}
+
+// Función para cargar los tipos de lentes desde Supabase
+export async function cargarTiposLentesSelect() {
+    console.log('Cargando tipos de lentes para el select...');
+
+    try {
+        // Obtener datos de Supabase
+        const { data: tiposLentes, error } = await supabaseClient.rpc('cargar_tipos_lentes');
+
+        if (error) throw error;
+
+        console.log('Tipos de lentes cargados:', tiposLentes);
+
+        // Llenar la lista desplegable de tipos de lentes
+        const tipoLenteSelect = document.getElementById('tipo-lente-select');
+        if (tipoLenteSelect) {
+            tipoLenteSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
+
+            tiposLentes.forEach(tipoLente => {
+                console.log(`Agregando tipo de lente: ${tipoLente.nombre}`);
+                const option = document.createElement('option');
+                option.value = tipoLente.id;
+                option.textContent = tipoLente.nombre;
+                tipoLenteSelect.appendChild(option);
+            });
+        } else {
+            console.error('Elemento select de tipos de lentes no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando tipos de lentes:', error);
+    }
+}
+
 // Escuchar el evento personalizado 'recetaTranspuesta'
 document.addEventListener('recetaTranspuesta', () => {
     console.log('Receta transpuesta detectada, actualizando lista de productos...');
