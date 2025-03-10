@@ -1,306 +1,594 @@
-/*--------------------------VARIABLES DE COLORES----------------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Variables de colores */
 :root {
-    --color-primario: #4A90E2; /* Color primario (azul) */
-    --color-secundario: #357ABD; /* Color secundario (azul más oscuro) */
-    --color-fondo: #f5f5f5; /* Color de fondo general */
-    --color-texto: #333; /* Color de texto principal */
-    --color-fondo-contenedor: #fff; /* Fondo de los contenedores */
-    --color-fondo-fila: #f9f9f9; /* Fondo de las filas de las tablas */
-    --color-fondo-hover: #e0e0e0; /* Fondo al hacer hover */
-    --color-borde: #ddd; /* Color de los bordes */
+    --color-primario: #4A90E2;
+    --color-secundario: #357ABD;
+    --color-fondo: #f5f5f5;
+    --color-texto: #333;
+    --color-fondo-contenedor: #fff;
+    --color-fondo-fila: #f9f9f9;
+    --color-fondo-hover: #e0e0e0;
+    --color-borde: #ddd;
+	--color-fondo-fila: #f9f9f9; /* Fondo normal de las filas */
+    --color-texto: #333; /* Color de texto normal */
 }
 
-/*--------------------------ESTILOS GENERALES-------------------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos generales */
 #presupuesto-content {
-    font-family: Arial, sans-serif; /* Fuente general */
+    font-family: Arial, sans-serif;
 }
 
 #presupuesto-content h1 {
-    color: var(--color-primario); /* Color del título principal */
-    text-align: center; /* Centrar el título */
+    color: var(--color-primario);
+    text-align: center;
 }
 
 #presupuesto-content p {
-    color: var(--color-texto); /* Color del texto */
-    font-size: 1.1em; /* Tamaño de fuente */
-    text-align: center; /* Centrar el texto */
+    color: var(--color-texto);
+    font-size: 1.1em;
+    text-align: center;
 }
 
-/*--------------------------ESTILOS PARA CONTENEDORES-----------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos comunes para contenedores */
 .vista-previa,
 #tipoLentesSection,
 #tratamientosSection,
 .Productos {
-    background-color: var(--color-fondo-contenedor); /* Fondo del contenedor */
-    border-radius: 5px; /* Bordes redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
-    width: 100%; /* Ancho completo */
-    max-width: 800px; /* Ancho máximo */
-    margin-bottom: 5px; /* Margen inferior */
-    padding: 5px; /* Relleno interno */
-    box-sizing: border-box; /* Incluir padding en el ancho */
+    background-color: var(--color-fondo-contenedor);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 5px;
+    padding: 5px;
+    box-sizing: border-box;
 }
 
-/*--------------------------ESTILOS PARA TÍTULOS DE SECCIÓN-----------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos comunes para títulos de sección */
 #vista-previa h2,
 #tipoLentesSection h2,
 #tratamientosSection h2,
 .Productos h2 {
-    color: var(--color-primario); /* Color del título */
-    cursor: pointer; /* Cursor tipo puntero */
-    display: flex; /* Flexbox para alinear elementos */
-    justify-content: space-between; /* Espacio entre elementos */
-    align-items: center; /* Alinear verticalmente */
-    padding: 10px; /* Relleno interno */
-    background-color: var(--color-fondo-fila); /* Fondo del título */
-    border-radius: 5px; /* Bordes redondeados */
-    margin: 0px; /* Eliminar margen */
+    color: var(--color-primario);
+    cursor: pointer; /* Hace que el h2 sea clickeable */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--color-fondo-fila);
+    border-radius: 5px;
+	margin: 0px;
 }
 
-/*--------------------------ESTILOS PARA ICONOS DE FLECHA-------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para el ícono de flecha */
 .toggle-icon {
-    cursor: pointer; /* Cursor tipo puntero */
-    transition: transform 0.3s ease; /* Transición suave */
-    margin-left: 10px; /* Margen izquierdo */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    margin-left: 10px;
 }
 
+/* Estilos para la flecha cuando la sección está contraída */
 .collapsed .toggle-icon {
     transform: rotate(0deg); /* Flecha hacia abajo */
 }
 
+/* Estilos para la flecha cuando la sección está expandida */
 .toggle-icon {
     transform: rotate(180deg); /* Flecha hacia arriba */
 }
 
-/*--------------------------ESTILOS PARA CONTENIDO DE SECCIONES-------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para el contenido de las secciones */
 .section-content {
     max-height: 1000px; /* Altura máxima cuando está expandido */
-    overflow: hidden; /* Ocultar contenido que excede */
-    transition: max-height 0.3s ease; /* Transición suave */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
 }
 
+/* Estilos para las secciones contraídas */
 .collapsed .section-content {
-    max-height: 0; /* Altura 0 cuando está contraído */
-    overflow: hidden; /* Ocultar contenido */
+    max-height: 0;
+    overflow: hidden;
 }
 
-/*--------------------------ESTILOS PARA TABLAS GENERALES-------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos comunes para tablas */
 table {
-    width: 100%; /* Ancho completo */
-    border-collapse: separate; /* Separar bordes */
-    border-spacing: 0 10px; /* Espaciado entre filas */
-    padding: 5px; /* Relleno interno */
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    padding: 5px;
 }
 
 th, td {
-    padding: 12px 15px; /* Relleno interno */
-    text-align: center; /* Alinear texto al centro */
-    white-space: nowrap; /* Evitar saltos de línea */
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 thead th {
-    background-color: var(--color-primario); /* Fondo del encabezado */
-    color: white; /* Color del texto */
-    text-align: center; /* Alinear texto al centro */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    background-color: var(--color-primario);
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 tbody td {
-    background-color: var(--color-fondo-fila); /* Fondo de las celdas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/*--------------------------ESTILOS PARA CELDAS INVISIBLES-----------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos específicos para celdas invisibles */
 thead th.invisible {
-    background-color: transparent; /* Fondo transparente */
-    box-shadow: none; /* Sin sombra */
-    color: transparent; /* Texto transparente */
+    background-color: transparent;
+    box-shadow: none;
+    color: transparent;
 }
 
-/*--------------------------ESTILOS PARA PRIMERA COLUMNA-------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para la primera columna */
 .primer-columna {
-    white-space: nowrap; /* Evitar saltos de línea */
-    min-width: auto; /* Ancho mínimo automático */
-    width: auto; /* Ancho automático */
+    white-space: nowrap;
+    min-width: auto;
+    width: auto;
 }
 
-/*--------------------------ESTILOS PARA INPUTS DE TEXTO-------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para inputs de texto */
 input[type="text"] {
-    width: 80px; /* Ancho del input */
-    padding: 8px; /* Relleno interno */
-    box-sizing: border-box; /* Incluir padding en el ancho */
-    text-align: center; /* Alinear texto al centro */
-    border: 1px solid var(--color-borde); /* Borde */
-    border-radius: 4px; /* Bordes redondeados */
-    background-color: white; /* Fondo blanco */
-    transition: background-color 0.3s ease; /* Transición suave */
+    width: 80px;
+    padding: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: white;
+    transition: background-color 0.3s ease;
 }
 
-/*--------------------------ESTILOS PARA SECCIÓN ADD-----------------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para la sección ADD */
 .seccion-add td {
-    background-color: var(--color-primario); /* Fondo de las celdas */
-    color: white; /* Color del texto */
+    background-color: var(--color-primario);
+    color: white;
 }
 
 .seccion-add input[type="text"] {
-    background-color: white; /* Fondo blanco */
-    color: var(--color-texto); /* Color del texto */
+    background-color: white;
+    color: var(--color-texto);
 }
 
-/*--------------------------ESTILOS PARA BOTONES DE FLECHA-----------------------*/
-/*---------------------------------------------------------------------------------*/
+/* Estilos para la celda con el botón de flecha */
 #arrow-trasp,
 #refresh-erase {
-    background-color: transparent; /* Fondo transparente */
-    color: white; /* Color del texto */
-    position: relative; /* Posición relativa */
-    padding: 20px 0; /* Relleno interno */
-    border: none; /* Sin borde */
-    box-shadow: none; /* Sin sombra */
+    background-color: transparent;
+    color: white;
+    position: relative;
+    padding: 20px 0;
+    border: none;
+    box-shadow: none;
 }
 
 #arrow-trasp button,
 #refresh-erase button {
-    background-color: #4CAF50; /* Fondo verde */
-    border: none; /* Sin borde */
-    color: white; /* Color del texto */
-    cursor: pointer; /* Cursor tipo puntero */
-    font-size: 1.2em; /* Tamaño de fuente */
-    width: 40px; /* Ancho */
-    height: 40px; /* Altura */
-    border-radius: 50%; /* Bordes redondeados */
-    display: flex; /* Flexbox para alinear elementos */
-    align-items: center; /* Alinear verticalmente */
-    justify-content: center; /* Alinear horizontalmente */
-    position: absolute; /* Posición absoluta */
-    top: 50%; /* Centrar verticalmente */
-    left: 50%; /* Centrar horizontalmente */
-    transform: translate(-50%, -50%); /* Centrar */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
-    pointer-events: auto; /* Permitir interacción */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
 }
 
 #arrow-trasp button i,
 #refresh-erase button i {
-    font-family: "Font Awesome 5 Free"; /* Fuente de íconos */
-    font-weight: 900; /* Grosor de la fuente */
-    scale: 1.2; /* Escalar ícono */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    scale: 1.2;
 }
 
-/*--------------------------ESTILOS PARA TABLA DE PRODUCTOS----------------------*/
-/*---------------------------------------------------------------------------------*/
-.table-container {
-    max-height: 400px; /* Altura máxima del contenedor */
-    overflow-y: auto; /* Desplazamiento vertical */
-    border: 1px solid var(--color-borde); /* Borde */
-    border-radius: 5px; /* Bordes redondeados */
+/* Estilos para la clase advertenciaReceta */
+.advertenciaReceta {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 10px;
+    display: block;
 }
 
+/* Estilos para evitar selección de texto y eventos de puntero en las secciones de receta */
+.seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
+.seccion-cerca table, .seccion-cerca th, .seccion-cerca td,
+.seccion-add table, .seccion-add th, .seccion-add td {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    pointer-events: none;
+}
+
+/* Permitir interacción solo en los inputs dentro de estas secciones */
+.seccion-lejos input[type="text"],
+.seccion-cerca input[type="text"],
+.seccion-add input[type="text"] {
+    pointer-events: auto;
+}
+
+/* Estilos para tablas de tipos de lentes y tratamientos */
+#tipoLentesTable,
+#tratamientosTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    /*margin-top: 10px;*/
+}
+
+#tipoLentesTable th,
+#productoSeleccionadoTable th,
+#tratamientosTable th {
+    background-color: var(--color-primario);
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+#tipoLentesTable th:nth-child(2),
+#tratamientosTable th:nth-child(2) {
+    text-align: center;
+}
+
+#tipoLentesTable td,
+#productoSeleccionadoTable td,
+#tratamientosTable td {
+    background-color: var(--color-fondo-fila);
+    color: var(--color-texto);
+    padding: 12px 15px;
+    text-align: left;
+    border-radius: 0;
+}
+
+#tipoLentesTable td:first-child,
+#tratamientosTable td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+#productoSeleccionadoTable td:last-child,
+#tipoLentesTable td:last-child,
+#tratamientosTable td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+}
+
+/* Eliminar hover en todas las filas de tipos de lentes y tratamientos */
+#tipoLentesTable tr:hover td,
+#tratamientosTable tr:hover td {
+    background-color: var(--color-fondo-fila); /* Mantener el color original */
+    cursor: default; /* Cursor por defecto */
+}
+
+/* Permitir interacción solo en checkboxes y radio buttons */
+#tipoLentesTable input[type="checkbox"],
+#tipoLentesTable input[type="radio"],
+#tratamientosTable input[type="checkbox"],
+#tratamientosTable input[type="radio"],
+#redondear-precios { /* Agregar el checkbox de redondeo */
+    pointer-events: auto; /* Permitir interacción */
+    transform: scale(1.5); /* Escala 1.5 */
+    margin: 0; /* Sin margen */
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .vista-previa {
+        width: 100%;
+    }
+
+    th, td {
+        min-width: 60px;
+    }
+
+    input[type="text"] {
+        width: 60px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vista-previa {
+        width: 100%;
+    }
+
+    th, td {
+        min-width: 50px;
+    }
+
+    input[type="text"] {
+        width: 50px;
+        padding: 4px;
+    }
+}
+
+/* Estilos para la sección de productos */
+.Productos {
+    background-color: var(--color-fondo-contenedor);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.Productos h2 {
+    color: var(--color-primario);
+}
+
+/* Estilos para la tabla de productos */
 #productTable {
-    width: 100%; /* Ancho completo */
-    border-collapse: collapse; /* Colapsar bordes */
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    /*margin-top: 10px;*/
+    overflow-x: auto; /* Habilitar barra de desplazamiento horizontal */
+    display: block; /* Necesario para que overflow-x funcione */
 }
 
 #productTable th,
 #productTable td {
-    padding: 12px 15px; /* Relleno interno */
-    text-align: center; /* Alinear texto al centro */
-    white-space: nowrap; /* Evitar saltos de línea */
-    min-width: 100px; /* Ancho mínimo */
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap;
+    min-width: 100px;
 }
 
 #productTable th {
-    background-color: var(--color-primario); /* Fondo del encabezado */
-    color: white; /* Color del texto */
-    text-align: center; /* Alinear texto al centro */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    background-color: var(--color-primario);
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #productTable td {
-    background-color: var(--color-fondo-fila); /* Fondo de las celdas */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #productTable td:first-child {
-    border-top-left-radius: 8px; /* Borde redondeado superior izquierdo */
-    border-bottom-left-radius: 8px; /* Borde redondeado inferior izquierdo */
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
 
 #productTable td:last-child {
-    border-top-right-radius: 8px; /* Borde redondeado superior derecho */
-    border-bottom-right-radius: 8px; /* Borde redondeado inferior derecho */
-    text-align: center; /* Alinear texto al centro */
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
 }
 
-/*--------------------------ESTILOS PARA FILA SELECCIONADA-----------------------*/
+/* Habilitar hover en las filas de la tabla de productos */
+#productTable tr:hover td {
+    background-color: var(--color-fondo-hover); /* Cambiar el color al hacer hover */
+    cursor: pointer; /* Cambiar el cursor a pointer */
+}
+
+
 /*---------------------------------------------------------------------------------*/
+/* Estilo para la fila seleccionada */
 #productTable tr.selected {
-    position: relative; /* Posición relativa */
+    position: relative; /* Necesario para posicionar el pseudo-elemento */
 }
 
 #productTable tr.selected::after {
-    content: ''; /* Pseudo-elemento */
-    position: absolute; /* Posición absoluta */
-    top: 0; /* Alinear arriba */
-    left: 0; /* Alinear izquierda */
-    right: 0; /* Alinear derecha */
-    bottom: 0; /* Alinear abajo */
+    content: ''; /* Crear el pseudo-elemento */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     border: 2px solid #4CAF50; /* Borde verde */
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(76, 175, 80, 0.6); /* Sombra verde */
-    pointer-events: none; /* Evitar interacción */
-    z-index: 1; /* Capa superior */
+    pointer-events: none; /* Evitar que el pseudo-elemento bloquee los clics */
+    z-index: 1; /* Asegurar que esté por encima del contenido de la fila */
 }
 
+/* Asegurar que las celdas de la fila seleccionada no tengan bordes individuales */
 #productTable tr.selected td {
-    background-color: #88e98c; /* Fondo verde claro */
-    color: var(--color-texto); /* Color del texto */
-    position: relative; /* Posición relativa */
-    z-index: 2; /* Capa superior */
+	
+    background-color: #88e98c; 
+    color: var(--color-texto); /* Color de texto normal */
+    position: relative; /* Para que el pseudo-elemento se posicione correctamente */
+    z-index: 2; /* Asegurar que el contenido de la celda esté por encima del pseudo-elemento */
 }
 
-/*--------------------------ESTILOS PARA BOTÓN GENERAR PDF-----------------------*/
+/* Fondo normal para las celdas no seleccionadas */
+#productTable tr td {
+    background-color: var(--color-fondo-fila); /* Fondo normal de las celdas */
+}
+
+/* Eliminar bordes entre celdas */
+#productTable {
+    border-collapse: separate; /* Mantener separación entre celdas */
+    border-spacing: 0 10px; /* Espaciado vertical entre filas */
+}
+
+#productTable td {
+    border: none; /* Eliminar bordes entre celdas */
+}
+
+/* Eliminar el estilo de foco en las celdas de la tabla */
+#productTable td:focus {
+    outline: none; /* Eliminar el borde de foco */
+    background-color: transparent; /* Eliminar el fondo de foco */
+}
+
 /*---------------------------------------------------------------------------------*/
+
+/* Estilos para los inputs enfocados en la sección de la receta */
+.seccion-lejos input[type="text"]:focus,
+.seccion-cerca input[type="text"]:focus,
+.seccion-add input[type="text"]:focus {
+    border-color: #4CAF50 !important; /* Cambiamos el borde a verde */
+    outline: 0;
+    outline: thin;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(76, 175, 80, 0.6); /* Verde */
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(76, 175, 80, 0.6); /* Verde */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 10px #4CAF50 !important; /* Sombra verde */
+}
+
+/* Estilos para el h2 */
+#ProductosSection h2 {
+    display: flex; /* Convertir el h2 en un contenedor flexible */
+    align-items: center; /* Alinear verticalmente los elementos hijos */
+    white-space: nowrap; /* Evitar que el texto se divida en varias líneas */
+}
+
+/* Estilos para el contador de productos */
+.contador-productos {
+    margin-left: 20px; /* Un pequeño espacio entre el texto y el contador */
+    font-size: 0.9em; /* Tamaño de fuente ligeramente más pequeño */
+    color: #666; /* Color del texto del contador */
+}
+
+/* Estilos para la flecha */
+.toggle-icon {
+    margin-left: auto; /* Empuja la flecha hacia la derecha */
+}
+
+/* Estilos para la sección de Producto Seleccionado */
+#productoSeleccionadoTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    margin-top: 10px;
+}
+
+#productoSeleccionadoTable td {
+    padding: 12px 15px;
+    text-align: left;
+    background-color: var(--color-fondo-fila);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#productoSeleccionadoTable td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    /*font-weight: bold;*/
+    white-space: nowrap;
+}
+
+#productoSeleccionadoTable td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+#productoSeleccionadoTable input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+#productoSeleccionadoTable input[type="text"]:read-only {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+#productoSeleccionadoTable input[type="text"]:focus {
+    border-color: #4CAF50 !important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(76, 175, 80, 0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(76, 175, 80, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 10px #4CAF50 !important;
+}
+
+/*---------------------------------------------------------------------------------*/
+/* Estilos para el select de armado */
+#producto-armado {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--color-borde);
+    border-radius: 4px;
+    background-color: white;
+    color: var(--color-texto);
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	text-align: center;
+}
+
+#producto-armado:focus {
+    border-color: #4CAF50 !important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(76, 175, 80, 0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(76, 175, 80, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 10px #4CAF50 !important;
+}
+
+/* Estilos para las opciones del select */
+#producto-armado option {
+    padding: 8px;
+    background-color: white;
+    color: var(--color-texto);
+}
+
+/* Estilos para el hover de las opciones */
+#producto-armado option:hover {
+    background-color: var(--color-fondo-hover);
+}
+/*---------------------------------------------------------------------------------*/
+/* Estilos para el botón de Generar PDF */
 #generar-pdf {
-    background-color: #4CAF50; /* Fondo verde */
-    border: none; /* Sin borde */
-    color: white; /* Color del texto */
-    cursor: pointer; /* Cursor tipo puntero */
-    font-size: 1.2em; /* Tamaño de fuente */
-    padding: 10px 20px; /* Relleno interno */
+    background-color: #4CAF50; /* Color de fondo verde */
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 10px 20px; /* Aumentar el tamaño del botón */
     border-radius: 25px; /* Bordes redondeados */
-    display: flex; /* Flexbox para alinear elementos */
-    align-items: center; /* Alinear verticalmente */
-    justify-content: center; /* Alinear horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Transición suave */
-    margin-left: auto; /* Alinear a la derecha */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+	margin-left: auto; /* Empuja el botón hacia la derecha */
 }
 
+/* Estilos para el ícono dentro del botón de Generar PDF */
 #generar-pdf i {
-    font-family: "Font Awesome 5 Free"; /* Fuente de íconos */
-    font-weight: 900; /* Grosor de la fuente */
-    margin-right: 10px; /* Margen derecho */
-    scale: 1.2; /* Escalar ícono */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    scale: 1.2; /* Aumentar el tamaño del ícono */
 }
 
+/* Efecto hover para el botón de Generar PDF */
 #generar-pdf:hover {
-    background-color: #45a049; /* Fondo verde oscuro al hacer hover */
-    transform: scale(1.05); /* Escalar al hacer hover */
+    background-color: #45a049; /* Color de fondo verde más oscuro al hacer hover */
+    transform: scale(1.05); /* Efecto de escala al hacer hover */
 }
 
+/* Efecto active para el botón de Generar PDF */
 #generar-pdf:active {
-    background-color: #3d8b40; /* Fondo verde más oscuro al hacer clic */
-    transform: scale(0.95); /* Escalar al hacer clic */
+    background-color: #3d8b40; /* Color de fondo verde aún más oscuro al hacer clic */
+    transform: scale(0.95); /* Efecto de escala al hacer clic */
 }
+
+/* Estilos para la celda que contiene el botón de Generar PDF */
+#productoSeleccionadoTable tr:last-child td {
+    text-align: right; /* Alinea el contenido de la celda a la derecha */
+    padding-right: 20px; /* Añade un poco de espacio a la derecha */
+	background-color: transparent !important; /* Fondo transparente */
+    box-shadow: none !important; /* Eliminar sombras */
+    border: none !important; /* Eliminar bordes */
+}
+/*---------------------------------------------------------------------------------*/
