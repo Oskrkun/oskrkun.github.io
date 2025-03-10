@@ -202,7 +202,7 @@ export async function initPresupuesto() {
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
 
-    // Cargar tipos de lentes y tratamientos
+    // Cargar tratamientos
     await cargarTratamientos();
 
     // Cargar laboratorios y tipos de lentes para las listas desplegables
@@ -215,6 +215,14 @@ export async function initPresupuesto() {
         tipoLenteSelect.addEventListener('change', cargarProductosFiltrados);
     } else {
         console.error('No se encontró la lista desplegable de tipos de lentes.');
+    }
+
+    // Agregar evento de cambio a la lista desplegable de laboratorios
+    const laboratorioSelect = document.getElementById('laboratorio-select');
+    if (laboratorioSelect) {
+        laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
+    } else {
+        console.error('No se encontró la lista desplegable de laboratorios.');
     }
 
     // Cargar productos filtrados después de que las listas estén llenas
