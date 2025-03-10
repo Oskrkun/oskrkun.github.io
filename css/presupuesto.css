@@ -38,7 +38,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 800px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     padding: 5px;
     box-sizing: border-box;
 }
@@ -49,7 +49,6 @@
 #tratamientosSection h2,
 .Productos h2 {
     color: var(--color-primario);
-    margin-bottom: 15px;
     cursor: pointer; /* Hace que el h2 sea clickeable */
     display: flex;
     justify-content: space-between;
@@ -57,6 +56,7 @@
     padding: 10px;
     background-color: var(--color-fondo-fila);
     border-radius: 5px;
+	margin: 0px;
 }
 
 /* Estilos para el ícono de flecha */
@@ -322,7 +322,6 @@ input[type="text"] {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 800px;
-    margin-bottom: 20px;
     padding: 5px;
     box-sizing: border-box;
 }
@@ -548,7 +547,6 @@ input[type="text"] {
     background-color: var(--color-fondo-hover);
 }
 /*---------------------------------------------------------------------------------*/
-
 /* Estilos para el botón de Generar PDF */
 #generar-pdf {
     background-color: #4CAF50; /* Color de fondo verde */
