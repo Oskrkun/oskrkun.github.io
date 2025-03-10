@@ -584,4 +584,10 @@ input[type="text"] {
     background-color: #3d8b40; /* Color de fondo verde aún más oscuro al hacer clic */
     transform: scale(0.95); /* Efecto de escala al hacer clic */
 }
+
+/* Estilos para la celda que contiene el botón de Generar PDF */
+#productoSeleccionadoTable tr:last-child td {
+    text-align: right; /* Alinea el contenido de la celda a la derecha */
+    padding-right: 20px; /* Añade un poco de espacio a la derecha */
+}
 /*---------------------------------------------------------------------------------*/
