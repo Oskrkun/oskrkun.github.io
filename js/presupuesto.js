@@ -25,7 +25,6 @@ import {
 } from './controlReceta.js';
 
 import {
-    cargarTiposLentes,
     cargarTratamientos,
     cargarProductosFiltrados,
     formatearNumero,
@@ -204,7 +203,6 @@ export async function initPresupuesto() {
     agregarEventoBotonBorrar();
 
     // Cargar tipos de lentes y tratamientos
-    await cargarTiposLentes();
     await cargarTratamientos();
 
     // Cargar laboratorios y tipos de lentes para las listas desplegables
