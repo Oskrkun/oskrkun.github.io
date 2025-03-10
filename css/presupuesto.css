@@ -563,6 +563,7 @@ input[type="text"] {
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
     transition: background-color 0.3s ease, transform 0.3s ease;
+	margin-left: auto; /* Empuja el botón hacia la derecha */
 }
 
 /* Estilos para el ícono dentro del botón de Generar PDF */
@@ -589,5 +590,8 @@ input[type="text"] {
 #productoSeleccionadoTable tr:last-child td {
     text-align: right; /* Alinea el contenido de la celda a la derecha */
     padding-right: 20px; /* Añade un poco de espacio a la derecha */
+	background-color: transparent !important; /* Fondo transparente */
+    box-shadow: none !important; /* Eliminar sombras */
+    border: none !important; /* Eliminar bordes */
 }
 /*---------------------------------------------------------------------------------*/
