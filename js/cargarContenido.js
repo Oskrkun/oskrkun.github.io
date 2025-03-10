@@ -61,7 +61,8 @@ export async function cargarContenido(seccion) {
 
 				// Cargar la librería jsPDF
 				const scriptJsPDF = document.createElement('script');
-				scriptJsPDF.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+				//scriptJsPDF.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+				scriptJsPDF.src = './js/jspdf.umd.min.js';
 				scriptJsPDF.onload = () => {
 					console.log('jsPDF cargado correctamente');
 				};
