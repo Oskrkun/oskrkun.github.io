@@ -528,6 +528,8 @@ input[type="text"] {
 	text-align: center;
 }
 
+#laboratorio-select,
+#tipo-lente-select,
 #producto-armado:focus {
     border-color: #4CAF50 !important;
     outline: 0;
@@ -537,6 +539,8 @@ input[type="text"] {
 }
 
 /* Estilos para las opciones del select */
+#laboratorio-select option,
+#tipo-lente-select option,
 #producto-armado option {
     padding: 8px;
     background-color: white;
@@ -544,6 +548,8 @@ input[type="text"] {
 }
 
 /* Estilos para el hover de las opciones */
+#laboratorio-select option:hover,
+#tipo-lente-select option:hover,
 #producto-armado option:hover {
     background-color: var(--color-fondo-hover);
 }
