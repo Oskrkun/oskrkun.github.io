@@ -80,11 +80,15 @@ export async function cargarTratamientos() {
         // Llenar la tabla de tratamientos
         const tratamientosContainer = document.getElementById('tratamientos');
         if (tratamientosContainer) {
-            tratamientosContainer.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+            // Limpiar solo las filas de tratamientos, no las filas manuales
+            const filasTratamientos = tratamientosContainer.querySelectorAll('tr.tratamiento-fila');
+            filasTratamientos.forEach(fila => fila.remove());
 
+            // Agregar los tratamientos
             tratamientos.forEach(tratamiento => {
                 console.log(`Agregando tratamiento: ${tratamiento.nombre}`);
                 const row = document.createElement('tr');
+                row.classList.add('tratamiento-fila'); // Agregar una clase para identificar las filas de tratamientos
                 row.innerHTML = `
                     <td>${tratamiento.nombre}</td>
                     <td>
