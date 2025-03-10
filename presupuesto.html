@@ -99,7 +99,7 @@
     </section>
 </div>
 
-<!-- Nueva sección para tratamientos -->
+<!-- Sección de Tratamientos -->
 <div class="Tratamientos">
     <section id="tratamientosSection" class="collapsed">
         <h2>
@@ -107,6 +107,25 @@
             <i class="fa-solid fa-chevron-down toggle-icon" data-target="tratamientos-content"></i>
         </h2>
         <div id="tratamientos-content" class="section-content">
+            <!-- Lista desplegable para Tipo de Lente -->
+            <div class="filtro-container">
+                <label for="tipoLenteSelect">Tipo de Lente:</label>
+                <select id="tipoLenteSelect">
+                    <option value="">Seleccionar Tipo de Lente</option>
+                    <!-- Las opciones se llenarán dinámicamente desde la BD -->
+                </select>
+            </div>
+
+            <!-- Lista desplegable para Laboratorio -->
+            <div class="filtro-container">
+                <label for="laboratorioSelect">Laboratorio:</label>
+                <select id="laboratorioSelect">
+                    <option value="">Seleccionar Laboratorio</option>
+                    <!-- Las opciones se llenarán dinámicamente desde la BD -->
+                </select>
+            </div>
+
+            <!-- Tabla de tratamientos -->
             <div class="table-container">
                 <table id="tratamientosTable">
                     <thead>
