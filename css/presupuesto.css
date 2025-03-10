@@ -328,7 +328,6 @@ input[type="text"] {
 
 .Productos h2 {
     color: var(--color-primario);
-    margin-bottom: 15px;
 }
 
 /* Estilos para la tabla de productos */
