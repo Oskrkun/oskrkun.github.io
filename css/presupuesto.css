@@ -549,4 +549,39 @@ input[type="text"] {
 }
 /*---------------------------------------------------------------------------------*/
 
+/* Estilos para el botón de Generar PDF */
+#generar-pdf {
+    background-color: #4CAF50; /* Color de fondo verde */
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2em;
+    padding: 10px 20px; /* Aumentar el tamaño del botón */
+    border-radius: 25px; /* Bordes redondeados */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
+/* Estilos para el ícono dentro del botón de Generar PDF */
+#generar-pdf i {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    scale: 1.2; /* Aumentar el tamaño del ícono */
+}
+
+/* Efecto hover para el botón de Generar PDF */
+#generar-pdf:hover {
+    background-color: #45a049; /* Color de fondo verde más oscuro al hacer hover */
+    transform: scale(1.05); /* Efecto de escala al hacer hover */
+}
+
+/* Efecto active para el botón de Generar PDF */
+#generar-pdf:active {
+    background-color: #3d8b40; /* Color de fondo verde aún más oscuro al hacer clic */
+    transform: scale(0.95); /* Efecto de escala al hacer clic */
+}
+/*---------------------------------------------------------------------------------*/
