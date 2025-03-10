@@ -122,6 +122,10 @@ export async function cargarProductosFiltrados() {
         const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
         console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
 
+        // Obtener el laboratorio seleccionado desde la lista desplegable
+        const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
+        console.log('Laboratorio seleccionado:', laboratorioSeleccionado);
+
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
         console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
@@ -149,9 +153,10 @@ export async function cargarProductosFiltrados() {
         console.log('ESF más alto:', esfMasAlto);
         console.log('CIL más alto:', cilMasAlto);
 
-        // Llamar a la función de Supabase para obtener los productos filtrados (tratamientos y tipo de lente)
+        // Llamar a la función de Supabase para obtener los productos filtrados (tipo de lente, laboratorio y tratamientos)
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
+            p_laboratorio_id: laboratorioSeleccionado || null,
             p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
         });
 
