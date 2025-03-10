@@ -31,7 +31,9 @@ import {
     formatearNumero,
     formatearPrecio,
     agregarEventosFiltrado,
-    agregarEventosReceta
+    agregarEventosReceta,
+    cargarLaboratorios, // Nueva función importada
+    cargarTiposLentesSelect // Nueva función importada
 } from './controlProductos.js';
 
 import { 
@@ -201,8 +203,15 @@ export async function initPresupuesto() {
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
 
+    // Cargar tipos de lentes y tratamientos
     await cargarTiposLentes();
     await cargarTratamientos();
+
+    // Cargar laboratorios y tipos de lentes para las listas desplegables
+    await cargarLaboratorios();
+    await cargarTiposLentesSelect();
+
+    // Cargar productos filtrados después de que las listas estén llenas
     await cargarProductosFiltrados();
 
     agregarEventosFiltrado();
