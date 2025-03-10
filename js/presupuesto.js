@@ -211,6 +211,14 @@ export async function initPresupuesto() {
     await cargarLaboratorios();
     await cargarTiposLentesSelect();
 
+    // Agregar evento de cambio a la lista desplegable de tipos de lentes
+    const tipoLenteSelect = document.getElementById('tipo-lente-select');
+    if (tipoLenteSelect) {
+        tipoLenteSelect.addEventListener('change', cargarProductosFiltrados);
+    } else {
+        console.error('No se encontró la lista desplegable de tipos de lentes.');
+    }
+
     // Cargar productos filtrados después de que las listas estén llenas
     await cargarProductosFiltrados();
 

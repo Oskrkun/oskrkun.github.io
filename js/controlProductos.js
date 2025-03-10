@@ -159,8 +159,8 @@ export async function cargarProductosFiltrados() {
     console.log('Cargando productos filtrados...');
 
     try {
-        // Obtener el tipo de lente seleccionado
-        const tipoLenteSeleccionado = document.querySelector('input[name="tipoLente"]:checked')?.value;
+        // Obtener el tipo de lente seleccionado desde la lista desplegable
+        const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
         console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
 
         // Obtener los tratamientos seleccionados
@@ -233,18 +233,17 @@ export async function cargarProductosFiltrados() {
                     `;
 
                     // Agregar evento de clic a la fila
-					row.addEventListener('click', () => {
-						// Si la fila ya está seleccionada, deseleccionarla
-						if (row.classList.contains('selected')) {
-							row.classList.remove('selected');
-						} else {
-							// Deseleccionar todas las filas
-							tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
-							// Seleccionar la fila clickeada
-							row.classList.add('selected');
-						}
-					});
-					
+                    row.addEventListener('click', () => {
+                        // Si la fila ya está seleccionada, deseleccionarla
+                        if (row.classList.contains('selected')) {
+                            row.classList.remove('selected');
+                        } else {
+                            // Deseleccionar todas las filas
+                            tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+                            // Seleccionar la fila clickeada
+                            row.classList.add('selected');
+                        }
+                    });
 
                     tbody.appendChild(row);
                 });
