@@ -525,11 +525,12 @@ input[type="text"] {
     color: var(--color-texto);
     font-size: 1em;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-	text-align: center;
+    text-align: center;
 }
 
-#laboratorio-select,
-#tipo-lente-select,
+/* Estilos para el foco en los selectores */
+#laboratorio-select:focus,
+#tipo-lente-select:focus,
 #producto-armado:focus {
     border-color: #4CAF50 !important;
     outline: 0;
