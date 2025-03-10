@@ -513,6 +513,8 @@ input[type="text"] {
 
 /*---------------------------------------------------------------------------------*/
 /* Estilos para el select de armado */
+#laboratorio-select,
+#tipo-lente-select,
 #producto-armado {
     width: 100%;
     padding: 8px;
