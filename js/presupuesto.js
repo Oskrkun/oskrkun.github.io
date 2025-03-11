@@ -38,7 +38,8 @@ import {
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-    inicializarProductoSeleccionado
+    inicializarProductoSeleccionado,
+    cargarListaMontaje // Importar la función
 } from './calculosPresupuesto.js';
 
 import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js'; // Importar funciones de autenticación
