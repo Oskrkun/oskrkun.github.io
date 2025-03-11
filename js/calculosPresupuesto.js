@@ -24,12 +24,13 @@ function desformatearMoneda(texto) {
 }
 
 // Función para cargar los precios de montaje desde la base de datos
-export async function cargarPreciosMontaje(laboratorioId) {
-    console.log('Cargando precios de montaje para el laboratorio:', laboratorioId);
+export async function cargarPreciosMontaje(laboratorioInput) {
+    console.log('Cargando precios de montaje para el laboratorio:', laboratorioInput);
 
     try {
+        // Obtener los precios de montaje
         const { data: preciosMontaje, error } = await supabaseClient
-            .rpc('obtener_precios_montaje', { laboratorio_id: laboratorioId });
+            .rpc('obtener_precios_montaje', { laboratorio_input: laboratorioInput });
 
         if (error) throw error;
 
