@@ -188,7 +188,7 @@ export async function cargarProductosFiltrados() {
                         <td>${producto.nombre}</td>
                         <td>${producto.tipo_lente}</td>
                         <td>${producto.material}</td>
-                        <td>${producto.laboratorio}</td>
+                        <td data-laboratorio-id="${producto.laboratorio_id}">${producto.laboratorio}</td> <!-- Mostrar nombre y guardar ID -->
                         <td>${min_esf}</td>
                         <td>${max_esf}</td>
                         <td>${cil}</td>
