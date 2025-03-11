@@ -1,4 +1,5 @@
 // controlProductos.js
+
 import { supabaseClient } from './supabaseConfig.js';
 
 // Función para actualizar el contador de productos en el h2
