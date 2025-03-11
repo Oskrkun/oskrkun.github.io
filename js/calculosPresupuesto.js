@@ -1,4 +1,6 @@
 // calculosPresupuesto.js
+import { supabaseClient } from './supabaseConfig.js';
+
 // Array con los precios de montaje
 const ListaPrecioMontaje = [
     { nombre: 'Monofocal', precio: 230 },
@@ -124,8 +126,6 @@ function rellenarCamposProductoSeleccionado(fila) {
     calcularPrecios();
 }
 
-import { supabaseClient } from './supabaseConfig.js';
-
 // Función para cargar la lista desplegable de montaje desde Supabase
 async function cargarListaMontaje() {
     const selectMontaje = document.getElementById('producto-armado');
@@ -161,11 +161,6 @@ async function cargarListaMontaje() {
     } catch (error) {
         console.error('Error al cargar la lista de montaje:', error.message);
     }
-}
-
-// Función para formatear moneda (ajusta según tu necesidad)
-function formatearMoneda(valor) {
-    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(valor);
 }
 
 // Función para calcular los precios (cristales y final)
