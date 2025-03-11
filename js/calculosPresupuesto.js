@@ -1,4 +1,5 @@
 // calculosPresupuesto.js
+import { supabaseClient } from './supabaseConfig.js';
 
 // Array con los precios de montaje
 const ListaPrecioMontaje = [
