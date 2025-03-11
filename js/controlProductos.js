@@ -289,6 +289,14 @@ export async function cargarLaboratorios() {
         if (laboratorioSelect) {
             laboratorioSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
 
+            // Agregar la opción "Todos" como primer elemento
+            const optionTodos = document.createElement('option');
+            optionTodos.value = ''; // Valor vacío para representar "Todos"
+            optionTodos.textContent = 'Todos';
+            optionTodos.selected = true; // Seleccionada por defecto
+            laboratorioSelect.appendChild(optionTodos);
+
+            // Agregar los laboratorios
             laboratorios.forEach(laboratorio => {
                 console.log(`Agregando laboratorio: ${laboratorio.nombre}`);
                 const option = document.createElement('option');
@@ -321,6 +329,14 @@ export async function cargarTiposLentesSelect() {
         if (tipoLenteSelect) {
             tipoLenteSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
 
+            // Agregar la opción "Todos" como primer elemento
+            const optionTodos = document.createElement('option');
+            optionTodos.value = ''; // Valor vacío para representar "Todos"
+            optionTodos.textContent = 'Todos';
+            optionTodos.selected = true; // Seleccionada por defecto
+            tipoLenteSelect.appendChild(optionTodos);
+
+            // Agregar los tipos de lentes
             tiposLentes.forEach(tipoLente => {
                 console.log(`Agregando tipo de lente: ${tipoLente.nombre}`);
                 const option = document.createElement('option');
