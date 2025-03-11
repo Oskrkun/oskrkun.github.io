@@ -176,6 +176,8 @@ async function llenarVendedor() {
 }
 
 // Función para inicializar el presupuesto
+// presupuesto.js
+
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
 
@@ -220,7 +222,10 @@ export async function initPresupuesto() {
     // Agregar evento de cambio a la lista desplegable de laboratorios
     const laboratorioSelect = document.getElementById('laboratorio-select');
     if (laboratorioSelect) {
-        laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
+        laboratorioSelect.addEventListener('change', async () => {
+            await cargarProductosFiltrados();
+            await cargarListaMontaje(); // Cargar los precios de montaje cuando cambia el laboratorio
+        });
     } else {
         console.error('No se encontró la lista desplegable de laboratorios.');
     }

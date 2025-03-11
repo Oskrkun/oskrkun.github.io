@@ -1,0 +1,46 @@
+-- Insertar tipos de servicios
+INSERT INTO public.servicios (nombre_servicio) VALUES
+('Montaje'),
+('Coloración'),
+('Endurecido'),
+('Filtro UV');
+ya agregue esos servicios
+
+para el laboratorio id 2 quiero agregar estos precios 
+Endurecido $475 Endurecido UV
+Proteccion UV 400 $475
+Retiro de Tratamiento $525
+Coloracion Tinte 1 $200
+ColoracionTinte 2 $200
+Coloracion Tinte 3 $305
+Coloracion Tinte 4 $305
+Coloracion Igual Muestra $465
+Coloracion Especial $620
+Montaje Monofocal Organico Entero 230
+Montaje Monofocal Organico Ranurado 250
+Montaje Monofocal Organico Aire 440
+Motaje Bifocal entero 260 
+Motaje Bifocal ranurado 280
+Motaje Bifocal aire 500
+Motaje Multifocal Entero 335
+Motaje Multifocal Ranurado 355
+Motaje Multifocal  aire 500
+Motaje Alto Indice Entero 410
+Motaje Alto Indice Ranurado 440
+Motaje Alto Indice aire 560
+Motaje Policarbonato entero 410
+ Motaje Policarbonato Ranurado 460 
+Motaje Policarbonato aire 560
+Motaje Lentes Sol 350
+
+Y en otro laboratorio id 4 sus precios son asi
+
+Endurecido Duralux $490
+Coloracion Tinte Rodenstock Homogeneo $240
+Coloracion Tinte Rodenstock Degrade $300
+Coloracion Tinte Segun Muestra Homogeneo $550
+Coloracion Tinte Segun Muestra Degrade $650
+Filtro UV 400nm $130
+Montaje Rodenstock $240
+Biselado remoto Rodenstock $180
+

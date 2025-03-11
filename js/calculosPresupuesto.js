@@ -30,6 +30,24 @@ function desformatearMoneda(texto) {
     return parseFloat(texto.replace(/[^0-9,-]/g, '').replace(',', '.'));
 }
 
+// Función para cargar los precios de montaje desde la base de datos
+export async function cargarPreciosMontaje(laboratorioId) {
+    console.log('Cargando precios de montaje para el laboratorio:', laboratorioId);
+
+    try {
+        const { data: preciosMontaje, error } = await supabaseClient
+            .rpc('obtener_precios_montaje', { laboratorio_id: laboratorioId });
+
+        if (error) throw error;
+
+        console.log('Precios de montaje cargados:', preciosMontaje);
+        return preciosMontaje;
+    } catch (error) {
+        console.error('Error cargando precios de montaje:', error);
+        return [];
+    }
+}
+
 // Función para validar que el input solo contenga números, puntos o comas
 function validarInputNumerico(event) {
     const input = event.target;
@@ -69,11 +87,13 @@ function restaurarValorPorDefecto(event) {
 }
 
 // Función para manejar el clic en una fila de la tabla de productos
+// calculosPresupuesto.js
+
 export function manejarSeleccionProducto() {
     console.log('Iniciando manejarSeleccionProducto...');
     const tbody = document.querySelector('#productTable tbody');
     if (tbody) {
-        tbody.addEventListener('click', (event) => {
+        tbody.addEventListener('click', async (event) => {
             console.log('Clic detectado en la tabla de productos.');
             const filaSeleccionada = event.target.closest('tr');
             if (filaSeleccionada) {
@@ -86,6 +106,9 @@ export function manejarSeleccionProducto() {
                 console.log('Seleccionando la fila clickeada...');
                 filaSeleccionada.classList.add('selected');
                 rellenarCamposProductoSeleccionado(filaSeleccionada);
+
+                // Cargar los precios de montaje según el laboratorio seleccionado
+                await cargarListaMontaje();
             } else {
                 console.log('No se encontró una fila válida.');
             }
@@ -126,19 +149,31 @@ function rellenarCamposProductoSeleccionado(fila) {
 }
 
 // Función para cargar la lista desplegable de montaje
-function cargarListaMontaje() {
+async function cargarListaMontaje() {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
-    ListaPrecioMontaje.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.precio;
-        option.textContent = `${item.nombre} (${formatearMoneda(item.precio)})`;
-        selectMontaje.appendChild(option);
-    });
+    // Obtener el laboratorio seleccionado
+    const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
 
-    // Seleccionar el primer elemento de la lista por defecto
-    selectMontaje.selectedIndex = 0;
+    if (laboratorioSeleccionado) {
+        // Obtener los precios de montaje desde la base de datos
+        const preciosMontaje = await cargarPreciosMontaje(laboratorioSeleccionado);
+
+        preciosMontaje.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.precio;
+            option.textContent = `${item.nombre_servicio} (${formatearMoneda(item.precio)})`;
+            selectMontaje.appendChild(option);
+        });
+
+        // Seleccionar el primer elemento de la lista por defecto
+        if (preciosMontaje.length > 0) {
+            selectMontaje.selectedIndex = 0;
+        }
+    } else {
+        console.error('No se ha seleccionado un laboratorio.');
+    }
 
     // Agregar evento para recalcular al cambiar el armado
     selectMontaje.addEventListener('change', calcularPrecios);
