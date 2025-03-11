@@ -1,5 +1,4 @@
 // presupuesto.js
-
 import { supabaseClient } from './supabaseConfig.js';
 import {
     MAX_ADD,
@@ -32,15 +31,14 @@ import {
     formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
-    cargarLaboratorios,
-    cargarTiposLentesSelect
+    cargarLaboratorios, // Nueva función importada
+    cargarTiposLentesSelect // Nueva función importada
 } from './controlProductos.js';
 
 import { 
     manejarSeleccionProducto, 
     agregarEventosCalculos, 
-    inicializarProductoSeleccionado,
-    cargarListaMontaje // Importar la función
+    inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
 
 import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js'; // Importar funciones de autenticación
@@ -222,10 +220,7 @@ export async function initPresupuesto() {
     // Agregar evento de cambio a la lista desplegable de laboratorios
     const laboratorioSelect = document.getElementById('laboratorio-select');
     if (laboratorioSelect) {
-        laboratorioSelect.addEventListener('change', async () => {
-            await cargarProductosFiltrados();
-            // No llamar a cargarListaMontaje aquí, ya que se maneja en la selección del producto
-        });
+        laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
     } else {
         console.error('No se encontró la lista desplegable de laboratorios.');
     }

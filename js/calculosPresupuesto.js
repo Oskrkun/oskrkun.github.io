@@ -1,6 +1,13 @@
 // calculosPresupuesto.js
 
-import { supabaseClient } from './supabaseConfig.js'; // Importar supabaseClient
+// Array con los precios de montaje
+const ListaPrecioMontaje = [
+    { nombre: 'Monofocal', precio: 230 },
+    { nombre: 'Laboratorio', precio: 250 },
+    { nombre: 'Bifocal', precio: 280 },
+    { nombre: 'Progresivos', precio: 355 },
+    { nombre: 'Armado Especial', precio: 560 }
+];
 
 // Función para redondear el precio a un número que termine en 90
 function redondearPrecio(precio) {
@@ -21,25 +28,6 @@ function formatearMoneda(numero) {
 // Función para convertir un texto formateado a número
 function desformatearMoneda(texto) {
     return parseFloat(texto.replace(/[^0-9,-]/g, '').replace(',', '.'));
-}
-
-// Función para cargar los precios de montaje desde la base de datos
-export async function cargarPreciosMontaje(laboratorioInput) {
-    console.log('Cargando precios de montaje para el laboratorio:', laboratorioInput);
-
-    try {
-        // Obtener los precios de montaje
-        const { data: preciosMontaje, error } = await supabaseClient
-            .rpc('obtener_precios_montaje', { laboratorio_input: laboratorioInput });
-
-        if (error) throw error;
-
-        console.log('Precios de montaje cargados:', preciosMontaje);
-        return preciosMontaje;
-    } catch (error) {
-        console.error('Error cargando precios de montaje:', error);
-        return [];
-    }
 }
 
 // Función para validar que el input solo contenga números, puntos o comas
@@ -85,7 +73,7 @@ export function manejarSeleccionProducto() {
     console.log('Iniciando manejarSeleccionProducto...');
     const tbody = document.querySelector('#productTable tbody');
     if (tbody) {
-        tbody.addEventListener('click', async (event) => {
+        tbody.addEventListener('click', (event) => {
             console.log('Clic detectado en la tabla de productos.');
             const filaSeleccionada = event.target.closest('tr');
             if (filaSeleccionada) {
@@ -113,7 +101,6 @@ function rellenarCamposProductoSeleccionado(fila) {
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
     const precioTexto = fila.cells[7].textContent;
-    const laboratorio = fila.cells[3].textContent; // Obtener el nombre del laboratorio
 
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
@@ -121,14 +108,13 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
     console.log('Precio:', precio);
-    console.log('Laboratorio:', laboratorio);
 
     document.getElementById('producto-nombre').value = nombre;
     document.getElementById('producto-tratamientos').value = tratamientos;
     document.getElementById('producto-precio-base').value = precio;
 
-    // Cargar la lista desplegable de montaje según el laboratorio del producto
-    cargarListaMontaje(laboratorio);
+    // Cargar la lista desplegable de montaje
+    cargarListaMontaje();
 
     // Inicializar el IVA, multiplicador y armazón
     document.getElementById('producto-iva').value = '22';
@@ -140,28 +126,19 @@ function rellenarCamposProductoSeleccionado(fila) {
 }
 
 // Función para cargar la lista desplegable de montaje
-export async function cargarListaMontaje(laboratorio) {
+function cargarListaMontaje() {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
-    if (laboratorio) {
-        // Obtener los precios de montaje desde la base de datos
-        const preciosMontaje = await cargarPreciosMontaje(laboratorio);
+    ListaPrecioMontaje.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.precio;
+        option.textContent = `${item.nombre} (${formatearMoneda(item.precio)})`;
+        selectMontaje.appendChild(option);
+    });
 
-        preciosMontaje.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.precio;
-            option.textContent = `${item.nombre_servicio} (${formatearMoneda(item.precio)})`;
-            selectMontaje.appendChild(option);
-        });
-
-        // Seleccionar el primer elemento de la lista por defecto
-        if (preciosMontaje.length > 0) {
-            selectMontaje.selectedIndex = 0;
-        }
-    } else {
-        console.log('No se ha seleccionado un laboratorio. No se cargarán precios de montaje.');
-    }
+    // Seleccionar el primer elemento de la lista por defecto
+    selectMontaje.selectedIndex = 0;
 
     // Agregar evento para recalcular al cambiar el armado
     selectMontaje.addEventListener('change', calcularPrecios);
