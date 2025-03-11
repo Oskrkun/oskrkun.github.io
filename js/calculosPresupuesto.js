@@ -172,7 +172,8 @@ async function cargarListaMontaje() {
             selectMontaje.selectedIndex = 0;
         }
     } else {
-        console.error('No se ha seleccionado un laboratorio.');
+        console.log('No se ha seleccionado un laboratorio. No se cargarán precios de montaje.');
+        // Aquí puedes agregar un mensaje o lógica adicional si es necesario
     }
 
     // Agregar evento para recalcular al cambiar el armado
