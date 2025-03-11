@@ -126,23 +126,48 @@ function rellenarCamposProductoSeleccionado(fila) {
     calcularPrecios();
 }
 
-// Función para cargar la lista desplegable de montaje
-function cargarListaMontaje() {
+import { supabaseClient } from './supabaseConfig.js';
+
+// Función para cargar la lista desplegable de montaje desde Supabase
+async function cargarListaMontaje() {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
-    ListaPrecioMontaje.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item.precio;
-        option.textContent = `${item.nombre} (${formatearMoneda(item.precio)})`;
-        selectMontaje.appendChild(option);
-    });
+    try {
+        // Llamar a la función de Supabase para obtener los datos
+        const { data, error } = await supabaseClient
+            .rpc('get_laboratorio_info', { lab_id: 2, serv_id: 1 }); // Usar los parámetros correctos
 
-    // Seleccionar el primer elemento de la lista por defecto
-    selectMontaje.selectedIndex = 0;
+        if (error) {
+            throw error;
+        }
 
-    // Agregar evento para recalcular al cambiar el armado
-    selectMontaje.addEventListener('change', calcularPrecios);
+        // Verificar si hay datos
+        if (data && data.length > 0) {
+            // Recorrer los datos y agregar opciones al select
+            data.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.precio;
+                option.textContent = `${item.descripcion} (${formatearMoneda(item.precio)})`;
+                selectMontaje.appendChild(option);
+            });
+
+            // Seleccionar el primer elemento de la lista por defecto
+            selectMontaje.selectedIndex = 0;
+
+            // Agregar evento para recalcular al cambiar el armado
+            selectMontaje.addEventListener('change', calcularPrecios);
+        } else {
+            console.warn('No se encontraron datos para el laboratorio y servicio especificados.');
+        }
+    } catch (error) {
+        console.error('Error al cargar la lista de montaje:', error.message);
+    }
+}
+
+// Función para formatear moneda (ajusta según tu necesidad)
+function formatearMoneda(valor) {
+    return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(valor);
 }
 
 // Función para calcular los precios (cristales y final)
