@@ -149,7 +149,7 @@ function rellenarCamposProductoSeleccionado(fila) {
 }
 
 // Función para cargar la lista desplegable de montaje
-async function cargarListaMontaje() {
+export async function cargarListaMontaje() {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
