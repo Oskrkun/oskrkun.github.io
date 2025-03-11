@@ -113,7 +113,7 @@ function rellenarCamposProductoSeleccionado(fila) {
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
     const precioTexto = fila.cells[7].textContent;
-    const laboratorio = fila.cells[3].textContent; // Obtener el laboratorio del producto seleccionado
+    const laboratorio = fila.cells[3].textContent; // Obtener el nombre del laboratorio
 
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
