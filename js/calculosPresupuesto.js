@@ -1,13 +1,6 @@
 // calculosPresupuesto.js
 
-// Array con los precios de montaje
-const ListaPrecioMontaje = [
-    { nombre: 'Monofocal', precio: 230 },
-    { nombre: 'Laboratorio', precio: 250 },
-    { nombre: 'Bifocal', precio: 280 },
-    { nombre: 'Progresivos', precio: 355 },
-    { nombre: 'Armado Especial', precio: 560 }
-];
+import { supabaseClient } from './supabaseConfig.js'; // Importar supabaseClient
 
 // Función para redondear el precio a un número que termine en 90
 function redondearPrecio(precio) {
@@ -87,8 +80,6 @@ function restaurarValorPorDefecto(event) {
 }
 
 // Función para manejar el clic en una fila de la tabla de productos
-// calculosPresupuesto.js
-
 export function manejarSeleccionProducto() {
     console.log('Iniciando manejarSeleccionProducto...');
     const tbody = document.querySelector('#productTable tbody');
@@ -106,9 +97,6 @@ export function manejarSeleccionProducto() {
                 console.log('Seleccionando la fila clickeada...');
                 filaSeleccionada.classList.add('selected');
                 rellenarCamposProductoSeleccionado(filaSeleccionada);
-
-                // Cargar los precios de montaje según el laboratorio seleccionado
-                await cargarListaMontaje();
             } else {
                 console.log('No se encontró una fila válida.');
             }
@@ -124,6 +112,7 @@ function rellenarCamposProductoSeleccionado(fila) {
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
     const precioTexto = fila.cells[7].textContent;
+    const laboratorio = fila.cells[3].textContent; // Obtener el laboratorio del producto seleccionado
 
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
@@ -131,13 +120,14 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
     console.log('Precio:', precio);
+    console.log('Laboratorio:', laboratorio);
 
     document.getElementById('producto-nombre').value = nombre;
     document.getElementById('producto-tratamientos').value = tratamientos;
     document.getElementById('producto-precio-base').value = precio;
 
-    // Cargar la lista desplegable de montaje
-    cargarListaMontaje();
+    // Cargar la lista desplegable de montaje según el laboratorio del producto
+    cargarListaMontaje(laboratorio);
 
     // Inicializar el IVA, multiplicador y armazón
     document.getElementById('producto-iva').value = '22';
@@ -149,16 +139,13 @@ function rellenarCamposProductoSeleccionado(fila) {
 }
 
 // Función para cargar la lista desplegable de montaje
-export async function cargarListaMontaje() {
+export async function cargarListaMontaje(laboratorio) {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
-    // Obtener el laboratorio seleccionado
-    const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
-
-    if (laboratorioSeleccionado) {
+    if (laboratorio) {
         // Obtener los precios de montaje desde la base de datos
-        const preciosMontaje = await cargarPreciosMontaje(laboratorioSeleccionado);
+        const preciosMontaje = await cargarPreciosMontaje(laboratorio);
 
         preciosMontaje.forEach(item => {
             const option = document.createElement('option');
@@ -173,7 +160,6 @@ export async function cargarListaMontaje() {
         }
     } else {
         console.log('No se ha seleccionado un laboratorio. No se cargarán precios de montaje.');
-        // Aquí puedes agregar un mensaje o lógica adicional si es necesario
     }
 
     // Agregar evento para recalcular al cambiar el armado

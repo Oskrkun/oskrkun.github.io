@@ -1,4 +1,5 @@
 // presupuesto.js
+
 import { supabaseClient } from './supabaseConfig.js';
 import {
     MAX_ADD,
@@ -31,8 +32,8 @@ import {
     formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
-    cargarLaboratorios, // Nueva función importada
-    cargarTiposLentesSelect // Nueva función importada
+    cargarLaboratorios,
+    cargarTiposLentesSelect
 } from './controlProductos.js';
 
 import { 
@@ -177,8 +178,6 @@ async function llenarVendedor() {
 }
 
 // Función para inicializar el presupuesto
-// presupuesto.js
-
 export async function initPresupuesto() {
     console.log('Inicializando presupuesto...');
 
@@ -225,7 +224,7 @@ export async function initPresupuesto() {
     if (laboratorioSelect) {
         laboratorioSelect.addEventListener('change', async () => {
             await cargarProductosFiltrados();
-            await cargarListaMontaje(); // Cargar los precios de montaje cuando cambia el laboratorio
+            // No llamar a cargarListaMontaje aquí, ya que se maneja en la selección del producto
         });
     } else {
         console.error('No se encontró la lista desplegable de laboratorios.');
