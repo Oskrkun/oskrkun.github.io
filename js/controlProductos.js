@@ -165,9 +165,20 @@ export async function cargarProductosFiltrados() {
         console.log('Productos filtrados cargados:', productos);
 
         // Filtrar productos por graduación (ESF y CIL)
-        const productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+        let productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
 
-        console.log('Productos filtrados por ESF y CIL:', productosFiltrados);
+        // Si no se seleccionó ningún tratamiento, excluir los productos que tienen tratamientos
+        if (tratamientosSeleccionados.length === 0) {
+            productosFiltrados = productosFiltrados.filter(producto => !producto.tratamientos || producto.tratamientos.length === 0);
+        } else {
+            // Si se seleccionaron tratamientos, filtrar los productos que tienen esos tratamientos
+            productosFiltrados = productosFiltrados.filter(producto =>
+                producto.tratamientos && producto.tratamientos.length > 0 &&
+                tratamientosSeleccionados.every(tratamiento => producto.tratamientos.includes(tratamiento))
+            );
+        }
+
+        console.log('Productos filtrados por ESF, CIL y tratamientos:', productosFiltrados);
 
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
