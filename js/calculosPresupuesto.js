@@ -124,6 +124,16 @@ async function cargarListaMontaje(laboratorioId) {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
+    // Verificar si no se proporcionó un laboratorioId
+    if (!laboratorioId) {
+        const option = document.createElement('option');
+        option.value = 0; // Valor numérico 0 en lugar de cadena vacía
+        option.textContent = 'No hay producto seleccionado';
+        selectMontaje.appendChild(option);
+        selectMontaje.disabled = true; // Deshabilitar el select si no hay producto seleccionado
+        return; // Salir de la función
+    }
+
     try {
         // Llamar a la función de Supabase para obtener los datos
         const { data, error } = await supabaseClient
@@ -138,7 +148,7 @@ async function cargarListaMontaje(laboratorioId) {
             // Recorrer los datos y agregar opciones al select
             data.forEach(item => {
                 const option = document.createElement('option');
-                option.value = item.precio;
+                option.value = item.precio; // Usar el precio directamente como valor
                 option.textContent = `${item.descripcion} (${formatearMoneda(item.precio)})`;
                 selectMontaje.appendChild(option);
             });
@@ -146,13 +156,30 @@ async function cargarListaMontaje(laboratorioId) {
             // Seleccionar el primer elemento de la lista por defecto
             selectMontaje.selectedIndex = 0;
 
+            // Habilitar el select si hay datos
+            selectMontaje.disabled = false;
+
             // Agregar evento para recalcular al cambiar el armado
             selectMontaje.addEventListener('change', calcularPrecios);
         } else {
             console.warn('No se encontraron datos para el laboratorio y servicio especificados.');
+
+            // Agregar una opción que indique que no hay datos
+            const option = document.createElement('option');
+            option.value = 0; // Valor numérico 0 en lugar de cadena vacía
+            option.textContent = 'No hay montajes disponibles';
+            selectMontaje.appendChild(option);
+            selectMontaje.disabled = true; // Deshabilitar el select si no hay datos
         }
     } catch (error) {
         console.error('Error al cargar la lista de montaje:', error.message);
+
+        // Agregar una opción que indique un error
+        const option = document.createElement('option');
+        option.value = 0; // Valor numérico 0 en lugar de cadena vacía
+        option.textContent = 'Error al cargar los montajes';
+        selectMontaje.appendChild(option);
+        selectMontaje.disabled = true; // Deshabilitar el select si hay un error
     }
 }
 
