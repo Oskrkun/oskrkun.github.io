@@ -2,26 +2,17 @@ import { supabaseClient } from './supabaseConfig.js';
 
 // Función para inicializar el ABM (Altas, Bajas y Modificaciones)
 export async function initABM() {
-    console.log('Inicializando ABM...');
-
     // Cargar datos del formulario (tipos de lentes, materiales, etc.)
     await cargarDatosFormulario();
-
     // Mostrar vista previa del producto
     mostrarVistaPrevia();
-
     // Cargar productos en la tabla
     await cargarProductos();
-
     // Manejar el envío del formulario
     const productForm = document.getElementById('productForm');
     if (productForm) {
-        console.log('Formulario encontrado, agregando evento submit...');
         productForm.addEventListener('submit', async (e) => {
             e.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
-
-            console.log('Formulario enviado, obteniendo datos...');
-
             // Obtener los valores del formulario
             const nombre = document.getElementById('nombre').value.trim(); // Trim para eliminar espacios en blanco
             const tipo_lente_id = document.getElementById('tipo_lente').value;
@@ -33,20 +24,6 @@ export async function initABM() {
             const cil = parseFloat(document.getElementById('cil').value);
             const precio = parseFloat(document.getElementById('precio').value);
             const tratamientos = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
-
-            console.log('Datos del formulario:', {
-                nombre,
-                tipo_lente_id,
-                material_id,
-                indice_refraccion_id,
-                laboratorio_id,
-                min_esf,
-                max_esf,
-                cil,
-                precio,
-                tratamientos
-            });
-
             // Verificar si el usuario está autenticado
             const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
             if (userError || !user) {
@@ -54,11 +31,7 @@ export async function initABM() {
                 alert('Error: Usuario no autenticado.');
                 return;
             }
-
-            console.log('Usuario autenticado:', user.id);
-
             // Llamar a la función de PostgreSQL para crear el producto
-            console.log('Llamando a la función crear_producto en Supabase...');
             const response = await supabaseClient.rpc('crear_producto', {
                 p_nombre: nombre || null, // Si el nombre está vacío, se envía null
                 p_tipo_lente_id: tipo_lente_id,
@@ -72,9 +45,6 @@ export async function initABM() {
                 p_precio: precio,
                 p_tratamientos: tratamientos
             });
-
-            console.log('Respuesta completa de Supabase:', JSON.stringify(response, null, 2)); // Depuración detallada
-
             // Verificar si la respuesta contiene un error
             if (response.data && response.data.error) {
                 console.error('Error creando producto:', response.data.error);
@@ -97,8 +67,6 @@ export async function initABM() {
 
 // Cargar datos para los selectores del formulario (tipos de lentes, materiales, etc.)
 async function cargarDatosFormulario() {
-    console.log('Cargando datos del formulario...');
-
     try {
         // Obtener datos de Supabase
         const tiposLentes = await supabaseClient.rpc('cargar_tipos_lentes');
@@ -106,14 +74,6 @@ async function cargarDatosFormulario() {
         const indicesRefraccion = await supabaseClient.rpc('cargar_indices_refraccion');
         const laboratorios = await supabaseClient.rpc('cargar_laboratorios');
         const tratamientos = await supabaseClient.rpc('cargar_tratamientos');
-
-        console.log('Datos cargados:', {
-            tiposLentes,
-            materiales,
-            indicesRefraccion,
-            laboratorios,
-            tratamientos
-        });
 
         // Llenar los selectores del formulario
         llenarSelector('tipo_lente', tiposLentes.data);
@@ -152,7 +112,6 @@ async function cargarDatosFormulario() {
 
 // Llenar un selector con datos
 function llenarSelector(id, datos) {
-    console.log(`Llenando selector ${id} con datos...`);
     const selector = document.getElementById(id);
     if (selector) {
         datos.forEach(item => {
@@ -168,8 +127,6 @@ function llenarSelector(id, datos) {
 
 // Mostrar vista previa del producto
 function mostrarVistaPrevia() {
-    console.log('Mostrando vista previa del producto...');
-
     const nombre = document.getElementById('nombre')?.value;
     const tipo_lente = document.getElementById('tipo_lente')?.options[document.getElementById('tipo_lente')?.selectedIndex]?.text;
     const material = document.getElementById('material')?.options[document.getElementById('material')?.selectedIndex]?.text;
@@ -209,14 +166,10 @@ function mostrarVistaPrevia() {
 
 // Cargar productos en la tabla
 async function cargarProductos() {
-    console.log('Cargando productos en la tabla...');
-
     try {
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos');
 
         if (error) throw error;
-
-        console.log('Productos cargados:', productos);
 
         const tbody = document.querySelector('#productTable tbody');
         if (tbody) {
@@ -276,7 +229,6 @@ async function cargarProductos() {
                                 console.error('Error de Supabase:', response.error);
                                 alert('Error de Supabase: ' + response.error.message);
                             } else {
-                                console.log('Producto eliminado correctamente.');
                                 alert('Producto eliminado correctamente.');
                                 await cargarProductos(); // Recargar la tabla de productos
                             }
