@@ -1,7 +1,4 @@
 // js/generarPdf.js
-
-console.log('generarPdf.js cargado correctamente');
-
 // Función para formatear la fecha en formato "dia/mes/año"
 function formatearFecha(date) {
     const dia = String(date.getDate()).padStart(2, '0');
@@ -12,8 +9,6 @@ function formatearFecha(date) {
 
 // Función para generar el PDF
 export function generarPDF() {
-    console.log('Generando PDF...');
-
     // Capturar los datos de la tabla
     const vendedor = document.getElementById('vendedor').value || "";
     const cliente = document.getElementById('cliente').value || "";
@@ -104,8 +99,6 @@ export function generarPDF() {
 
                         // Guardar el PDF
                         doc.save(`Presupuesto_${cliente}.pdf`);
-
-                        console.log('PDF generado y descargado correctamente.');
                     }).catch(error => {
                         console.error('Error al generar el PDF:', error);
                         // Asegurarse de eliminar el elemento en caso de error
@@ -130,10 +123,8 @@ export function generarPDF() {
 // Esperar a que el DOM esté completamente cargado antes de agregar el evento
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        console.log('Buscando el botón de generar PDF...');
         const botonGenerarPDF = document.getElementById('generar-pdf');
         if (botonGenerarPDF) {
-            console.log('Botón de generar PDF encontrado, agregando evento...');
             botonGenerarPDF.addEventListener('click', generarPDF);
         } else {
             console.error('No se encontró el botón de generar PDF.');
