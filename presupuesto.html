@@ -1,3 +1,40 @@
+<!-- Nueva sección para Filtros -->
+<div class="Tratamientos">
+    <section id="tratamientosSection" class="collapsed">
+        <h2>
+            Seleccionar Filtros
+            <i class="fa-solid fa-chevron-down toggle-icon" data-target="tratamientos-content"></i>
+        </h2>
+        <div id="tratamientos-content" class="section-content">
+            <div class="table-container">
+                <table id="tratamientosTable">
+                    <tbody id="tratamientos">
+                        <!-- Nueva fila para Laboratorio -->
+                        <tr>
+                            <td class="primer-columna">Laboratorio:</td>
+                            <td>
+                                <select id="laboratorio-select" class="lista-desplegable">
+                                    <!-- Opciones se llenarán dinámicamente -->
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- Nueva fila para Tipo de Lente -->
+                        <tr>
+                            <td class="primer-columna">Tipo de Lente:</td>
+                            <td>
+                                <select id="tipo-lente-select" class="lista-desplegable">
+                                    <!-- Opciones se llenarán dinámicamente -->
+                                </select>
+                            </td>
+                        </tr>
+                        <!-- Aquí se llenarán los tratamientos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Nueva sección para Receta -->
 <div class="vista-previa collapsed" id="vista-previa">
     <h2>
         Ingresar Receta
@@ -75,43 +112,6 @@
         </table>
     </div>
 </div>
-<!-- Nueva sección para tratamientos -->
-<div class="Tratamientos">
-    <section id="tratamientosSection" class="collapsed">
-        <h2>
-            Seleccionar Filtros
-            <i class="fa-solid fa-chevron-down toggle-icon" data-target="tratamientos-content"></i>
-        </h2>
-        <div id="tratamientos-content" class="section-content">
-            <div class="table-container">
-                <table id="tratamientosTable">
-                    <tbody id="tratamientos">
-                        <!-- Nueva fila para Laboratorio -->
-                        <tr>
-                            <td class="primer-columna">Laboratorio:</td>
-                            <td>
-                                <select id="laboratorio-select" class="lista-desplegable">
-                                    <!-- Opciones se llenarán dinámicamente -->
-                                </select>
-                            </td>
-                        </tr>
-                        <!-- Nueva fila para Tipo de Lente -->
-                        <tr>
-                            <td class="primer-columna">Tipo de Lente:</td>
-                            <td>
-                                <select id="tipo-lente-select" class="lista-desplegable">
-                                    <!-- Opciones se llenarán dinámicamente -->
-                                </select>
-                            </td>
-                        </tr>
-                        <!-- Aquí se llenarán los tratamientos -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-</div>
-
 <!-- Nueva sección para Lista de Productos -->
 <div class="Productos">
     <section id="ProductosSection" class="collapsed">
