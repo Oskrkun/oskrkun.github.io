@@ -3,7 +3,6 @@ import { supabaseClient } from './supabaseConfig.js';
 
 // Función para actualizar el contador de productos en el h2
 function actualizarContadorProductos(cantidad) {
-    console.log('Actualizando contador de productos...');
     const h2Productos = document.querySelector('#ProductosSection h2');
     if (h2Productos) {
         // Buscar el span que contiene el contador
@@ -18,7 +17,6 @@ function actualizarContadorProductos(cantidad) {
 
         // Actualizar el texto del contador
         contadorSpan.textContent = `(${cantidad})`;
-        console.log(`Contador de productos actualizado a: ${cantidad}`);
     } else {
         console.error('No se encontró el elemento h2 en la sección de productos.');
     }
@@ -26,15 +24,12 @@ function actualizarContadorProductos(cantidad) {
 
 // Función para cargar los tratamientos desde Supabase
 export async function cargarTratamientos() {
-    console.log('Cargando tratamientos...');
 
     try {
         // Obtener datos de Supabase
         const { data: tratamientos, error } = await supabaseClient.rpc('cargar_tratamientos');
 
         if (error) throw error;
-
-        console.log('Tratamientos cargados:', tratamientos);
 
         // Llenar la tabla de tratamientos
         const tratamientosContainer = document.getElementById('tratamientos');
@@ -45,7 +40,6 @@ export async function cargarTratamientos() {
 
             // Agregar los tratamientos
             tratamientos.forEach(tratamiento => {
-                console.log(`Agregando tratamiento: ${tratamiento.nombre}`);
                 const row = document.createElement('tr');
                 row.classList.add('tratamiento-fila'); // Agregar una clase para identificar las filas de tratamientos
                 row.innerHTML = `
@@ -71,22 +65,18 @@ export async function cargarTratamientos() {
 
 // Función para realizar la transposición oftalmológica
 function transponerCilindrico(esf, cil) {
-    console.log(`Transponiendo valores - ESF: ${esf}, CIL: ${cil}`);
     if (cil > 0) {
         // Transposición: cambiar el signo del CIL y ajustar el ESF
         const nuevoCil = -cil;
         const nuevoEsf = esf + cil;
-        console.log(`Valores transpuestos - Nuevo ESF: ${nuevoEsf}, Nuevo CIL: ${nuevoCil}`);
         return { esf: nuevoEsf, cil: nuevoCil };
     }
     // Si el CIL es negativo, no se realiza la transposición
-    console.log('No se necesita transposición, CIL ya es negativo.');
     return { esf, cil };
 }
 
 // Función para determinar el valor más alto de ESF o CIL
 function obtenerValorMasAlto(valor1, valor2) {
-    console.log(`Comparando valores para obtener el más alto: ${valor1} y ${valor2}`);
     if (valor1 === null && valor2 === null) return null;
     if (valor1 === null) return valor2;
     if (valor2 === null) return valor1;
@@ -95,19 +85,13 @@ function obtenerValorMasAlto(valor1, valor2) {
 
 // Función para filtrar productos por graduación (ESF y CIL)
 function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
-    console.log(`Filtrando producto: ${producto.nombre}`);
-    console.log(`ESF más alto: ${esfMasAlto}, CIL más alto: ${cilMasAlto}`);
-    console.log(`Producto - min_esf: ${producto.min_esf}, max_esf: ${producto.max_esf}, cil: ${producto.cil}`);
-
     // Verificar si el producto cumple con el ESF más alto
     const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-    console.log(`¿Cumple con ESF? ${cumpleEsf}`);
-
+    
     // Verificar si el producto cumple con el CIL más alto
     const cumpleCil = cilMasAlto === null || (
         producto.cil <= cilMasAlto // CIL del producto debe ser más negativo o igual (menor o igual a -5)
     );
-    console.log(`¿Cumple con CIL? ${cumpleCil}`);
 
     // Devolver true si cumple con ambos filtros
     return cumpleEsf && cumpleCil;
@@ -115,43 +99,30 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
 
 // Función para cargar productos filtrados
 export async function cargarProductosFiltrados() {
-    console.log('Cargando productos filtrados...');
 
     try {
         // Obtener el tipo de lente seleccionado desde la lista desplegable
         const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
-        console.log('Tipo de lente seleccionado:', tipoLenteSeleccionado);
 
         // Obtener el laboratorio seleccionado desde la lista desplegable
         const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
-        console.log('Laboratorio seleccionado:', laboratorioSeleccionado);
 
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
-        console.log('Tratamientos seleccionados:', tratamientosSeleccionados);
-
+        
         // Obtener los valores de ESF y CIL de la receta
         const odLejosEsf = parseFloat(document.getElementById('od-lejos-esf').value) || null;
         const odLejosCil = parseFloat(document.getElementById('od-lejos-cil').value) || null;
         const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
         const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
-        console.log('Valores de la receta - OD ESF:', odLejosEsf, 'OD CIL:', odLejosCil);
-        console.log('Valores de la receta - OI ESF:', oiLejosEsf, 'OI CIL:', oiLejosCil);
-
         // Realizar la transposición oftalmológica si es necesario
         const odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
         const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
 
-        console.log('Valores transpuestos - OD:', odTranspuesto);
-        console.log('Valores transpuestos - OI:', oiTranspuesto);
-
         // Determinar los valores más altos de ESF y CIL (después de la transposición)
         const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
         const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-
-        console.log('ESF más alto:', esfMasAlto);
-        console.log('CIL más alto:', cilMasAlto);
 
         // Llamar a la función de Supabase para obtener los productos filtrados (tipo de lente, laboratorio y tratamientos)
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
@@ -162,12 +133,8 @@ export async function cargarProductosFiltrados() {
 
         if (error) throw error;
 
-        console.log('Productos filtrados cargados:', productos);
-
         // Filtrar productos por graduación (ESF y CIL)
         const productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
-
-        console.log('Productos filtrados por ESF y CIL:', productosFiltrados);
 
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
@@ -176,7 +143,6 @@ export async function cargarProductosFiltrados() {
 
             if (productosFiltrados && productosFiltrados.length > 0) {
                 productosFiltrados.forEach(producto => {
-                    console.log(`Agregando producto a la tabla: ${producto.nombre}`);
                     const tratamientos = producto.tratamientos ? producto.tratamientos.join(', ') : '';
                     const precio = formatearPrecio(producto.precio);
                     const min_esf = formatearNumero(producto.min_esf);
@@ -212,7 +178,6 @@ export async function cargarProductosFiltrados() {
                     tbody.appendChild(row);
                 });
             } else {
-                console.log('No hay productos disponibles después del filtrado.');
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td colspan="9" style="text-align: center;">No hay productos disponibles.</td>
@@ -259,7 +224,6 @@ export function formatearPrecio(precio) {
 
 // Función para agregar eventos de filtrado
 export function agregarEventosFiltrado() {
-    console.log('Agregando eventos de filtrado...');
     const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
     const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
 
@@ -274,15 +238,11 @@ export function agregarEventosFiltrado() {
 
 // Función para cargar los laboratorios desde Supabase
 export async function cargarLaboratorios() {
-    console.log('Cargando laboratorios...');
-
     try {
         // Obtener datos de Supabase
         const { data: laboratorios, error } = await supabaseClient.rpc('cargar_laboratorios');
 
         if (error) throw error;
-
-        console.log('Laboratorios cargados:', laboratorios);
 
         // Llenar la lista desplegable de laboratorios
         const laboratorioSelect = document.getElementById('laboratorio-select');
@@ -298,7 +258,6 @@ export async function cargarLaboratorios() {
 
             // Agregar los laboratorios
             laboratorios.forEach(laboratorio => {
-                console.log(`Agregando laboratorio: ${laboratorio.nombre}`);
                 const option = document.createElement('option');
                 option.value = laboratorio.id;
                 option.textContent = laboratorio.nombre;
@@ -314,15 +273,12 @@ export async function cargarLaboratorios() {
 
 // Función para cargar los tipos de lentes desde Supabase
 export async function cargarTiposLentesSelect() {
-    console.log('Cargando tipos de lentes para el select...');
 
     try {
         // Obtener datos de Supabase
         const { data: tiposLentes, error } = await supabaseClient.rpc('cargar_tipos_lentes');
 
         if (error) throw error;
-
-        console.log('Tipos de lentes cargados:', tiposLentes);
 
         // Llenar la lista desplegable de tipos de lentes
         const tipoLenteSelect = document.getElementById('tipo-lente-select');
@@ -338,7 +294,6 @@ export async function cargarTiposLentesSelect() {
 
             // Agregar los tipos de lentes
             tiposLentes.forEach(tipoLente => {
-                console.log(`Agregando tipo de lente: ${tipoLente.nombre}`);
                 const option = document.createElement('option');
                 option.value = tipoLente.id;
                 option.textContent = tipoLente.nombre;
@@ -354,19 +309,16 @@ export async function cargarTiposLentesSelect() {
 
 // Escuchar el evento personalizado 'recetaTranspuesta'
 document.addEventListener('recetaTranspuesta', () => {
-    console.log('Receta transpuesta detectada, actualizando lista de productos...');
     cargarProductosFiltrados();
 });
 
 // Escuchar el evento personalizado 'recetaBorrada'
 document.addEventListener('recetaBorrada', () => {
-    console.log('Receta borrada detectada, actualizando lista de productos...');
     cargarProductosFiltrados();
 });
 
 // Función para agregar eventos de cambio en los inputs de la receta
 export function agregarEventosReceta() {
-    console.log('Agregando eventos de cambio en los inputs de la receta...');
     const inputsReceta = document.querySelectorAll('.vista-previa input');
     inputsReceta.forEach(input => {
         input.addEventListener('blur', cargarProductosFiltrados);
