@@ -45,7 +45,6 @@ import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js'; // I
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
-    console.log('Alternando sección...');
     if (!event || !event.currentTarget) {
         console.error('Evento no válido');
         return;
@@ -76,17 +75,14 @@ function toggleSection(event) {
     }
 
     if (section.classList.contains('collapsed')) {
-        console.log('Expandir la sección');
         section.classList.remove('collapsed');
     } else {
-        console.log('Contraer la sección');
         section.classList.add('collapsed');
     }
 }
 
 // Función para agregar eventos de clic a los títulos de las secciones
 function agregarEventosToggleSection() {
-    console.log('Agregando eventos de clic a los títulos de las secciones...');
     const headers = document.querySelectorAll('h2');
     headers.forEach(header => {
         if (header.querySelector('.toggle-icon')) {
@@ -97,7 +93,6 @@ function agregarEventosToggleSection() {
 
 // Función para borrar todos los inputs de "lejos" y "ADD"
 function borrarReceta() {
-    console.log('Borrando receta...');
     const inputsLejos = document.querySelectorAll('.seccion-lejos input');
     const inputsAdd = document.querySelectorAll('.seccion-add input');
 
@@ -112,8 +107,6 @@ function borrarReceta() {
     limpiarCerca('od');
     limpiarCerca('oi');
 
-    console.log('Receta borrada.');
-
     revisarErroresYActualizarCerca();
 
     const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
@@ -122,7 +115,6 @@ function borrarReceta() {
 
 // Función para agregar el evento al botón de "refresh-erase"
 function agregarEventoBotonBorrar() {
-    console.log('Agregando evento al botón de borrar...');
     const botonBorrar = document.querySelector('#refresh-erase button');
     if (botonBorrar) {
         botonBorrar.addEventListener('click', borrarReceta);
@@ -133,11 +125,9 @@ function agregarEventoBotonBorrar() {
 
 // Función para agregar evento al botón de rotación
 function agregarEventoBotonRotacion() {
-    console.log('Agregando evento al botón de rotación...');
     const botonRotacion = document.querySelector('#arrow-trasp button');
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
-            console.log('Botón de transposición presionado');
             transponerReceta();
             sincronizarTodo();
 
@@ -151,7 +141,6 @@ function agregarEventoBotonRotacion() {
 
 // Función para deshabilitar los campos de "cerca"
 function deshabilitarCamposCerca() {
-    console.log('Deshabilitando campos de "cerca"...');
     const inputsCerca = document.querySelectorAll('.seccion-cerca input');
     inputsCerca.forEach(input => {
         input.disabled = true;
@@ -160,7 +149,6 @@ function deshabilitarCamposCerca() {
 
 // Función para llenar el campo "Vendedor" con el nick del usuario logueado
 async function llenarVendedor() {
-    console.log('Llenando campo Vendedor...');
     const user = await verificarAutenticacion();
     if (user) {
         const { esAdmin, nick } = await verificarSiEsAdmin(user);
@@ -177,7 +165,6 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
-    console.log('Inicializando presupuesto...');
 
     crearAdvertencias();
     deshabilitarCamposCerca();
@@ -194,8 +181,6 @@ export async function initPresupuesto() {
             }
         });
     });
-
-    console.log('Eventos agregados a los inputs.');
 
     agregarEventosSincronizacion();
     mostrarAdvertenciaAddDiferente();
@@ -242,6 +227,5 @@ export async function initPresupuesto() {
 
 // Inicializar el presupuesto cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM completamente cargado, inicializando presupuesto...');
     initPresupuesto();
 });

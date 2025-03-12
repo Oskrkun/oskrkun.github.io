@@ -10,7 +10,6 @@ export let erroresActivos = [];
 
 // Función para crear los span de advertencia dinámicamente
 export function crearAdvertencias() {
-    console.log('Creando contenedor de errores...');
 
     // Crear un contenedor único para las advertencias
     const contenedorErrores = document.createElement('div');
@@ -21,7 +20,6 @@ export function crearAdvertencias() {
     const seccionCerca = document.querySelector('.seccion-cerca');
     if (seccionCerca) {
         seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
-        console.log('Contenedor de errores creado debajo de la sección de cerca.');
     } else {
         console.error('No se encontró la sección de cerca.');
     }
@@ -29,7 +27,6 @@ export function crearAdvertencias() {
 
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
-    console.log('Actualizando lista de errores...');
 
     const contenedorErrores = document.getElementById('contenedor-errores');
     if (!contenedorErrores) {
@@ -48,8 +45,6 @@ export function actualizarErrores() {
         spanError.style.display = 'block';
         contenedorErrores.appendChild(spanError);
     });
-
-    console.log('Errores actualizados:', erroresActivos);
 }
 
 // Función para validar los inputs
@@ -57,8 +52,6 @@ export function validarInput(event) {
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
-
-    console.log(`Validando input con ID: ${id}, Valor: ${value}`);
 
     // Limpiar el error anterior
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
@@ -75,8 +68,6 @@ export function validarInput(event) {
     else {
         validarEsfOCil(input, value, id);
     }
-
-    console.log(`Input ${id} validado correctamente.`);
 }
 
 // Función para validar el EJE
@@ -158,7 +149,6 @@ export function ajustarValorAPasos(valor) {
 // Función para manejar el evento de foco (entrar al input)
 export function onInputFocus(event) {
     const input = event.target;
-    console.log(`Entrando al input con ID: ${input.id}`);
     input.placeholder = ''; // Limpiar el placeholder al entrar
 }
 
@@ -167,7 +157,6 @@ export function onInputBlur(event) {
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
-    console.log(`Saliendo del input con ID: ${id}, Valor: ${value}`);
 
     // Validación específica para EJE
     if (id.includes('eje')) {
@@ -403,7 +392,6 @@ export function esEsfOCil(id) {
 
 // Función para transponer la receta
 export function transponerReceta() {
-    console.log('Transponiendo receta...');
 
     // Obtener los valores de los cilindros de "lejos"
     const cilOD = parseFloat(document.getElementById('od-lejos-cil').value) || 0;
@@ -437,8 +425,6 @@ export function transponerReceta() {
             transponerOjo('oi');
         }
     }
-
-    console.log('Receta transpuesta.');
 }
 
 // Función para transponer un ojo (transposición completa)
@@ -464,8 +450,6 @@ function transponerOjo(ojo) {
     document.getElementById(`${ojo}-lejos-esf`).value = esfFormateado;
     document.getElementById(`${ojo}-lejos-cil`).value = cilFormateado;
     document.getElementById(`${ojo}-lejos-eje`).value = ejeTranspuesto;
-
-    console.log(`Ojo ${ojo} transpuesto: ESF=${esfFormateado}, CIL=${cilFormateado}, EJE=${ejeTranspuesto}`);
 }
 
 // Función para cambiar el signo del cilindro (solo para un ojo)
@@ -492,7 +476,6 @@ function cambiarSignoCilindro(ojo) {
     document.getElementById(`${ojo}-lejos-cil`).value = cilFormateado;
     document.getElementById(`${ojo}-lejos-eje`).value = ejeTranspuesto;
 
-    console.log(`Ojo ${ojo} cambiado: ESF=${esfFormateado}, CIL=${cilFormateado}, EJE=${ejeTranspuesto}`);
 }
 
 // Función para formatear valores (agregar "+" a valores positivos)
@@ -513,6 +496,4 @@ export function sincronizarTodo() {
 
     // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
-
-    console.log('Sincronización completada después de la transposición.');
 }

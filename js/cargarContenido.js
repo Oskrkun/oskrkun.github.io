@@ -7,11 +7,8 @@ let cargaEnProgreso = false;
 
 // Función para cargar contenido dinámico
 export async function cargarContenido(seccion) {
-    console.log(`Cargando contenido para la sección: ${seccion}`); // Depuración: Inicio de la carga de contenido
-
     // Si ya hay una carga en progreso, ignorar el clic
     if (cargaEnProgreso) {
-        console.log('Carga en progreso, ignorando clic adicional.'); // Depuración: Carga en progreso
         return;
     }
 
@@ -64,7 +61,6 @@ export async function cargarContenido(seccion) {
 				//scriptJsPDF.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
 				scriptJsPDF.src = './js/jspdf.umd.min.js';
 				scriptJsPDF.onload = () => {
-					console.log('jsPDF cargado correctamente');
 				};
 				scriptJsPDF.onerror = (error) => {
 					console.error('Error al cargar jsPDF:', error);
@@ -75,7 +71,6 @@ export async function cargarContenido(seccion) {
 				const scriptHtml2Canvas = document.createElement('script');
 				scriptHtml2Canvas.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
 				scriptHtml2Canvas.onload = () => {
-					console.log('html2canvas cargado correctamente');
 				};
 				scriptHtml2Canvas.onerror = (error) => {
 					console.error('Error al cargar html2canvas:', error);
@@ -87,11 +82,9 @@ export async function cargarContenido(seccion) {
 
 				// Cargar el script para generar PDF
 				await import('../js/generarPdf.js').then(module => {
-					console.log('generarPdf.js cargado correctamente');
 					// Vincular el evento click al botón
 					const botonGenerarPDF = document.getElementById('generar-pdf');
 					if (botonGenerarPDF) {
-						console.log('Botón de generar PDF encontrado, agregando evento...');
 						botonGenerarPDF.addEventListener('click', module.generarPDF);
 					} else {
 						console.error('No se encontró el botón de generar PDF.');
@@ -124,6 +117,5 @@ export async function cargarContenido(seccion) {
     } finally {
         // Marcar que la carga ha terminado
         cargaEnProgreso = false;
-        console.log('Carga finalizada.'); // Depuración: Carga finalizada
     }
 }
