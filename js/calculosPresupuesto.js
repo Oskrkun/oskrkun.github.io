@@ -62,20 +62,16 @@ function restaurarValorPorDefecto(event) {
 
 // Función para manejar el clic en una fila de la tabla de productos
 export function manejarSeleccionProducto() {
-    console.log('Iniciando manejarSeleccionProducto...');
     const tbody = document.querySelector('#productTable tbody');
     if (tbody) {
         tbody.addEventListener('click', (event) => {
-            console.log('Clic detectado en la tabla de productos.');
             const filaSeleccionada = event.target.closest('tr');
             if (filaSeleccionada) {
-                console.log('Fila seleccionada:', filaSeleccionada);
 
                 // Deseleccionar todas las filas primero
                 tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
 
                 // Seleccionar la fila clickeada
-                console.log('Seleccionando la fila clickeada...');
                 filaSeleccionada.classList.add('selected');
                 rellenarCamposProductoSeleccionado(filaSeleccionada);
             } else {
@@ -89,7 +85,6 @@ export function manejarSeleccionProducto() {
 
 // Función para rellenar los campos del producto seleccionado
 function rellenarCamposProductoSeleccionado(fila) {
-    console.log('Rellenando campos del producto seleccionado...');
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
     const precioTexto = fila.cells[7].textContent;
@@ -97,11 +92,6 @@ function rellenarCamposProductoSeleccionado(fila) {
 
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
-
-    console.log('Nombre del producto:', nombre);
-    console.log('Tratamientos:', tratamientos);
-    console.log('Precio:', precio);
-    console.log('Laboratorio ID:', laboratorioId);
 
     document.getElementById('producto-nombre').value = nombre;
     document.getElementById('producto-tratamientos').value = tratamientos;
@@ -185,20 +175,12 @@ async function cargarListaMontaje(laboratorioId) {
 
 // Función para calcular los precios (cristales y final)
 function calcularPrecios() {
-    console.log('Calculando precios...');
-
     // Obtener valores
     const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
     const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
     const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
     const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
     const precioArmazon = desformatearMoneda(document.getElementById('producto-armazon').value) || 0;
-
-    console.log('Precio base:', precioBase);
-    console.log('Armado:', armado);
-    console.log('IVA:', iva);
-    console.log('Multiplicador:', multiplicador);
-    console.log('Precio del armazón:', precioArmazon);
 
     // Calcular precio de los cristales
     const precioConArmado = precioBase + armado;
@@ -210,19 +192,15 @@ function calcularPrecios() {
     if (redondearPreciosCheckbox && redondearPreciosCheckbox.checked) {
         precioCristales = redondearPrecio(precioCristales);
     }
-
-    console.log('Precio de los cristales:', precioCristales);
     document.getElementById('Precio-Cristales').value = formatearMoneda(precioCristales);
 
     // Calcular precio final
     const precioFinal = precioCristales + precioArmazon;
-    console.log('Precio final:', precioFinal);
     document.getElementById('producto-precio-final').value = formatearMoneda(precioFinal);
 }
 
 // Función para agregar eventos a los campos editables
 export function agregarEventosCalculos() {
-    console.log('Agregando eventos a los campos editables...');
     const camposEditables = ['producto-iva', 'producto-multiplicador', 'producto-armazon'];
     camposEditables.forEach(id => {
         const campo = document.getElementById(id);
@@ -245,8 +223,6 @@ export function agregarEventosCalculos() {
 
 // Función para inicializar la tabla de producto seleccionado
 export function inicializarProductoSeleccionado() {
-    console.log('Inicializando la tabla de producto seleccionado...');
-
     // Cargar la lista desplegable de montaje
     cargarListaMontaje();
 
@@ -267,7 +243,6 @@ export function inicializarProductoSeleccionado() {
 
 // Inicializar todo cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM completamente cargado, inicializando...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
     inicializarProductoSeleccionado(); // Inicializar la tabla de producto seleccionado
