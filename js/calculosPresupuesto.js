@@ -248,7 +248,7 @@ export function inicializarProductoSeleccionado() {
     console.log('Inicializando la tabla de producto seleccionado...');
 
     // Cargar la lista desplegable de montaje
-    cargarListaMontaje(2);
+    cargarListaMontaje();
 
     // Inicializar los campos editables con valores por defecto
     document.getElementById('producto-iva').value = '22'; // IVA por defecto
