@@ -1,15 +1,6 @@
 // calculosPresupuesto.js
 import { supabaseClient } from './supabaseConfig.js';
 
-// Array con los precios de montaje
-const ListaPrecioMontaje = [
-    { nombre: 'Monofocal', precio: 230 },
-    { nombre: 'Laboratorio', precio: 250 },
-    { nombre: 'Bifocal', precio: 280 },
-    { nombre: 'Progresivos', precio: 355 },
-    { nombre: 'Armado Especial', precio: 560 }
-];
-
 // Función para redondear el precio a un número que termine en 90
 function redondearPrecio(precio) {
     const redondeo = Math.ceil((precio + 10) / 100) * 100 - 10;
