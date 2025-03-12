@@ -93,6 +93,7 @@ function rellenarCamposProductoSeleccionado(fila) {
     const nombre = fila.cells[0].textContent;
     const tratamientos = fila.cells[8].textContent;
     const precioTexto = fila.cells[7].textContent;
+    const laboratorioId = fila.cells[3].getAttribute('data-laboratorio-id'); // Obtener el laboratorio_id
 
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
@@ -100,13 +101,14 @@ function rellenarCamposProductoSeleccionado(fila) {
     console.log('Nombre del producto:', nombre);
     console.log('Tratamientos:', tratamientos);
     console.log('Precio:', precio);
+    console.log('Laboratorio ID:', laboratorioId);
 
     document.getElementById('producto-nombre').value = nombre;
     document.getElementById('producto-tratamientos').value = tratamientos;
     document.getElementById('producto-precio-base').value = precio;
 
-    // Cargar la lista desplegable de montaje
-    cargarListaMontaje();
+    // Cargar la lista desplegable de montaje con el laboratorio_id
+    cargarListaMontaje(laboratorioId);
 
     // Inicializar el IVA, multiplicador y armazón
     document.getElementById('producto-iva').value = '22';
@@ -118,14 +120,14 @@ function rellenarCamposProductoSeleccionado(fila) {
 }
 
 // Función para cargar la lista desplegable de montaje desde Supabase
-async function cargarListaMontaje() {
+async function cargarListaMontaje(laboratorioId) {
     const selectMontaje = document.getElementById('producto-armado');
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
     try {
         // Llamar a la función de Supabase para obtener los datos
         const { data, error } = await supabaseClient
-            .rpc('get_laboratorio_info', { lab_id: 2, serv_id: 1 }); // Usar los parámetros correctos
+            .rpc('get_laboratorio_info', { lab_id: laboratorioId, serv_id: 1 }); // Usar el laboratorio_id como parámetro
 
         if (error) {
             throw error;
@@ -219,7 +221,7 @@ export function inicializarProductoSeleccionado() {
     console.log('Inicializando la tabla de producto seleccionado...');
 
     // Cargar la lista desplegable de montaje
-    cargarListaMontaje();
+    cargarListaMontaje(2);
 
     // Inicializar los campos editables con valores por defecto
     document.getElementById('producto-iva').value = '22'; // IVA por defecto
