@@ -1,8 +1,9 @@
 // controlProductos.js
 import { supabaseClient } from './supabaseConfig.js';
+import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 // Función para actualizar el contador de productos en el h2
-function actualizarContadorProductos(cantidad) {
+export function actualizarContadorProductos(cantidad) {
     const h2Productos = document.querySelector('#ProductosSection h2');
     if (h2Productos) {
         // Buscar el span que contiene el contador
@@ -24,7 +25,6 @@ function actualizarContadorProductos(cantidad) {
 
 // Función para cargar los tratamientos desde Supabase
 export async function cargarTratamientos() {
-
     try {
         // Obtener datos de Supabase
         const { data: tratamientos, error } = await supabaseClient.rpc('cargar_tratamientos');
@@ -62,7 +62,6 @@ export async function cargarTratamientos() {
         console.error('Error cargando tratamientos:', error);
     }
 }
-
 
 // Función para formatear números con signo y dos decimales
 export function formatearNumero(numero) {
@@ -146,7 +145,6 @@ export async function cargarLaboratorios() {
 
 // Función para cargar los tipos de lentes desde Supabase
 export async function cargarTiposLentesSelect() {
-
     try {
         // Obtener datos de Supabase
         const { data: tiposLentes, error } = await supabaseClient.rpc('cargar_tipos_lentes');
