@@ -1,4 +1,3 @@
-// filtradoProductos.js
 import { supabaseClient } from './supabaseConfig.js';
 import {
     formatearNumero,
@@ -24,18 +23,68 @@ function obtenerValorMasAlto(valor1, valor2) {
     return Math.min(valor1, valor2); // En ESF y CIL, el valor más alto es el más negativo
 }
 
-// Función para filtrar productos por graduación
+// Función para filtrar productos por graduación (Laboratorio 2)
 function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
     const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
     const cumpleCil = cilMasAlto === null || (producto.cil <= cilMasAlto);
     return cumpleEsf && cumpleCil;
 }
 
+// Función para validar productos según las reglas del Laboratorio 4
+function validarLaboratorio4(producto, odTranspuesto, oiTranspuesto) {
+    // Obtener los rangos de ESF y CIL del producto
+    const minEsfProducto = producto.min_esf;
+    const maxEsfProducto = producto.max_esf;
+    const cilProducto = producto.cil;
+
+    // Validar ESF y CIL para OD
+    const esfOD = odTranspuesto.esf;
+    const cilOD = odTranspuesto.cil;
+
+    if (esfOD !== null && cilOD !== null) {
+        // Verificar que el CIL no supere el máximo del producto
+        if (Math.abs(cilOD) > cilProducto) {
+            return false; // CIL fuera de rango
+        }
+
+        // Verificar que la suma de ESF y CIL esté dentro del rango de ESF del producto
+        const sumaEsfCilOD = esfOD + cilOD;
+        if (sumaEsfCilOD > maxEsfProducto || sumaEsfCilOD < minEsfProducto) {
+            return false; // Suma fuera de rango
+        }
+    }
+
+    // Validar ESF y CIL para OI
+    const esfOI = oiTranspuesto.esf;
+    const cilOI = oiTranspuesto.cil;
+
+    if (esfOI !== null && cilOI !== null) {
+        // Verificar que el CIL no supere el máximo del producto
+        if (Math.abs(cilOI) > cilProducto) {
+            return false; // CIL fuera de rango
+        }
+
+        // Verificar que la suma de ESF y CIL esté dentro del rango de ESF del producto
+        const sumaEsfCilOI = esfOI + cilOI;
+        if (sumaEsfCilOI > maxEsfProducto || sumaEsfCilOI < minEsfProducto) {
+            return false; // Suma fuera de rango
+        }
+    }
+
+    // Si pasa todas las validaciones, el producto es válido
+    return true;
+}
+
 // Función principal para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     try {
+        // Obtener el tipo de lente seleccionado desde la lista desplegable
         const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
+
+        // Obtener el laboratorio seleccionado desde la lista desplegable
         const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
+
+        // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
         // Obtener los valores de ESF y CIL de la receta
@@ -44,21 +93,10 @@ export async function cargarProductosFiltrados() {
         const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
         const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
-        // Realizar la transposición oftalmológica si es necesario
-        const odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
-        const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
+        // Verificar si se ingresó una receta
+        const hayReceta = odLejosEsf !== null || odLejosCil !== null || oiLejosEsf !== null || oiLejosCil !== null;
 
-        // Determinar los valores más altos de ESF y CIL (después de la transposición)
-        let esfMasAlto = null;
-        let cilMasAlto = null;
-
-        // Solo aplicar el control de graduación si el laboratorio seleccionado es el ID 2
-        if (laboratorioSeleccionado === '2') {
-            esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
-            cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-        }
-
-        // Llamar a la función de Supabase para obtener los productos filtrados
+        // Obtener los productos desde Supabase
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
             p_laboratorio_id: laboratorioSeleccionado || null,
@@ -67,10 +105,34 @@ export async function cargarProductosFiltrados() {
 
         if (error) throw error;
 
-        // Filtrar productos por graduación solo si el laboratorio es ID 2
         let productosFiltrados = productos;
-        if (laboratorioSeleccionado === '2') {
-            productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+
+        if (hayReceta) {
+            // Aplicar transposición solo si el laboratorio es el ID 2 (o en el futuro, otros laboratorios)
+            let odTranspuesto = { esf: odLejosEsf, cil: odLejosCil };
+            let oiTranspuesto = { esf: oiLejosEsf, cil: oiLejosCil };
+
+            if (laboratorioSeleccionado === '2') {
+                odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
+                oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
+            }
+
+            // Aplicar controles según el laboratorio seleccionado
+            if (laboratorioSeleccionado === '2') {
+                // Control para Laboratorio 2
+                const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
+                const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
+                productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+            } else if (laboratorioSeleccionado === '4') {
+                // Control para Laboratorio 4
+                productosFiltrados = productos.filter(producto => validarLaboratorio4(producto, odTranspuesto, oiTranspuesto));
+            } else {
+                // Sin control de graduación para otros laboratorios
+                productosFiltrados = productos;
+            }
+        } else {
+            // Si no hay receta, mostrar todos los productos
+            productosFiltrados = productos;
         }
 
         // Llenar la tabla de productos
@@ -99,7 +161,6 @@ export async function cargarProductosFiltrados() {
                         <td>${tratamientos}</td>
                     `;
 
-                    // Agregar evento de clic a la fila
                     row.addEventListener('click', () => {
                         if (row.classList.contains('selected')) {
                             row.classList.remove('selected');
