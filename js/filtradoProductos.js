@@ -24,10 +24,21 @@ function obtenerValorMasAlto(valor1, valor2) {
 }
 
 // Función para filtrar productos por graduación (Laboratorio 2)
-function filtrarPorGraduacionVidaltec(producto, esfMasAlto, cilMasAlto) {
-    const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-    const cumpleCil = cilMasAlto === null || (producto.cil <= cilMasAlto);
-    return cumpleEsf && cumpleCil;
+function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
+    // Aplicar transposición si el cilindro es positivo
+    const odTranspuesto = transponerCilindrico(odEsfValue, odCilValue);
+    const oiTranspuesto = transponerCilindrico(oiEsfValue, oiCilValue);
+
+    // Obtener los valores más altos de ESF y CIL
+    const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
+    const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
+
+    // Filtrar los productos
+    return productos.filter(producto => {
+        const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
+        const cumpleCil = cilMasAlto === null || (producto.cil <= cilMasAlto);
+        return cumpleEsf && cumpleCil;
+    });
 }
 
 // Función para filtrar por graduación (Laboratorio 4)
@@ -93,21 +104,10 @@ export async function cargarProductosFiltrados() {
         let productosFiltrados = productos;
 
         if (hayReceta) {
-            // Aplicar transposición solo si el laboratorio es el ID 2 (o en el futuro, otros laboratorios)
-            let odTranspuesto = { esf: odLejosEsf, cil: odLejosCil };
-            let oiTranspuesto = { esf: oiLejosEsf, cil: oiLejosCil };
-
-            if (laboratorioSeleccionado === '2') {
-                odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
-                oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
-            }
-
             // Aplicar controles según el laboratorio seleccionado
             if (laboratorioSeleccionado === '2') {
                 // Control para Laboratorio 2
-                const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
-                const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-                productosFiltrados = productos.filter(producto => filtrarPorGraduacionVidaltec(producto, esfMasAlto, cilMasAlto));
+                productosFiltrados = filtrarPorGraduacionVidaltec(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
             } else if (laboratorioSeleccionado === '4') {
                 // Control para Laboratorio 4
                 productosFiltrados = filterByGraduationRodenstock(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
