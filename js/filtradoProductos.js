@@ -29,15 +29,18 @@ function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilVa
     const odTranspuesto = transponerCilindrico(odEsfValue, odCilValue);
     const oiTranspuesto = transponerCilindrico(oiEsfValue, oiCilValue);
 
-    // Obtener los valores más altos de ESF y CIL
-    const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
-    const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-
     // Filtrar los productos
     return productos.filter(producto => {
-        const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
-        const cumpleCil = cilMasAlto === null || (producto.cil <= cilMasAlto);
-        return cumpleEsf && cumpleCil;
+        // Verificar que el OD cumpla con los rangos de ESF y CIL
+        const odCumpleEsf = odTranspuesto.esf === null || (producto.min_esf <= odTranspuesto.esf && producto.max_esf >= odTranspuesto.esf);
+        const odCumpleCil = odTranspuesto.cil === null || (producto.cil <= odTranspuesto.cil);
+
+        // Verificar que el OI cumpla con los rangos de ESF y CIL
+        const oiCumpleEsf = oiTranspuesto.esf === null || (producto.min_esf <= oiTranspuesto.esf && producto.max_esf >= oiTranspuesto.esf);
+        const oiCumpleCil = oiTranspuesto.cil === null || (producto.cil <= oiTranspuesto.cil);
+
+        // El producto es válido solo si ambos ojos cumplen con los rangos
+        return odCumpleEsf && odCumpleCil && oiCumpleEsf && oiCumpleCil;
     });
 }
 // Función para filtrar por graduación (Laboratorio 4)
