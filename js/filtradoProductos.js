@@ -34,13 +34,8 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
 // Función principal para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     try {
-        // Obtener el tipo de lente seleccionado desde la lista desplegable
         const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
-
-        // Obtener el laboratorio seleccionado desde la lista desplegable
         const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
-
-        // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
         // Obtener los valores de ESF y CIL de la receta
@@ -54,10 +49,16 @@ export async function cargarProductosFiltrados() {
         const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
 
         // Determinar los valores más altos de ESF y CIL (después de la transposición)
-        const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
-        const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
+        let esfMasAlto = null;
+        let cilMasAlto = null;
 
-        // Llamar a la función de Supabase para obtener los productos filtrados (tipo de lente, laboratorio y tratamientos)
+        // Solo aplicar el control de graduación si el laboratorio seleccionado es el ID 2
+        if (laboratorioSeleccionado === '2') {
+            esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
+            cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
+        }
+
+        // Llamar a la función de Supabase para obtener los productos filtrados
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
             p_laboratorio_id: laboratorioSeleccionado || null,
@@ -66,8 +67,11 @@ export async function cargarProductosFiltrados() {
 
         if (error) throw error;
 
-        // Filtrar productos por graduación (ESF y CIL)
-        const productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+        // Filtrar productos por graduación solo si el laboratorio es ID 2
+        let productosFiltrados = productos;
+        if (laboratorioSeleccionado === '2') {
+            productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+        }
 
         // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
@@ -97,13 +101,10 @@ export async function cargarProductosFiltrados() {
 
                     // Agregar evento de clic a la fila
                     row.addEventListener('click', () => {
-                        // Si la fila ya está seleccionada, deseleccionarla
                         if (row.classList.contains('selected')) {
                             row.classList.remove('selected');
                         } else {
-                            // Deseleccionar todas las filas
                             tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
-                            // Seleccionar la fila clickeada
                             row.classList.add('selected');
                         }
                     });
