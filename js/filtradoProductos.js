@@ -34,8 +34,14 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
 // Función principal para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     try {
-        // Obtener el laboratorio seleccionado
+        // Obtener el tipo de lente seleccionado desde la lista desplegable
+        const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
+
+        // Obtener el laboratorio seleccionado desde la lista desplegable
         const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
+
+        // Obtener los tratamientos seleccionados
+        const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
 
         // Obtener los valores de ESF y CIL de la receta
         const odLejosEsf = parseFloat(document.getElementById('od-lejos-esf').value) || null;
@@ -43,19 +49,15 @@ export async function cargarProductosFiltrados() {
         const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
         const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
 
-        // Variables para almacenar los valores de ESF y CIL más altos
-        let esfMasAlto = null;
-        let cilMasAlto = null;
+        // Realizar la transposición oftalmológica si es necesario
+        const odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
+        const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
 
-        // Aplicar el filtrado de graduación solo si el laboratorio seleccionado es el ID 2
-        if (laboratorioSeleccionado === '2') {
-            const odTranspuesto = transponerCilindrico(odLejosEsf, odLejosCil);
-            const oiTranspuesto = transponerCilindrico(oiLejosEsf, oiLejosCil);
-            esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
-            cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-        }
+        // Determinar los valores más altos de ESF y CIL (después de la transposición)
+        const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
+        const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
 
-        // Llamar a la función de Supabase para obtener los productos filtrados
+        // Llamar a la función de Supabase para obtener los productos filtrados (tipo de lente, laboratorio y tratamientos)
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
             p_laboratorio_id: laboratorioSeleccionado || null,
@@ -64,13 +66,10 @@ export async function cargarProductosFiltrados() {
 
         if (error) throw error;
 
-        // Filtrar productos por graduación solo si el laboratorio es el ID 2
-        let productosFiltrados = productos;
-        if (laboratorioSeleccionado === '2') {
-            productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
-        }
+        // Filtrar productos por graduación (ESF y CIL)
+        const productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
 
-        // Mostrar los productos filtrados en la tabla
+        // Llenar la tabla de productos
         const tbody = document.querySelector('#productTable tbody');
         if (tbody) {
             tbody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
