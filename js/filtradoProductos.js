@@ -24,7 +24,7 @@ function obtenerValorMasAlto(valor1, valor2) {
 }
 
 // Función para filtrar productos por graduación (Laboratorio 2)
-function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
+function filtrarPorGraduacionVidaltec(producto, esfMasAlto, cilMasAlto) {
     const cumpleEsf = esfMasAlto === null || (producto.min_esf <= esfMasAlto && producto.max_esf >= esfMasAlto);
     const cumpleCil = cilMasAlto === null || (producto.cil <= cilMasAlto);
     return cumpleEsf && cumpleCil;
@@ -107,7 +107,7 @@ export async function cargarProductosFiltrados() {
                 // Control para Laboratorio 2
                 const esfMasAlto = obtenerValorMasAlto(odTranspuesto.esf, oiTranspuesto.esf);
                 const cilMasAlto = obtenerValorMasAlto(odTranspuesto.cil, oiTranspuesto.cil);
-                productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
+                productosFiltrados = productos.filter(producto => filtrarPorGraduacionVidaltec(producto, esfMasAlto, cilMasAlto));
             } else if (laboratorioSeleccionado === '4') {
                 // Control para Laboratorio 4
                 productosFiltrados = filterByGraduationRodenstock(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
