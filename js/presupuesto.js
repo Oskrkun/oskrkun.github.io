@@ -23,10 +23,10 @@ import {
     sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
-
+import { cargarProductosFiltrados
+} from './filtradoProductos.js';
 import {
     cargarTratamientos,
-    cargarProductosFiltrados,
     formatearNumero,
     formatearPrecio,
     agregarEventosFiltrado,
