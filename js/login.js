@@ -22,9 +22,6 @@ if (typeof supabase === 'undefined') {
             // Obtén los valores del formulario
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            console.log('Intentando iniciar sesión con:', email); // Depuración
-
             try {
                 // Intenta iniciar sesión con Supabase
                 const { data, error } = await supabaseClient.auth.signInWithPassword({
@@ -36,7 +33,6 @@ if (typeof supabase === 'undefined') {
                     console.error('Error al iniciar sesión:', error.message); // Depuración
                     alert(`Error al iniciar sesión: ${error.message}`);
                 } else {
-                    console.log('Inicio de sesión exitoso:', data); // Depuración
 
                     // Guarda el token de sesión en localStorage
                     localStorage.setItem('supabaseAuthToken', data.session.access_token);
