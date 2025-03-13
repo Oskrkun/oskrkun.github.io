@@ -2,9 +2,17 @@
 import { supabaseClient } from './supabaseConfig.js';
 import { cargarProductosFiltrados } from './filtradoProductos.js';
 
+// Almacenar elementos del DOM en variables
+const h2Productos = document.querySelector('#ProductosSection h2');
+const tratamientosContainer = document.getElementById('tratamientos');
+const laboratorioSelect = document.getElementById('laboratorio-select');
+const tipoLenteSelect = document.getElementById('tipo-lente-select');
+const inputsReceta = document.querySelectorAll('.vista-previa input');
+const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
+const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
+
 // Función para actualizar el contador de productos en el h2
 export function actualizarContadorProductos(cantidad) {
-    const h2Productos = document.querySelector('#ProductosSection h2');
     if (h2Productos) {
         // Buscar el span que contiene el contador
         let contadorSpan = h2Productos.querySelector('.contador-productos');
@@ -32,7 +40,6 @@ export async function cargarTratamientos() {
         if (error) throw error;
 
         // Llenar la tabla de tratamientos
-        const tratamientosContainer = document.getElementById('tratamientos');
         if (tratamientosContainer) {
             // Limpiar solo las filas de tratamientos, no las filas manuales
             const filasTratamientos = tratamientosContainer.querySelectorAll('tr.tratamiento-fila');
@@ -92,9 +99,6 @@ export function formatearPrecio(precio) {
 
 // Función para agregar eventos de filtrado
 export function agregarEventosFiltrado() {
-    const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
-    const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
-
     tipoLenteRadios.forEach(radio => {
         radio.addEventListener('change', cargarProductosFiltrados);
     });
@@ -113,7 +117,6 @@ export async function cargarLaboratorios() {
         if (error) throw error;
 
         // Llenar la lista desplegable de laboratorios
-        const laboratorioSelect = document.getElementById('laboratorio-select');
         if (laboratorioSelect) {
             laboratorioSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
 
@@ -152,7 +155,6 @@ export async function cargarTiposLentesSelect() {
         if (error) throw error;
 
         // Llenar la lista desplegable de tipos de lentes
-        const tipoLenteSelect = document.getElementById('tipo-lente-select');
         if (tipoLenteSelect) {
             tipoLenteSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
 
@@ -190,7 +192,6 @@ document.addEventListener('recetaBorrada', () => {
 
 // Función para agregar eventos de cambio en los inputs de la receta
 export function agregarEventosReceta() {
-    const inputsReceta = document.querySelectorAll('.vista-previa input');
     inputsReceta.forEach(input => {
         input.addEventListener('blur', cargarProductosFiltrados);
     });

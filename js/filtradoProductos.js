@@ -1,4 +1,6 @@
-import { supabaseClient } from './supabaseConfig.js';
+import { 
+    supabaseClient 
+} from './supabaseConfig.js';
 import {
     formatearNumero,
     formatearPrecio,
@@ -14,7 +16,6 @@ function transponerCilindrico(esf, cil) {
     }
     return { esf, cil };
 }
-
 // Función para determinar el valor más alto de ESF o CIL
 function obtenerValorMasAlto(valor1, valor2) {
     if (valor1 === null && valor2 === null) return null;
@@ -22,7 +23,6 @@ function obtenerValorMasAlto(valor1, valor2) {
     if (valor2 === null) return valor1;
     return Math.min(valor1, valor2); // En ESF y CIL, el valor más alto es el más negativo
 }
-
 // Función para filtrar productos por graduación (Laboratorio 2)
 function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
     // Aplicar transposición si el cilindro es positivo
@@ -40,7 +40,6 @@ function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilVa
         return cumpleEsf && cumpleCil;
     });
 }
-
 // Función para filtrar por graduación (Laboratorio 4)
 function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
     // Convertir CIL a positivo si es negativo
@@ -70,7 +69,6 @@ function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilVal
         return odEsfValid && oiEsfValid && odCilValid && oiCilValid && odSumValid && oiSumValid;
     });
 }
-
 // Función principal para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     try {
