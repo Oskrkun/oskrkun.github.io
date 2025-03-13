@@ -23,16 +23,17 @@ import {
     sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
-import { cargarProductosFiltrados
-} from './filtradoProductos.js';
+
+import { cargarProductosFiltrados } from './filtradoProductos.js';
+
 import {
     cargarTratamientos,
     formatearNumero,
     formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
-    cargarLaboratorios, // Nueva función importada
-    cargarTiposLentesSelect // Nueva función importada
+    cargarLaboratorios,
+    cargarTiposLentesSelect
 } from './controlProductos.js';
 
 import { 
@@ -165,7 +166,6 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
-
     crearAdvertencias();
     deshabilitarCamposCerca();
 
