@@ -30,49 +30,34 @@ function filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto) {
     return cumpleEsf && cumpleCil;
 }
 
-// Función para validar productos según las reglas del Laboratorio 4
-function validarLaboratorio4(producto, odTranspuesto, oiTranspuesto) {
-    // Obtener los rangos de ESF y CIL del producto
-    const minEsfProducto = producto.min_esf;
-    const maxEsfProducto = producto.max_esf;
-    const cilProducto = producto.cil;
+// Función para filtrar por graduación (Laboratorio 4)
+function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
+    // Convertir CIL a positivo si es negativo
+    odCilValue = Math.abs(odCilValue);
+    oiCilValue = Math.abs(oiCilValue);
 
-    // Validar ESF y CIL para OD
-    const esfOD = odTranspuesto.esf;
-    const cilOD = odTranspuesto.cil;
+    return products.filter(product => {
+        // Filtro para ESF (esférico)
+        const odEsfValid = (odEsfValue >= 0 && odEsfValue >= product.min_esf && odEsfValue <= product.max_esf) || // Para valores positivos
+            (odEsfValue < 0 && odEsfValue >= product.min_esf); // Para valores negativos, debe ser mayor o igual al mínimo
+        const oiEsfValid = (oiEsfValue >= 0 && oiEsfValue >= product.min_esf && oiEsfValue <= product.max_esf) || // Para valores positivos
+            (oiEsfValue < 0 && oiEsfValue >= product.min_esf); // Para valores negativos, debe ser mayor o igual al mínimo
 
-    if (esfOD !== null && cilOD !== null) {
-        // Verificar que el CIL no supere el máximo del producto
-        if (Math.abs(cilOD) > cilProducto) {
-            return false; // CIL fuera de rango
-        }
+        // Filtro para CIL (cilíndrico)
+        const odCilValid = odCilValue <= product.cil; // El CIL de la receta debe ser menor o igual al del producto
+        const oiCilValid = oiCilValue <= product.cil; // El CIL de la receta debe ser menor o igual al del producto
 
-        // Verificar que la suma de ESF y CIL esté dentro del rango de ESF del producto
-        const sumaEsfCilOD = esfOD + cilOD;
-        if (sumaEsfCilOD > maxEsfProducto || sumaEsfCilOD < minEsfProducto) {
-            return false; // Suma fuera de rango
-        }
-    }
+        // Validación de la suma de ESF y CIL
+        const odSum = Math.abs(odEsfValue) + odCilValue; // Suma de |ESF| y CIL
+        const oiSum = Math.abs(oiEsfValue) + oiCilValue; // Suma de |ESF| y CIL
 
-    // Validar ESF y CIL para OI
-    const esfOI = oiTranspuesto.esf;
-    const cilOI = oiTranspuesto.cil;
+        const odSumValid = (odEsfValue >= 0 && odSum <= product.max_esf) || // Para valores positivos
+            (odEsfValue < 0 && odSum <= Math.abs(product.min_esf)); // Para valores negativos
+        const oiSumValid = (oiEsfValue >= 0 && oiSum <= product.max_esf) || // Para valores positivos
+            (oiEsfValue < 0 && oiSum <= Math.abs(product.min_esf)); // Para valores negativos
 
-    if (esfOI !== null && cilOI !== null) {
-        // Verificar que el CIL no supere el máximo del producto
-        if (Math.abs(cilOI) > cilProducto) {
-            return false; // CIL fuera de rango
-        }
-
-        // Verificar que la suma de ESF y CIL esté dentro del rango de ESF del producto
-        const sumaEsfCilOI = esfOI + cilOI;
-        if (sumaEsfCilOI > maxEsfProducto || sumaEsfCilOI < minEsfProducto) {
-            return false; // Suma fuera de rango
-        }
-    }
-
-    // Si pasa todas las validaciones, el producto es válido
-    return true;
+        return odEsfValid && oiEsfValid && odCilValid && oiCilValid && odSumValid && oiSumValid;
+    });
 }
 
 // Función principal para cargar productos filtrados
@@ -125,7 +110,7 @@ export async function cargarProductosFiltrados() {
                 productosFiltrados = productos.filter(producto => filtrarPorGraduacion(producto, esfMasAlto, cilMasAlto));
             } else if (laboratorioSeleccionado === '4') {
                 // Control para Laboratorio 4
-                productosFiltrados = productos.filter(producto => validarLaboratorio4(producto, odTranspuesto, oiTranspuesto));
+                productosFiltrados = filterByGraduationRodenstock(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
             } else {
                 // Sin control de graduación para otros laboratorios
                 productosFiltrados = productos;
