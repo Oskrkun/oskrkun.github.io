@@ -17,16 +17,21 @@ export async function verificarAutenticacion() {
 
 // Verificar si el usuario es administrador
 export async function verificarSiEsAdmin(user) {
+    console.log('Verificando si el usuario es administrador:', user.id);
+
     const { data: admin, error: adminError } = await supabaseClient
         .from('administradores')
         .select('user_id, nick')
         .eq('user_id', user.id)
         .single();
 
-    if (adminError || !admin) {
-        console.error('Usuario no es administrador:', adminError ? adminError.message : 'No es administrador'); // Depuración: Usuario no es administrador
-        return { esAdmin: false, nick: null };
+    if (adminError) {
+        console.error('Error al verificar administrador:', adminError);
+    } else if (!admin) {
+        console.log('El usuario no es administrador.');
     } else {
-        return { esAdmin: true, nick: admin.nick };
+        console.log('El usuario es administrador:', admin);
     }
+
+    return { esAdmin: !!admin, nick: admin?.nick || null };
 }
