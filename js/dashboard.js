@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cerrar el menú si se hace clic fuera de él
     document.addEventListener('click', (event) => {
-        if (!sidebarMenu.contains(event.target) {
+        if (!sidebarMenu.contains(event.target)) {
             sidebarMenu.classList.remove('active');
         }
     });
