@@ -207,7 +207,11 @@ export async function cargarIndicesRefraccion() {
             indicesRefraccion.forEach(indice => {
                 const option = document.createElement('option');
                 option.value = indice.id;
-                option.textContent = indice.valor; // Mostrar el valor del índice de refracción
+
+                // Formatear el valor para que tenga siempre dos decimales
+                const valorFormateado = parseFloat(indice.valor).toFixed(2);
+                option.textContent = valorFormateado; // Mostrar el valor formateado
+
                 indiceRefraccionSelect.appendChild(option);
             });
         } else {
