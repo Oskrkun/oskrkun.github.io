@@ -616,3 +616,17 @@ input[type="text"] {
     border: none !important; /* Eliminar bordes */
 }
 /*---------------------------------------------------------------------------------*/
+#contenedor-errores {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 300px;
+    overflow-y: auto;
+    max-height: 200px;
+}
+/*---------------------------------------------------------------------------------*/
