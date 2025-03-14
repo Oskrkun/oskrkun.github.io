@@ -1,21 +1,6 @@
 // presupuesto.js
-import { supabaseClient } from './supabaseConfig.js';
 import {
-    MAX_ADD,
-    MAX_ESF,
-    MAX_CIL,
-    erroresActivos,
-    crearAdvertencias,
-    actualizarErrores,
-    agregarEventosDelegacion,
     revisarErroresYActualizarCerca,
-    mostrarAdvertenciaEjeFaltante,
-    mostrarAdvertenciaAddDiferente,
-    mostrarAdvertenciaMaxEsfCil,
-    calcularCerca,
-    sincronizarCambios,
-    agregarEventosSincronizacion,
-    esEsfOCil,
     transponerReceta,
     sincronizarTodo,
     limpiarCerca
@@ -25,8 +10,6 @@ import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 import {
     cargarTratamientos,
-    formatearNumero,
-    formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
     cargarLaboratorios,
