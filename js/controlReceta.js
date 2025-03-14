@@ -43,21 +43,29 @@ export function crearAdvertencias() {
 
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
-    if (!elementos.contenedorErrores) {
+    let contenedorErrores = document.getElementById('contenedor-errores');
+
+    // Si el contenedor no existe, crearlo
+    if (!contenedorErrores) {
+        crearAdvertencias();
+        contenedorErrores = document.getElementById('contenedor-errores');
+    }
+
+    if (!contenedorErrores) {
         console.error('No se encontró el contenedor de errores.');
         return;
     }
 
     // Limpiar el contenedor de errores
-    elementos.contenedorErrores.innerHTML = '';
+    contenedorErrores.innerHTML = '';
 
     // Mostrar cada error en el contenedor
     erroresActivos.forEach(error => {
         const spanError = document.createElement('span');
         spanError.textContent = error;
-        spanError.classList.add('advertenciaReceta'); // Aplicar la clase CSS
+        spanError.classList.add('advertenciaReceta');
         spanError.style.display = 'block';
-        elementos.contenedorErrores.appendChild(spanError);
+        contenedorErrores.appendChild(spanError);
     });
 }
 
