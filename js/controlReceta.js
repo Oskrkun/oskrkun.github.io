@@ -88,6 +88,385 @@ function eliminarErroresPorId(id) {
 
 // Función para validar los inputs
 export function validarInput(event) {
+
+// Función para validar los inputs
+export function validarInput(event) {
+    const input = event.target;
+    const value = input.value.trim();
+    const id = input.id;
+
+    console.log('validarInput - Inicio', 'id:', id, 'value:', value);
+
+    // Limpiar errores anteriores relacionados con este input
+    console.log('eliminarErroresPorId - Antes (validarInput):', id);
+    gestorErrores.eliminarErroresPorId(id);
+    console.log('eliminarErroresPorId - Después (validarInput):', gestorErrores.errores);
+
+    // Si el input está vacío, no hay necesidad de validar más
+    if (value === '') {
+        console.log('validarInput - Input vacío, actualizando errores y retornando');
+        gestorErrores.actualizarErroresUI(); // Actualizar la lista de errores en la interfaz
+        return;
+    }
+
+    // Resto de la lógica de validación...
+    if (id.includes('eje')) {
+        validarEje(input, value);
+    } else if (id.includes('add')) {
+        validarADD(input, value);
+    } else {
+        validarEsfOCil(input, value, id);
+    }
+    console.log('validarInput - Fin');
+};
+
+    // Resto de la lógica de validación...
+    if (id.includes('eje')) {
+        validarEje(input, value);
+    } else if (id.includes('add')) {
+        validarADD(input, value);
+    } else {
+        validarEsfOCil(input, value, id);
+    }
+}
+
+// Función para validar el EJE
+function validarEje(input, value) {
+    // Solo permitir números enteros entre 0 y 180
+    if (!/^\d*$/.test(value)) {
+        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números.`);
+        agregarError(input.id, `*${input.id}: Solo se permiten números.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Asegurar que el valor esté en el rango de 0 a 180
+    const valorNumerico = parseInt(value, 10);
+    if (valorNumerico < 0 || valorNumerico > 180) {
+        console.error(`Error: El valor en ${input.id} debe estar entre 0 y 180.`);
+        agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y 180.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+}
+
+// Función para validar ADD
+function validarADD(input, value) {
+    // Solo permitir números positivos y punto decimal
+    if (!/^\d*\.?\d*$/.test(value)) {
+        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números positivos y punto decimal.`);
+        agregarError(input.id, `*${input.id}: Solo se permiten números positivos y punto decimal.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+
+    // Asegurar que el valor esté en el rango de 0 a MAX_ADD
+    const valorNumerico = parseFloat(value);
+    if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
+        console.error(`Error: El valor en ${input.id} debe estar entre 0 y ${MAX_ADD}.`);
+        agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y ${MAX_ADD}.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
+}
+
+// Función para validar ESF y CIL
+function validarEsfOCil(input, value, id) {
+    // Limpiar errores anteriores relacionados con este input
+    eliminarErroresPorId(id);
+
+    // Validar el formato del valor
+    if (!/^[+-]?\d*\.?\d*$/.test(value)) {
+        console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
+        agregarError(id, `*${id}: Solo se permiten números, +, - y punto decimal.`);
+        input.value = value.slice(0, -1);
+        return;
+    }
+
+    // Validar que no haya más de 2 cifras enteras
+    const partes = value.split('.');
+    const parteEntera = partes[0].replace(/[+-]/, ''); // Ignorar el signo
+    if (parteEntera.length > 2) {
+        console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
+        agregarError(id, `*${id}: No puede tener más de 2 cifras enteras.`);
+        input.value = value.slice(0, -1);
+        return;
+    }
+
+    // Validar el valor numérico
+    const valorNumerico = parseFloat(value);
+    mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+    // Si el cilindro está vacío, limpiar el error del eje
+    if (value === '') {
+        eliminarErroresPorId('odLejosEje');
+        eliminarErroresPorId('oiLejosEje');
+    }
+}
+
+// Función para ajustar el valor a pasos de 0.25
+export function ajustarValorAPasos(valor) {
+    if (valor === '' || valor === '+' || valor === '-') {
+        return ''; // No ajustar si el valor está vacío o es solo un signo
+    }
+
+    const paso = 0.25;
+    const valorNumerico = parseFloat(valor);
+    const multiplicador = 1 / paso;
+    const valorAjustado = Math.round(valorNumerico * multiplicador) / multiplicador;
+    return valorAjustado.toFixed(2); // Asegurar que tenga 2 decimales
+}
+
+// Función para manejar el evento de foco (entrar al input)
+export function onInputFocus(event) {
+    const input = event.target;
+    input.placeholder = ''; // Limpiar el placeholder al entrar
+
+    // Limpiar el error correspondiente al input
+    const id = input.id;
+    eliminarErroresPorId(id);
+
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
+}
+
+// Función para manejar el evento de blur (salir del input)
+export function onInputBlur(event) {
+
+// Función para manejar el evento de blur (salir del input)
+export function onInputBlur(event) {
+    const input = event.target;
+    const value = input.value.trim();
+    const id = input.id;
+
+    console.log('onInputBlur - Inicio', 'id:', id, 'value:', value);
+
+    // Si el input está vacío, limpiar todos los errores relacionados
+    if (value === '') {
+        console.log('onInputBlur - Input vacío, eliminando errores y actualizando UI');
+        gestorErrores.eliminarErroresPorId(id);
+        gestorErrores.actualizarErroresUI(); // Actualizar la lista de errores en la interfaz
+        return; // Salir de la función para evitar más validaciones
+    }
+
+    // Resto de la lógica de validación...
+    if (id.includes('eje')) {
+        if (value === '') {
+            input.value = '';
+        } else {
+            const valorNumerico = parseInt(value, 10);
+            if (valorNumerico < 0) {
+                input.value = '0';
+            } else if (valorNumerico > 180) {
+                input.value = '180';
+            }
+        }
+    } else if (id.includes('add')) {
+        if (value === '') {
+            input.value = '';
+        } else {
+            const valorNumerico = parseFloat(value);
+            if (valorNumerico < 0) {
+                input.value = '0.00';
+            } else if (valorNumerico > MAX_ADD) {
+                input.value = MAX_ADD.toFixed(2);
+            } else {
+                const valorAjustado = ajustarValorAPasos(value);
+                input.value = valorAjustado;
+            }
+        }
+    } else if (esEsfOCil(id)) {
+        if (value === '' || value === '+' || value === '-') {
+            input.value = '';
+            return;
+        }
+
+        let valorAjustado = ajustarValorAPasos(value);
+        if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
+            valorAjustado = `+${valorAjustado}`;
+        }
+
+        input.value = valorAjustado;
+
+        const valorNumerico = parseFloat(valorAjustado);
+        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+        // Si el cilindro está vacío, limpiar el error del eje
+        if (value === '') {
+            console.log('onInputBlur - Cilindro vacío, eliminando errores de eje');
+            gestorErrores.eliminarErroresPorId('odLejosEje');
+            gestorErrores.eliminarErroresPorId('oiLejosEje');
+        }
+    }
+
+    revisarErroresYActualizarCerca();
+    console.log('onInputBlur - Fin');
+};
+
+    // Resto de la lógica de validación...
+    if (id.includes('eje')) {
+        if (value === '') {
+            input.value = '';
+        } else {
+            const valorNumerico = parseInt(value, 10);
+            if (valorNumerico < 0) {
+                input.value = '0';
+            } else if (valorNumerico > 180) {
+                input.value = '180';
+            }
+        }
+    } else if (id.includes('add')) {
+        if (value === '') {
+            input.value = '';
+        } else {
+            const valorNumerico = parseFloat(value);
+            if (valorNumerico < 0) {
+                input.value = '0.00';
+            } else if (valorNumerico > MAX_ADD) {
+                input.value = MAX_ADD.toFixed(2);
+            } else {
+                const valorAjustado = ajustarValorAPasos(value);
+                input.value = valorAjustado;
+            }
+        }
+    } else if (esEsfOCil(id)) {
+        if (value === '' || value === '+' || value === '-') {
+            input.value = '';
+            return;
+        }
+
+        let valorAjustado = ajustarValorAPasos(value);
+        if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
+            valorAjustado = `+${valorAjustado}`;
+        }
+
+        input.value = valorAjustado;
+
+        const valorNumerico = parseFloat(valorAjustado);
+        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+        // Si el cilindro está vacío, limpiar el error del eje
+        if (value === '') {
+            eliminarErroresPorId('odLejosEje');
+            eliminarErroresPorId('oiLejosEje');
+        }
+    }
+
+    revisarErroresYActualizarCerca();
+}
+
+// Función para mostrar u ocultar la sección de "cerca" en función de los valores de "ADD"
+function actualizarVisibilidadCerca() {
+    const addOD = elementos.addOD.value.trim();
+    const addOI = elementos.addOI.value.trim();
+
+    // Si hay algún valor en los campos de "ADD", mostrar la sección de "cerca"
+    if (addOD !== '' || addOI !== '') {
+        elementos.seccionCerca.classList.add('visible');
+    } else {
+        elementos.seccionCerca.classList.remove('visible');
+    }
+}
+
+// Función para revisar errores y actualizar la parte de "cerca"
+export function revisarErroresYActualizarCerca() {
+
+// Función para revisar errores y actualizar la parte de "cerca"
+export function revisarErroresYActualizarCerca() {
+    console.log('revisarErroresYActualizarCerca - Inicio');
+    mostrarAdvertenciaEjeFaltante();
+    mostrarAdvertenciaAddDiferente();
+    actualizarVisibilidadCerca();
+    gestorErrores.actualizarErroresUI(); // Actualizar la lista de errores en la interfaz
+    console.log('revisarErroresYActualizarCerca - Fin');
+};
+
+// Función para limpiar la parte de "cerca" cuando la ADD está vacía
+export function limpiarCerca(ojo) {
+    // Limpiar los campos de "cerca" para el ojo especificado
+    elementos[`${ojo}CercaEsf`].value = '';
+    elementos[`${ojo}CercaCil`].value = '';
+    elementos[`${ojo}CercaEje`].value = '';
+}
+
+// Función para mostrar advertencia si falta el EJE y hay CIL
+export function mostrarAdvertenciaEjeFaltante() {
+    console.log('mostrarAdvertenciaEjeFaltante - Inicio');
+    console.log('cilOD:', cilOD, 'ejeOD:', ejeOD, 'cilOI:', cilOI, 'ejeOI:', ejeOI);
+
+    // Limpiar errores anteriores relacionados con el eje
+    console.log('eliminarErroresPorId - Antes (odLejosEje):', 'odLejosEje');
+    gestorErrores.eliminarErroresPorId('odLejosEje');
+    console.log('eliminarErroresPorId - Después (odLejosEje):', gestorErrores.errores);
+
+    console.log('eliminarErroresPorId - Antes (oiLejosEje):', 'oiLejosEje');
+    gestorErrores.eliminarErroresPorId('oiLejosEje');
+    console.log('eliminarErroresPorId - Después (oiLejosEje):', gestorErrores.errores);
+
+    // Verificar si falta el EJE en OD
+    if (cilOD !== '' && ejeOD === '') {
+        console.log('agregarError - odLejosEje', mensajeErrorOD);
+        gestorErrores.agregarError('odLejosEje', mensajeErrorOD);
+    }
+
+    // Verificar si falta el EJE en OI
+    if (cilOI !== '' && ejeOI === '') {
+        console.log('agregarError - oiLejosEje', mensajeErrorOI);
+        gestorErrores.agregarError('oiLejosEje', mensajeErrorOI);
+    }
+    console.log('mostrarAdvertenciaEjeFaltante - Fin');
+}; else {
+        console.error('No se encontró la sección de cerca.');
+    }
+}
+
+// Función para actualizar la lista de errores en la interfaz
+export function actualizarErrores() {
+    let contenedorErrores = document.getElementById('contenedor-errores');
+
+    if (!contenedorErrores) {
+        crearAdvertencias();
+        contenedorErrores = document.getElementById('contenedor-errores');
+    }
+
+    if (!contenedorErrores) {
+        console.error('No se encontró el contenedor de errores.');
+        return;
+    }
+
+    // Limpiar el contenedor de errores
+    contenedorErrores.innerHTML = '';
+
+    // Mostrar cada error en el contenedor
+    erroresActivos.forEach(error => {
+        const spanError = document.createElement('span');
+        spanError.textContent = error.message;
+        spanError.id = error.id; // Asignar un ID único al error
+        spanError.classList.add('advertenciaReceta');
+        spanError.style.display = 'block';
+        contenedorErrores.appendChild(spanError);
+    });
+
+    console.log('Errores actualizados:', erroresActivos);
+}
+
+// Función para agregar un error con un ID único
+function agregarError(id, mensaje) {
+    const errorId = `${id}-${Date.now()}`; // ID único basado en el ID del input y la marca de tiempo
+    const error = { id: errorId, message: mensaje };
+    erroresActivos.push(error);
+    console.log(`Error agregado: ${errorId} - ${mensaje}`);
+}
+
+// Función para eliminar errores por ID
+function eliminarErroresPorId(id) {
+    const erroresEliminados = erroresActivos.filter(error => error.id.startsWith(id));
+    erroresActivos = erroresActivos.filter(error => !error.id.startsWith(id));
+    console.log(`Errores eliminados para ${id}:`, erroresEliminados);
+}
+
+// Función para validar los inputs
+export function validarInput(event) {
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
