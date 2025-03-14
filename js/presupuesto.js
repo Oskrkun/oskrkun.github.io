@@ -153,7 +153,7 @@ function deshabilitarCamposCerca() {
 async function llenarVendedor() {
     const user = await verificarAutenticacion();
     if (user) {
-        const { rol, nick } = await obtenerRolYNick(user); // Usar la nueva función
+        const { nick } = await obtenerRolYNick(user); // Obtener el nick del usuario
         const vendedorInput = document.getElementById('vendedor');
         if (vendedorInput) {
             vendedorInput.value = nick || user.email; // Usar el nick si existe, de lo contrario, el email
