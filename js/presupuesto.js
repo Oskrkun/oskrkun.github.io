@@ -4,16 +4,12 @@ import {
     MAX_ADD,
     MAX_ESF,
     MAX_CIL,
-    gestorErrores, // Importar el gestor de errores
-    crearAdvertencias, // Importar crearAdvertencias
+    crearAdvertencias,
     validarInput,
     ajustarValorAPasos,
     onInputFocus,
     onInputBlur,
     revisarErroresYActualizarCerca,
-    mostrarAdvertenciaEjeFaltante,
-    mostrarAdvertenciaAddDiferente,
-    mostrarAdvertenciaMaxEsfCil,
     calcularCerca,
     sincronizarCambios,
     agregarEventosSincronizacion,
@@ -47,31 +43,26 @@ import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js'; // Impo
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
     if (!event || !event.currentTarget) {
-        console.error('Evento no válido');
         return;
     }
 
     const icon = event.currentTarget.querySelector('.toggle-icon');
     if (!icon) {
-        console.error('No se encontró el ícono .toggle-icon');
         return;
     }
 
     const targetId = icon.getAttribute('data-target');
     if (!targetId) {
-        console.error('No se encontró el atributo data-target en el ícono');
         return;
     }
 
     const sectionContent = document.getElementById(targetId);
     if (!sectionContent) {
-        console.error('No se encontró el contenido de la sección con el ID:', targetId);
         return;
     }
 
     const section = sectionContent.parentElement;
     if (!section) {
-        console.error('No se encontró la sección padre');
         return;
     }
 
@@ -119,8 +110,6 @@ function agregarEventoBotonBorrar() {
     const botonBorrar = document.querySelector('#refresh-erase button');
     if (botonBorrar) {
         botonBorrar.addEventListener('click', borrarReceta);
-    } else {
-        console.error('No se encontró el botón de borrar.');
     }
 }
 
@@ -135,8 +124,6 @@ function agregarEventoBotonRotacion() {
             const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
             document.dispatchEvent(eventoTranspuesto);
         });
-    } else {
-        console.error('No se encontró el botón de rotación.');
     }
 }
 
@@ -156,11 +143,7 @@ async function llenarVendedor() {
         const vendedorInput = document.getElementById('vendedor');
         if (vendedorInput) {
             vendedorInput.value = nick || user.email; // Usar el nick si existe, de lo contrario, el email
-        } else {
-            console.error('No se encontró el campo de Vendedor.');
         }
-    } else {
-        console.error('No se pudo obtener el usuario logueado.');
     }
 }
 
@@ -168,13 +151,6 @@ async function llenarVendedor() {
 export async function initPresupuesto() {
     // Crear el contenedor de errores
     crearAdvertencias();
-
-    // Verificar que el contenedor de errores esté presente
-    const contenedorErrores = document.getElementById('contenedor-errores');
-    if (!contenedorErrores) {
-        console.error('El contenedor de errores no se creó correctamente.');
-        return;
-    }
 
     // Deshabilitar los campos de "cerca"
     deshabilitarCamposCerca();
@@ -196,9 +172,6 @@ export async function initPresupuesto() {
     // Agregar eventos de sincronización
     agregarEventosSincronizacion();
 
-    // Mostrar advertencia si las ADD son diferentes
-    mostrarAdvertenciaAddDiferente();
-
     // Agregar eventos a los botones
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
@@ -215,16 +188,12 @@ export async function initPresupuesto() {
     const tipoLenteSelect = document.getElementById('tipo-lente-select');
     if (tipoLenteSelect) {
         tipoLenteSelect.addEventListener('change', cargarProductosFiltrados);
-    } else {
-        console.error('No se encontró la lista desplegable de tipos de lentes.');
     }
 
     // Agregar evento de cambio a la lista desplegable de laboratorios
     const laboratorioSelect = document.getElementById('laboratorio-select');
     if (laboratorioSelect) {
         laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
-    } else {
-        console.error('No se encontró la lista desplegable de laboratorios.');
     }
 
     // Cargar productos filtrados después de que las listas estén llenas
