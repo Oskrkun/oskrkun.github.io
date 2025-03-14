@@ -100,13 +100,27 @@ export function formatearPrecio(precio) {
 
 // Función para agregar eventos de filtrado
 export function agregarEventosFiltrado() {
+    // Evento para los radios de tipo de lente
     tipoLenteRadios.forEach(radio => {
         radio.addEventListener('change', cargarProductosFiltrados);
     });
 
+    // Evento para los checkboxes de tratamientos
     tratamientosCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', cargarProductosFiltrados);
     });
+
+    // Evento para el select de laboratorio
+    const laboratorioSelect = document.getElementById('laboratorio-select');
+    if (laboratorioSelect) {
+        laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
+    }
+
+    // Evento para el select de índice de refracción
+    const indiceRefraccionSelect = document.getElementById('indice-refraccion-select');
+    if (indiceRefraccionSelect) {
+        indiceRefraccionSelect.addEventListener('change', cargarProductosFiltrados);
+    }
 }
 
 // Función para cargar los laboratorios desde Supabase
