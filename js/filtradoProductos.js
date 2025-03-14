@@ -73,6 +73,7 @@ function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilVal
     });
 }
 // Función principal para cargar productos filtrados
+// Función principal para cargar productos filtrados
 export async function cargarProductosFiltrados() {
     try {
         // Obtener el tipo de lente seleccionado desde la lista desplegable
@@ -83,6 +84,9 @@ export async function cargarProductosFiltrados() {
 
         // Obtener los tratamientos seleccionados
         const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
+
+        // Obtener el índice de refracción seleccionado
+        const indiceRefraccionSeleccionado = document.getElementById('indice-refraccion-select').value;
 
         // Obtener los valores de ESF y CIL de la receta
         const odLejosEsf = parseFloat(document.getElementById('od-lejos-esf').value) || null;
@@ -97,7 +101,8 @@ export async function cargarProductosFiltrados() {
         const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
             p_tipo_lente_id: tipoLenteSeleccionado || null,
             p_laboratorio_id: laboratorioSeleccionado || null,
-            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null
+            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null,
+            p_indice_refraccion_id: indiceRefraccionSeleccionado || null // Nuevo parámetro para filtrar por índice de refracción
         });
 
         if (error) throw error;
