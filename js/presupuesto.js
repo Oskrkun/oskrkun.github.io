@@ -3,7 +3,7 @@ import {
     transponerReceta,
     limpiarCerca
 } from './controlReceta.js';
-
+import { initErrorManager } from './errorManager.js';
 import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 import {
@@ -148,6 +148,9 @@ export async function initPresupuesto() {
     // Deshabilitar los campos de "cerca"
     console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
+
+    // Inicializar el manejador de errores
+    initErrorManager();
 
     // Agregar eventos a los botones
     console.log('Agregando eventos a los botones...');
