@@ -109,7 +109,6 @@ function agregarEventoBotonRotacion() {
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
             transponerReceta();
-            sincronizarTodo();
 
             const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
             document.dispatchEvent(eventoTranspuesto);
