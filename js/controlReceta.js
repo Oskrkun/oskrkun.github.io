@@ -107,6 +107,10 @@ export function validarInput(event) {
     else {
         validarEsfOCil(input, value, id);
     }
+    
+
+    // Revisar errores y actualizar la parte de "cerca"
+    revisarErroresYActualizarCerca();
 }
 
 // Función para validar el EJE
