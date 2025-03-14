@@ -6,26 +6,40 @@ import { cargarContenido } from './cargarContenido.js';
 
 // Función principal para inicializar el dashboard
 async function inicializarDashboard() {
-    const user = await verificarAutenticacion(); // Verificar autenticación
-    if (!user) return; // Si no hay usuario, salir
+    // Verificar si el usuario está autenticado
+    const user = await verificarAutenticacion();
+    if (!user) {
+        console.error('Usuario no autenticado. Redirigiendo al login...');
+        window.location.href = 'index.html'; // Redirigir al login si no hay usuario autenticado
+        return;
+    }
 
-    const { rol, nick } = await obtenerRolYNick(user); // Obtener rol y nick del usuario
+    // Obtener el rol y el nick del usuario
+    const { rol, nick } = await obtenerRolYNick(user);
     const tipoUsuario = rol === 'admin' ? 'admin' : 'usuario'; // Determinar el tipo de usuario
 
-    crearBotones(tipoUsuario, cargarContenido); // Crear botones según el tipo de usuario
-    actualizarTextoUsuario(user, nick); // Actualizar la interfaz con el nombre del usuario
+    // Crear botones según el tipo de usuario y cargar el contenido correspondiente
+    crearBotones(tipoUsuario, cargarContenido);
+
+    // Actualizar la interfaz con los datos del usuario
+    actualizarTextoUsuario(user, nick, rol);
 }
 
-// Actualizar el texto del usuario en el logo
-function actualizarTextoUsuario(user, nick = null) {
+// Función para actualizar la interfaz con los datos del usuario
+function actualizarTextoUsuario(user, nick = null, rol = null) {
     const userIcon = document.getElementById('userIcon');
     const userRole = document.getElementById('userRole');
     const userEmail = document.getElementById('userEmail');
 
     if (userIcon && userRole && userEmail) {
-        userIcon.className = nick ? 'fas fa-user-shield' : 'fas fa-user'; // Ícono para administrador o usuario común
-        userRole.textContent = nick ? 'Admin:' : 'Bienvenido:';
-        userEmail.textContent = nick || user.email; // Mostrar el nick si es administrador, de lo contrario, el correo
+        // Cambiar el ícono según el rol del usuario
+        userIcon.className = rol === 'admin' ? 'fas fa-user-shield' : 'fas fa-user';
+
+        // Mostrar el rol del usuario
+        userRole.textContent = rol === 'admin' ? 'Admin:' : 'Bienvenido:';
+
+        // Mostrar el nick si está disponible, de lo contrario, mostrar el correo
+        userEmail.textContent = nick || user.email;
     } else {
         console.error('No se encontraron los elementos del DOM para actualizar el texto del usuario.');
     }
@@ -33,9 +47,10 @@ function actualizarTextoUsuario(user, nick = null) {
 
 // Escuchar clics en los botones del menú
 document.addEventListener('DOMContentLoaded', () => {
-    inicializarDashboard(); // Inicializar el dashboard cuando el DOM esté listo
+    // Inicializar el dashboard cuando el DOM esté listo
+    inicializarDashboard();
 
-    // Manejar el botón de hamburguesa
+    // Manejar el botón de hamburguesa para mostrar/ocultar el menú lateral
     document.getElementById('menuToggle').addEventListener('click', () => {
         const sidebarMenu = document.querySelector('.sidebar-menu');
         sidebarMenu.classList.toggle('active');
