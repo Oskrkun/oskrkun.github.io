@@ -1,6 +1,5 @@
 // presupuesto.js
 import {
-    revisarErroresYActualizarCerca,
     transponerReceta,
     limpiarCerca
 } from './controlReceta.js';
