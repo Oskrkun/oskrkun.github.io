@@ -1,6 +1,21 @@
 // calculosPresupuesto.js
 import { supabaseClient } from './supabaseConfig.js';
 
+// Objeto para almacenar referencias a los elementos del DOM
+const elementos = {
+    productoIva: document.getElementById('producto-iva'),
+    productoMultiplicador: document.getElementById('producto-multiplicador'),
+    productoArmazon: document.getElementById('producto-armazon'),
+    productoNombre: document.getElementById('producto-nombre'),
+    productoTratamientos: document.getElementById('producto-tratamientos'),
+    productoPrecioBase: document.getElementById('producto-precio-base'),
+    productoArmado: document.getElementById('producto-armado'),
+    precioCristales: document.getElementById('Precio-Cristales'),
+    productoPrecioFinal: document.getElementById('producto-precio-final'),
+    redondearPreciosCheckbox: document.getElementById('redondear-precios'),
+    productTableTbody: document.querySelector('#productTable tbody')
+};
+
 // Función para redondear el precio a un número que termine en 90
 function redondearPrecio(precio) {
     const redondeo = Math.ceil((precio + 10) / 100) * 100 - 10;
@@ -62,14 +77,12 @@ function restaurarValorPorDefecto(event) {
 
 // Función para manejar el clic en una fila de la tabla de productos
 export function manejarSeleccionProducto() {
-    const tbody = document.querySelector('#productTable tbody');
-    if (tbody) {
-        tbody.addEventListener('click', (event) => {
+    if (elementos.productTableTbody) {
+        elementos.productTableTbody.addEventListener('click', (event) => {
             const filaSeleccionada = event.target.closest('tr');
             if (filaSeleccionada) {
-
                 // Deseleccionar todas las filas primero
-                tbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
+                elementos.productTableTbody.querySelectorAll('tr').forEach(r => r.classList.remove('selected'));
 
                 // Seleccionar la fila clickeada
                 filaSeleccionada.classList.add('selected');
@@ -93,17 +106,17 @@ function rellenarCamposProductoSeleccionado(fila) {
     // Convertir el precio a número
     const precio = desformatearMoneda(precioTexto);
 
-    document.getElementById('producto-nombre').value = nombre;
-    document.getElementById('producto-tratamientos').value = tratamientos;
-    document.getElementById('producto-precio-base').value = precio;
+    elementos.productoNombre.value = nombre;
+    elementos.productoTratamientos.value = tratamientos;
+    elementos.productoPrecioBase.value = precio;
 
     // Cargar la lista desplegable de montaje con el laboratorio_id
     cargarListaMontaje(laboratorioId);
 
     // Inicializar el IVA, multiplicador y armazón
-    document.getElementById('producto-iva').value = '22';
-    document.getElementById('producto-multiplicador').value = '2.2';
-    document.getElementById('producto-armazon').value = formatearMoneda(0);
+    elementos.productoIva.value = '22';
+    elementos.productoMultiplicador.value = '2.2';
+    elementos.productoArmazon.value = formatearMoneda(0);
 
     // Calcular precios
     calcularPrecios();
@@ -111,7 +124,7 @@ function rellenarCamposProductoSeleccionado(fila) {
 
 // Función para cargar la lista desplegable de montaje desde Supabase
 async function cargarListaMontaje(laboratorioId) {
-    const selectMontaje = document.getElementById('producto-armado');
+    const selectMontaje = elementos.productoArmado;
     selectMontaje.innerHTML = ''; // Limpiar opciones anteriores
 
     // Verificar si no se proporcionó un laboratorioId
@@ -176,11 +189,11 @@ async function cargarListaMontaje(laboratorioId) {
 // Función para calcular los precios (cristales y final)
 function calcularPrecios() {
     // Obtener valores
-    const precioBase = parseFloat(document.getElementById('producto-precio-base').value) || 0;
-    const armado = parseFloat(document.getElementById('producto-armado').value) || 0;
-    const iva = parseFloat(document.getElementById('producto-iva').value) || 0;
-    const multiplicador = parseFloat(document.getElementById('producto-multiplicador').value) || 2.2;
-    const precioArmazon = desformatearMoneda(document.getElementById('producto-armazon').value) || 0;
+    const precioBase = parseFloat(elementos.productoPrecioBase.value) || 0;
+    const armado = parseFloat(elementos.productoArmado.value) || 0;
+    const iva = parseFloat(elementos.productoIva.value) || 0;
+    const multiplicador = parseFloat(elementos.productoMultiplicador.value) || 2.2;
+    const precioArmazon = desformatearMoneda(elementos.productoArmazon.value) || 0;
 
     // Calcular precio de los cristales
     const precioConArmado = precioBase + armado;
@@ -188,15 +201,14 @@ function calcularPrecios() {
     let precioCristales = precioConIva * multiplicador;
 
     // Redondear si es necesario
-    const redondearPreciosCheckbox = document.getElementById('redondear-precios');
-    if (redondearPreciosCheckbox && redondearPreciosCheckbox.checked) {
+    if (elementos.redondearPreciosCheckbox && elementos.redondearPreciosCheckbox.checked) {
         precioCristales = redondearPrecio(precioCristales);
     }
-    document.getElementById('Precio-Cristales').value = formatearMoneda(precioCristales);
+    elementos.precioCristales.value = formatearMoneda(precioCristales);
 
     // Calcular precio final
     const precioFinal = precioCristales + precioArmazon;
-    document.getElementById('producto-precio-final').value = formatearMoneda(precioFinal);
+    elementos.productoPrecioFinal.value = formatearMoneda(precioFinal);
 }
 
 // Función para agregar eventos a los campos editables
@@ -215,9 +227,8 @@ export function agregarEventosCalculos() {
     });
 
     // Agregar evento al checkbox de redondeo
-    const redondearPreciosCheckbox = document.getElementById('redondear-precios');
-    if (redondearPreciosCheckbox) {
-        redondearPreciosCheckbox.addEventListener('change', calcularPrecios);
+    if (elementos.redondearPreciosCheckbox) {
+        elementos.redondearPreciosCheckbox.addEventListener('change', calcularPrecios);
     }
 }
 
@@ -227,14 +238,13 @@ export function inicializarProductoSeleccionado() {
     cargarListaMontaje();
 
     // Inicializar los campos editables con valores por defecto
-    document.getElementById('producto-iva').value = '22'; // IVA por defecto
-    document.getElementById('producto-multiplicador').value = '2.2'; // Multiplicador por defecto
-    document.getElementById('producto-armazon').value = formatearMoneda(0); // Armazón por defecto
+    elementos.productoIva.value = '22'; // IVA por defecto
+    elementos.productoMultiplicador.value = '2.2'; // Multiplicador por defecto
+    elementos.productoArmazon.value = formatearMoneda(0); // Armazón por defecto
 
     // Seleccionar el primer valor de la lista de montaje
-    const selectMontaje = document.getElementById('producto-armado');
-    if (selectMontaje && selectMontaje.options.length > 0) {
-        selectMontaje.selectedIndex = 0; // Seleccionar el primer elemento
+    if (elementos.productoArmado && elementos.productoArmado.options.length > 0) {
+        elementos.productoArmado.selectedIndex = 0; // Seleccionar el primer elemento
     }
 
     // Calcular precios iniciales
