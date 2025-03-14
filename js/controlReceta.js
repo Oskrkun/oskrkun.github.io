@@ -409,6 +409,7 @@ export function calcularCerca(ojo) {
 export function sincronizarCambios(event) {
     const input = event.target;
     const id = input.id;
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM dinámicamente
 
     // Si se modifica ADD, actualizar "cerca"
     if (id.includes('add')) {
