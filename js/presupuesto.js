@@ -14,8 +14,6 @@ import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 import {
     cargarTratamientos,
-    formatearNumero,
-    formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
     cargarLaboratorios,
