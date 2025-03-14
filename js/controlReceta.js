@@ -135,23 +135,28 @@ function validarADD(input, value) {
 
 // Función para validar ESF y CIL
 function validarEsfOCil(input, value, id) {
-    // Permitir los símbolos +, - y punto decimal mientras se escribe
+    // Limpiar errores anteriores relacionados con este input
+    erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+
+    // Validar el formato del valor
     if (!/^[+-]?\d*\.?\d*$/.test(value)) {
         console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
         erroresActivos.push(`*${id}: Solo se permiten números, +, - y punto decimal.`);
-        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        input.value = value.slice(0, -1);
         return;
     }
 
-    // Validar que no haya valores de 3 cifras
-    if (value.length > 5) { // Considerando el signo y el punto decimal
+    // Validar que no haya más de 2 cifras enteras
+    const partes = value.split('.');
+    const parteEntera = partes[0].replace(/[+-]/, ''); // Ignorar el signo
+    if (parteEntera.length > 2) {
         console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
         erroresActivos.push(`*${id}: No puede tener más de 2 cifras enteras.`);
-        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        input.value = value.slice(0, -1);
         return;
     }
 
-    // Validar que el valor esté dentro del rango permitido
+    // Validar el valor numérico
     const valorNumerico = parseFloat(value);
     mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
 }
@@ -188,7 +193,7 @@ export function onInputBlur(event) {
     const value = input.value.trim();
     const id = input.id;
 
-    // Si el input está vacío, limpiar el error correspondiente
+    // Si el input está vacío, limpiar todos los errores relacionados
     if (value === '') {
         erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
         actualizarErrores(); // Actualizar la lista de errores en la interfaz
@@ -295,22 +300,17 @@ export function mostrarAdvertenciaEjeFaltante() {
     const mensajeErrorOD = '*Falta el Eje del OD';
     const mensajeErrorOI = '*Falta el Eje del OI';
 
+    // Limpiar errores anteriores relacionados con el eje
+    erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOD && error !== mensajeErrorOI);
+
     // Verificar si falta el EJE en OD
     if (cilOD !== '' && ejeOD === '') {
-        if (!erroresActivos.includes(mensajeErrorOD)) {
-            erroresActivos.push(mensajeErrorOD);
-        }
-    } else {
-        erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOD);
+        erroresActivos.push(mensajeErrorOD);
     }
 
     // Verificar si falta el EJE en OI
     if (cilOI !== '' && ejeOI === '') {
-        if (!erroresActivos.includes(mensajeErrorOI)) {
-            erroresActivos.push(mensajeErrorOI);
-        }
-    } else {
-        erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOI);
+        erroresActivos.push(mensajeErrorOI);
     }
 
     // Actualizar la lista de errores en la interfaz
@@ -344,16 +344,16 @@ export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
     const ojo = id.includes('od') ? 'OD' : 'OI';
     const mensajeError = `*${esfOCil} demasiado alto en ${ojo}. Consultar con el laboratorio.`;
 
+    // Limpiar errores anteriores relacionados con este input
+    erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+
     // Verificar si el valor está fuera de rango
     if (valorNumerico > maxValor || valorNumerico < -maxValor) {
-        if (!erroresActivos.includes(mensajeError)) {
-            erroresActivos.push(mensajeError);
-        }
-    } else {
-        erroresActivos = erroresActivos.filter(error => error !== mensajeError);
+        erroresActivos.push(mensajeError);
     }
 
-    actualizarErrores(); // Actualizar la lista de errores en la interfaz
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
 }
 
 // Función genérica para calcular y actualizar la parte de "cerca"
