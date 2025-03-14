@@ -174,6 +174,9 @@ async function cargarListaMontaje(laboratorioId) {
 
             // Agregar evento para recalcular al cambiar el armado
             selectMontaje.addEventListener('change', calcularPrecios);
+
+            // Calcular precios después de cargar el montaje
+            calcularPrecios();
         } else {
             console.warn('No se encontraron datos para el laboratorio y servicio especificados.'); // Depuración: No hay datos
             const option = document.createElement('option');
