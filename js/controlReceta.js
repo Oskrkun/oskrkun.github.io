@@ -102,34 +102,50 @@ export function actualizarErrores() {
 
 // Función para validar los inputs
 export function validarInput(event) {
-    console.log('Función validarInput: Validando input:', event.target.id);
+    console.log('Función validarInput: Validando input:', event.target.id); // Depuración
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
 
     // Limpiar el error anterior relacionado con este input
-    console.log('Limpiando errores anteriores para:', id);
+    console.log('Limpiando errores anteriores para:', id); // Depuración
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
-    console.log('Errores activos después de limpiar:', erroresActivos);
+    console.log('Errores activos después de limpiar:', erroresActivos); // Depuración
 
     // Validación específica para EJE
     if (id.includes('eje')) {
-        console.log('Validando EJE...');
+        console.log('Validando EJE...'); // Depuración
         validarEje(input, value);
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
-        console.log('Validando ADD...');
+        console.log('Validando ADD...'); // Depuración
         validarADD(input, value);
     }
     // Validación para ESF y CIL
     else {
-        console.log('Validando ESF o CIL...');
+        console.log('Validando ESF o CIL...'); // Depuración
         validarEsfOCil(input, value, id);
     }
 
+    // Verificar si los errores relacionados con el eje o el cilindro siguen siendo válidos
+    if (id.includes('esf') || id.includes('cil')) {
+        console.log('Verificando errores relacionados con el eje o el cilindro...'); // Depuración
+        const ojo = id.includes('od') ? 'od' : 'oi';
+        const cil = parseFloat(elementos[`${ojo}LejosCil`].value) || 0;
+        const eje = elementos[`${ojo}LejosEje`].value.trim();
+
+        console.log(`Cilindro (${ojo}):`, cil, 'Eje:', eje); // Depuración
+
+        if (cil === 0 && eje === '') {
+            console.log(`No hay cilindro en ${ojo}. Eliminando error de eje faltante si existe...`); // Depuración
+            erroresActivos = erroresActivos.filter(error => !error.includes(`Falta el Eje del ${ojo.toUpperCase()}`));
+            console.log('Errores activos después de eliminar error de eje faltante:', erroresActivos); // Depuración
+        }
+    }
+
     // Revisar errores y actualizar la parte de "cerca"
-    console.log('Llamando a revisarErroresYActualizarCerca...');
+    console.log('Llamando a revisarErroresYActualizarCerca...'); // Depuración
     revisarErroresYActualizarCerca();
 }
 
@@ -341,39 +357,46 @@ export function limpiarCerca(ojo) {
 
 // Función para mostrar advertencia si falta el EJE y hay CIL
 export function mostrarAdvertenciaEjeFaltante() {
-    console.log('Función mostrarAdvertenciaEjeFaltante: Revisando si falta el eje...');
-    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+    console.log('Función mostrarAdvertenciaEjeFaltante: Revisando si falta el eje...'); // Depuración
+    const elementos = obtenerElementos();
     const cilOD = elementos.odLejosCil.value.trim();
     const ejeOD = elementos.odLejosEje.value.trim();
     const cilOI = elementos.oiLejosCil.value.trim();
     const ejeOI = elementos.oiLejosEje.value.trim();
+
+    console.log('Cilindro OD:', cilOD, 'Eje OD:', ejeOD); // Depuración
+    console.log('Cilindro OI:', cilOI, 'Eje OI:', ejeOI); // Depuración
 
     const mensajeErrorOD = '*Falta el Eje del OD';
     const mensajeErrorOI = '*Falta el Eje del OI';
 
     // Verificar si falta el EJE en OD
     if (cilOD !== '' && ejeOD === '') {
-        console.log('Falta el eje en OD. Agregando error...');
+        console.log('Falta el eje en OD. Agregando error...'); // Depuración
         if (!erroresActivos.includes(mensajeErrorOD)) {
             erroresActivos.push(mensajeErrorOD);
         }
     } else {
-        console.log('No falta el eje en OD. Eliminando error si existe...');
+        console.log('No falta el eje en OD. Eliminando error si existe...'); // Depuración
         erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOD);
     }
 
     // Verificar si falta el EJE en OI
     if (cilOI !== '' && ejeOI === '') {
-        console.log('Falta el eje en OI. Agregando error...');
+        console.log('Falta el eje en OI. Agregando error...'); // Depuración
         if (!erroresActivos.includes(mensajeErrorOI)) {
             erroresActivos.push(mensajeErrorOI);
         }
     } else {
-        console.log('No falta el eje en OI. Eliminando error si existe...');
+        console.log('No falta el eje en OI. Eliminando error si existe...'); // Depuración
         erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOI);
     }
 
-    console.log('Errores activos después de revisar ejes:', erroresActivos);
+    console.log('Errores activos después de revisar ejes:', erroresActivos); // Depuración
+
+    // Actualizar la lista de errores en la interfaz
+    console.log('Llamando a actualizarErrores...'); // Depuración
+    actualizarErrores();
 }
 
 // Función para mostrar advertencia si las ADD son diferentes
