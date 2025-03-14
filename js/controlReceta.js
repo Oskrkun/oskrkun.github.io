@@ -45,7 +45,6 @@ export function crearAdvertencias() {
 export function actualizarErrores() {
     let contenedorErrores = document.getElementById('contenedor-errores');
 
-    // Si el contenedor no existe, crearlo
     if (!contenedorErrores) {
         crearAdvertencias();
         contenedorErrores = document.getElementById('contenedor-errores');
@@ -78,16 +77,18 @@ export function validarInput(event) {
     // Limpiar el error anterior
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
 
-    // Validación específica para EJE
+    // Si el input está vacío, no hay necesidad de validar más
+    if (value === '') {
+        actualizarErrores(); // Actualizar la lista de errores en la interfaz
+        return;
+    }
+
+    // Resto de la lógica de validación...
     if (id.includes('eje')) {
         validarEje(input, value);
-    }
-    // Validación específica para ADD
-    else if (id.includes('add')) {
+    } else if (id.includes('add')) {
         validarADD(input, value);
-    }
-    // Validación para ESF y CIL
-    else {
+    } else {
         validarEsfOCil(input, value, id);
     }
 }
@@ -180,10 +181,16 @@ export function onInputBlur(event) {
     const value = input.value.trim();
     const id = input.id;
 
-    // Validación específica para EJE
+    // Si el input está vacío, limpiar el error correspondiente
+    if (value === '') {
+        erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+        actualizarErrores(); // Actualizar la lista de errores en la interfaz
+        return; // Salir de la función para evitar más validaciones
+    }
+
+    // Resto de la lógica de validación...
     if (id.includes('eje')) {
         if (value === '') {
-            // No autocompletar con 0 si está vacío
             input.value = '';
         } else {
             const valorNumerico = parseInt(value, 10);
@@ -193,33 +200,26 @@ export function onInputBlur(event) {
                 input.value = '180';
             }
         }
-    }
-    // Validación específica para ADD
-    else if (id.includes('add')) {
+    } else if (id.includes('add')) {
         if (value === '') {
-            input.value = ''; // Si está vacío, no hacer nada
+            input.value = '';
         } else {
-            // Asegurar que el valor esté en el rango de 0 a MAX_ADD
             const valorNumerico = parseFloat(value);
             if (valorNumerico < 0) {
                 input.value = '0.00';
             } else if (valorNumerico > MAX_ADD) {
                 input.value = MAX_ADD.toFixed(2);
             } else {
-                // Ajustar el valor a pasos de 0.25
                 const valorAjustado = ajustarValorAPasos(value);
                 input.value = valorAjustado;
             }
         }
-    }
-    // Validación para ESF y CIL
-    else if (esEsfOCil(id)) {
+    } else if (esEsfOCil(id)) {
         if (value === '' || value === '+' || value === '-') {
-            input.value = ''; // Si está vacío o solo tiene un signo, dejarlo vacío
+            input.value = '';
             return;
         }
 
-        // Asegurar que el valor tenga un signo
         let valorAjustado = ajustarValorAPasos(value);
         if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
             valorAjustado = `+${valorAjustado}`;
@@ -227,12 +227,10 @@ export function onInputBlur(event) {
 
         input.value = valorAjustado;
 
-        // Mostrar advertencia si el valor es mayor a MAX_ESF o MAX_CIL
         const valorNumerico = parseFloat(valorAjustado);
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
 
-    // Revisar errores y actualizar la parte de "cerca"
     revisarErroresYActualizarCerca();
 }
 
@@ -251,28 +249,25 @@ function actualizarVisibilidadCerca() {
 
 // Función para revisar errores y actualizar la parte de "cerca"
 export function revisarErroresYActualizarCerca() {
-    // Revisar si falta el eje y hay cilindro
     mostrarAdvertenciaEjeFaltante();
 
-    // Si hay ADD, actualizar la parte de "cerca"
     const addOD = parseFloat(elementos.addOD.value) || 0;
     const addOI = parseFloat(elementos.addOI.value) || 0;
 
     if (addOD !== 0) {
         calcularCerca('od');
     } else {
-        limpiarCerca('od'); // Si la ADD está vacía, limpiar la parte de "cerca" del OD
+        limpiarCerca('od');
     }
 
     if (addOI !== 0) {
         calcularCerca('oi');
     } else {
-        limpiarCerca('oi'); // Si la ADD está vacía, limpiar la parte de "cerca" del OI
+        limpiarCerca('oi');
     }
-    // Actualizar la visibilidad de la sección de "cerca"
+
     actualizarVisibilidadCerca();
-    // Actualizar la lista de errores en la interfaz
-    actualizarErrores();
+    actualizarErrores(); // Actualizar la lista de errores en la interfaz
 }
 
 // Función para limpiar la parte de "cerca" cuando la ADD está vacía
@@ -344,17 +339,14 @@ export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
 
     // Verificar si el valor está fuera de rango
     if (valorNumerico > maxValor || valorNumerico < -maxValor) {
-        // Agregar el error a la lista de errores activos si no está ya presente
         if (!erroresActivos.includes(mensajeError)) {
             erroresActivos.push(mensajeError);
         }
     } else {
-        // Si el valor está dentro del rango, eliminar el error de la lista
         erroresActivos = erroresActivos.filter(error => error !== mensajeError);
     }
 
-    // Actualizar la lista de errores en la interfaz
-    actualizarErrores();
+    actualizarErrores(); // Actualizar la lista de errores en la interfaz
 }
 
 // Función genérica para calcular y actualizar la parte de "cerca"
