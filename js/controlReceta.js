@@ -1,3 +1,5 @@
+// controlReceta.js
+
 // Variables para establecer los máximos de ADD, ESF y CIL
 export const MAX_ADD = 3.25;
 export const MAX_ESF = 25.00; // Máximo valor para ESF
@@ -6,49 +8,57 @@ export const MAX_CIL = 8.00; // Máximo valor para CIL
 // Lista de errores activos
 export let erroresActivos = [];
 
-// Elementos del DOM
-const elementos = {
-    addOD: document.getElementById('add-od'),
-    addOI: document.getElementById('add-oi'),
-    odLejosEsf: document.getElementById('od-lejos-esf'),
-    odLejosCil: document.getElementById('od-lejos-cil'),
-    odLejosEje: document.getElementById('od-lejos-eje'),
-    oiLejosEsf: document.getElementById('oi-lejos-esf'),
-    oiLejosCil: document.getElementById('oi-lejos-cil'),
-    oiLejosEje: document.getElementById('oi-lejos-eje'),
-    odCercaEsf: document.getElementById('od-cerca-esf'),
-    odCercaCil: document.getElementById('od-cerca-cil'),
-    odCercaEje: document.getElementById('od-cerca-eje'),
-    oiCercaEsf: document.getElementById('oi-cerca-esf'),
-    oiCercaCil: document.getElementById('oi-cerca-cil'),
-    oiCercaEje: document.getElementById('oi-cerca-eje'),
-    seccionCerca: document.getElementById('seccion-cerca'),
-    contenedorErrores: document.getElementById('contenedor-errores')
-};
+// Función para obtener los elementos del DOM dinámicamente
+export function obtenerElementos() {
+    return {
+        addOD: document.getElementById('add-od'),
+        addOI: document.getElementById('add-oi'),
+        odLejosEsf: document.getElementById('od-lejos-esf'),
+        odLejosCil: document.getElementById('od-lejos-cil'),
+        odLejosEje: document.getElementById('od-lejos-eje'),
+        oiLejosEsf: document.getElementById('oi-lejos-esf'),
+        oiLejosCil: document.getElementById('oi-lejos-cil'),
+        oiLejosEje: document.getElementById('oi-lejos-eje'),
+        odCercaEsf: document.getElementById('od-cerca-esf'),
+        odCercaCil: document.getElementById('od-cerca-cil'),
+        odCercaEje: document.getElementById('od-cerca-eje'),
+        oiCercaEsf: document.getElementById('oi-cerca-esf'),
+        oiCercaCil: document.getElementById('oi-cerca-cil'),
+        oiCercaEje: document.getElementById('oi-cerca-eje'),
+        seccionCerca: document.getElementById('seccion-cerca'),
+        contenedorErrores: document.getElementById('contenedor-errores')
+    };
+}
 
 // Función para crear los span de advertencia dinámicamente
 export function crearAdvertencias() {
-    // Crear un contenedor único para las advertencias
-    const contenedorErrores = document.createElement('div');
-    contenedorErrores.id = 'contenedor-errores';
-    contenedorErrores.style.marginTop = '10px';
+    let contenedorErrores = document.getElementById('contenedor-errores');
 
-    // Insertar el contenedor de errores debajo de la sección de cerca
-    if (elementos.seccionCerca) {
-        elementos.seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
-    } else {
-        console.error('No se encontró la sección de cerca.');
+    // Si el contenedor no existe, crearlo
+    if (!contenedorErrores) {
+        contenedorErrores = document.createElement('div');
+        contenedorErrores.id = 'contenedor-errores';
+        contenedorErrores.style.marginTop = '10px';
+
+        // Insertar el contenedor de errores debajo de la sección de cerca
+        const seccionCerca = document.getElementById('seccion-cerca');
+        if (seccionCerca) {
+            seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
+        } else {
+            console.error('No se encontró la sección de cerca.');
+        }
     }
 }
 
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
-    let contenedorErrores = document.getElementById('contenedor-errores');
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+    let contenedorErrores = elementos.contenedorErrores;
 
     // Si el contenedor no existe, crearlo
     if (!contenedorErrores) {
         crearAdvertencias();
-        contenedorErrores = document.getElementById('contenedor-errores');
+        contenedorErrores = elementos.contenedorErrores;
     }
 
     if (!contenedorErrores) {
@@ -238,6 +248,7 @@ export function onInputBlur(event) {
 
 // Función para mostrar u ocultar la sección de "cerca" en función de los valores de "ADD"
 function actualizarVisibilidadCerca() {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const addOD = elementos.addOD.value.trim();
     const addOI = elementos.addOI.value.trim();
 
@@ -251,6 +262,8 @@ function actualizarVisibilidadCerca() {
 
 // Función para revisar errores y actualizar la parte de "cerca"
 export function revisarErroresYActualizarCerca() {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+
     // Revisar si falta el eje y hay cilindro
     mostrarAdvertenciaEjeFaltante();
 
@@ -269,14 +282,18 @@ export function revisarErroresYActualizarCerca() {
     } else {
         limpiarCerca('oi'); // Si la ADD está vacía, limpiar la parte de "cerca" del OI
     }
+
     // Actualizar la visibilidad de la sección de "cerca"
     actualizarVisibilidadCerca();
+
     // Actualizar la lista de errores en la interfaz
     actualizarErrores();
 }
 
 // Función para limpiar la parte de "cerca" cuando la ADD está vacía
 export function limpiarCerca(ojo) {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+
     // Limpiar los campos de "cerca" para el ojo especificado
     elementos[`${ojo}CercaEsf`].value = '';
     elementos[`${ojo}CercaCil`].value = '';
@@ -285,6 +302,7 @@ export function limpiarCerca(ojo) {
 
 // Función para mostrar advertencia si falta el EJE y hay CIL
 export function mostrarAdvertenciaEjeFaltante() {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const cilOD = elementos.odLejosCil.value.trim();
     const ejeOD = elementos.odLejosEje.value.trim();
     const cilOI = elementos.oiLejosCil.value.trim();
@@ -317,6 +335,7 @@ export function mostrarAdvertenciaEjeFaltante() {
 
 // Función para mostrar advertencia si las ADD son diferentes
 export function mostrarAdvertenciaAddDiferente() {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const addOD = parseFloat(elementos.addOD.value) || 0;
     const addOI = parseFloat(elementos.addOI.value) || 0;
 
@@ -359,6 +378,8 @@ export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
 
 // Función genérica para calcular y actualizar la parte de "cerca"
 export function calcularCerca(ojo) {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+
     // Obtener los valores de ESF de "lejos" y ADD para el ojo especificado
     const esfLejos = parseFloat(elementos[`${ojo}LejosEsf`].value) || 0;
     const add = parseFloat(elementos[`add${ojo.toUpperCase()}`].value) || 0;
@@ -428,6 +449,8 @@ export function esEsfOCil(id) {
 
 // Función para transponer la receta
 export function transponerReceta() {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
+
     // Obtener los valores de los cilindros de "lejos"
     const cilOD = parseFloat(elementos.odLejosCil.value) || 0;
     const cilOI = parseFloat(elementos.oiLejosCil.value) || 0;
@@ -464,6 +487,7 @@ export function transponerReceta() {
 
 // Función para transponer un ojo (transposición completa)
 function transponerOjo(ojo) {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const esf = parseFloat(elementos[`${ojo}LejosEsf`].value) || 0;
     const cil = parseFloat(elementos[`${ojo}LejosCil`].value) || 0;
     const eje = parseInt(elementos[`${ojo}LejosEje`].value) || 0; // Si el eje está vacío, se toma como 0
@@ -489,6 +513,7 @@ function transponerOjo(ojo) {
 
 // Función para cambiar el signo del cilindro (solo para un ojo)
 function cambiarSignoCilindro(ojo) {
+    const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const esf = parseFloat(elementos[`${ojo}LejosEsf`].value) || 0;
     const cil = parseFloat(elementos[`${ojo}LejosCil`].value) || 0;
     const eje = parseInt(elementos[`${ojo}LejosEje`].value) || 0; // Si el eje está vacío, se toma como 0
