@@ -164,29 +164,10 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
-    console.log('Función initPresupuesto: Inicializando presupuesto...');
-    // Crear el contenedor de errores
-    console.log('Llamando a crearAdvertencias...');
-    crearAdvertencias();
-
-    // Verificar que el contenedor de errores esté presente
-    const contenedorErrores = document.getElementById('contenedor-errores');
-    if (!contenedorErrores) {
-        console.error('El contenedor de errores no se creó correctamente.');
-        return;
-    }
 
     // Deshabilitar los campos de "cerca"
     console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
-
-    // Agregar eventos de delegación
-    console.log('Agregando eventos de delegación...');
-    agregarEventosDelegacion();
-
-    // Mostrar advertencia si las ADD son diferentes
-    console.log('Llamando a mostrarAdvertenciaAddDiferente...');
-    mostrarAdvertenciaAddDiferente();
 
     // Agregar eventos a los botones
     console.log('Agregando eventos a los botones...');
