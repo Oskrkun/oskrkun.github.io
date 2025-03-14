@@ -167,9 +167,20 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
+    // Crear el contenedor de errores
     crearAdvertencias();
+
+    // Verificar que el contenedor de errores esté presente
+    const contenedorErrores = document.getElementById('contenedor-errores');
+    if (!contenedorErrores) {
+        console.error('El contenedor de errores no se creó correctamente.');
+        return;
+    }
+
+    // Deshabilitar los campos de "cerca"
     deshabilitarCamposCerca();
 
+    // Agregar eventos a los inputs
     const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
@@ -183,14 +194,20 @@ export async function initPresupuesto() {
         });
     });
 
+    // Agregar eventos de sincronización
     agregarEventosSincronizacion();
+
+    // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
+
+    // Agregar eventos a los botones
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
 
     // Cargar tratamientos
     await cargarTratamientos();
     await cargarIndicesRefraccion();
+
     // Cargar laboratorios y tipos de lentes para las listas desplegables
     await cargarLaboratorios();
     await cargarTiposLentesSelect();
@@ -214,10 +231,12 @@ export async function initPresupuesto() {
     // Cargar productos filtrados después de que las listas estén llenas
     await cargarProductosFiltrados();
 
+    // Agregar eventos de filtrado y receta
     agregarEventosFiltrado();
     agregarEventosToggleSection();
     agregarEventosReceta();
 
+    // Manejar la selección de productos y cálculos
     manejarSeleccionProducto();
     agregarEventosCalculos();
     inicializarProductoSeleccionado();
