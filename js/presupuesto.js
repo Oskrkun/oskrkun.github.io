@@ -43,7 +43,7 @@ import {
     inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
 
-import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js'; // Importar funciones de autenticación
+import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js'; // Importar funciones actualizadas
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
@@ -153,10 +153,10 @@ function deshabilitarCamposCerca() {
 async function llenarVendedor() {
     const user = await verificarAutenticacion();
     if (user) {
-        const { esAdmin, nick } = await verificarSiEsAdmin(user);
+        const { rol, nick } = await obtenerRolYNick(user); // Usar la nueva función
         const vendedorInput = document.getElementById('vendedor');
         if (vendedorInput) {
-            vendedorInput.value = nick || user.email; // Usar el nick si es admin, o el email si no
+            vendedorInput.value = nick || user.email; // Usar el nick si existe, de lo contrario, el email
         } else {
             console.error('No se encontró el campo de Vendedor.');
         }
