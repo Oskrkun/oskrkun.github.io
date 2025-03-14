@@ -1,20 +1,10 @@
 // presupuesto.js
 import { supabaseClient } from './supabaseConfig.js';
 import {
-    MAX_ADD,
-    MAX_ESF,
-    MAX_CIL,
-    erroresActivos,
     crearAdvertencias,
-    actualizarErrores,
     agregarEventosDelegacion,
     revisarErroresYActualizarCerca,
-    mostrarAdvertenciaEjeFaltante,
     mostrarAdvertenciaAddDiferente,
-    mostrarAdvertenciaMaxEsfCil,
-    calcularCerca,
-    sincronizarCambios,
-    esEsfOCil,
     transponerReceta,
     sincronizarTodo,
     limpiarCerca
