@@ -108,6 +108,9 @@ export function validarInputCentralizado(event) {
     const value = input.value.trim();
     const id = input.id;
 
+    // Obtener los elementos del DOM
+    const elementos = obtenerElementos();
+
     // Limpiar el error anterior relacionado con este input
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
 
@@ -206,6 +209,11 @@ function validarEsfOCil(input, value, id) {
     // Validar que el valor esté dentro del rango permitido
     const valorNumerico = parseFloat(value);
     mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+    // Si el valor es válido, eliminar el error si existe
+    if (valorNumerico <= MAX_ESF && valorNumerico >= -MAX_ESF) {
+        erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+    }
 }
 
 // Función para ajustar el valor a pasos de 0.25
