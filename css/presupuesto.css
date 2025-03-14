@@ -200,6 +200,16 @@ input[type="text"] {
     display: block;
 }
 
+/* Estilos para ocultar la sección de "cerca" */
+#seccion-cerca {
+    display: none; /* Ocultar por defecto */
+}
+
+/* Estilos para mostrar la sección de "cerca" cuando sea necesario */
+#seccion-cerca.visible {
+    display: table; /* Mostrar como tabla */
+}
+
 /* Estilos para evitar selección de texto y eventos de puntero en las secciones de receta */
 .seccion-lejos table, .seccion-lejos th, .seccion-lejos td,
 .seccion-cerca table, .seccion-cerca th, .seccion-cerca td,

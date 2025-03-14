@@ -214,6 +214,20 @@ export function onInputBlur(event) {
     revisarErroresYActualizarCerca();
 }
 
+// Función para mostrar u ocultar la sección de "cerca" en función de los valores de "ADD"
+function actualizarVisibilidadCerca() {
+    const addOD = document.getElementById('add-od').value.trim();
+    const addOI = document.getElementById('add-oi').value.trim();
+    const seccionCerca = document.getElementById('seccion-cerca');
+
+    // Si hay algún valor en los campos de "ADD", mostrar la sección de "cerca"
+    if (addOD !== '' || addOI !== '') {
+        seccionCerca.classList.add('visible');
+    } else {
+        seccionCerca.classList.remove('visible');
+    }
+}
+
 // Función para revisar errores y actualizar la parte de "cerca"
 export function revisarErroresYActualizarCerca() {
     // Revisar si falta el eje y hay cilindro
@@ -234,7 +248,8 @@ export function revisarErroresYActualizarCerca() {
     } else {
         limpiarCerca('oi'); // Si la ADD está vacía, limpiar la parte de "cerca" del OI
     }
-
+    // Actualizar la visibilidad de la sección de "cerca"
+    actualizarVisibilidadCerca();
     // Actualizar la lista de errores en la interfaz
     actualizarErrores();
 }
