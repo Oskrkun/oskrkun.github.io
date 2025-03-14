@@ -50,16 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar el dashboard cuando el DOM esté listo
     inicializarDashboard();
 
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+
     // Manejar el botón de hamburguesa para mostrar/ocultar el menú lateral
-    document.getElementById('menuToggle').addEventListener('click', () => {
-        const sidebarMenu = document.querySelector('.sidebar-menu');
+    menuToggle.addEventListener('click', (event) => {
+        event.stopPropagation(); // Evitar que el clic se propague al documento
         sidebarMenu.classList.toggle('active');
+    });
+
+    // Cerrar el menú si se hace clic fuera de él
+    document.addEventListener('click', (event) => {
+        if (!sidebarMenu.contains(event.target) {
+            sidebarMenu.classList.remove('active');
+        }
     });
 
     // Ajustar el menú al redimensionar la pantalla
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
-            document.querySelector('.sidebar-menu').classList.remove('active');
+            sidebarMenu.classList.remove('active');
         }
     });
 });
