@@ -167,9 +167,9 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
-    console.log('Función initPresupuesto: Inicializando presupuesto...');
+    //console.log('Función initPresupuesto: Inicializando presupuesto...');
     // Crear el contenedor de errores
-    console.log('Llamando a crearAdvertencias...');
+    //console.log('Llamando a crearAdvertencias...');
     crearAdvertencias();
 
     // Verificar que el contenedor de errores esté presente
@@ -180,11 +180,11 @@ export async function initPresupuesto() {
     }
 
     // Deshabilitar los campos de "cerca"
-    console.log('Deshabilitando campos de "cerca"...');
+    //console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
 
     // Agregar eventos a los inputs
-    console.log('Agregando eventos a los inputs...');
+    //console.log('Agregando eventos a los inputs...');
     const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
@@ -199,25 +199,25 @@ export async function initPresupuesto() {
     });
 
     // Agregar eventos de sincronización
-    console.log('Agregando eventos de sincronización...');
+    //console.log('Agregando eventos de sincronización...');
     agregarEventosSincronizacion();
 
     // Mostrar advertencia si las ADD son diferentes
-    console.log('Llamando a mostrarAdvertenciaAddDiferente...');
+    //console.log('Llamando a mostrarAdvertenciaAddDiferente...');
     mostrarAdvertenciaAddDiferente();
 
     // Agregar eventos a los botones
-    console.log('Agregando eventos a los botones...');
+    //console.log('Agregando eventos a los botones...');
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
 
     // Cargar tratamientos
-    console.log('Cargando tratamientos...');
+    //console.log('Cargando tratamientos...');
     await cargarTratamientos();
     await cargarIndicesRefraccion();
 
     // Cargar laboratorios y tipos de lentes para las listas desplegables
-    console.log('Cargando laboratorios y tipos de lentes...');
+    //console.log('Cargando laboratorios y tipos de lentes...');
     await cargarLaboratorios();
     await cargarTiposLentesSelect();
 
@@ -238,23 +238,23 @@ export async function initPresupuesto() {
     }
 
     // Cargar productos filtrados después de que las listas estén llenas
-    console.log('Cargando productos filtrados...');
+    //console.log('Cargando productos filtrados...');
     await cargarProductosFiltrados();
 
     // Agregar eventos de filtrado y receta
-    console.log('Agregando eventos de filtrado y receta...');
+    //console.log('Agregando eventos de filtrado y receta...');
     agregarEventosFiltrado();
     agregarEventosToggleSection();
     agregarEventosReceta();
 
     // Manejar la selección de productos y cálculos
-    console.log('Manejando selección de productos y cálculos...');
+    //console.log('Manejando selección de productos y cálculos...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
     inicializarProductoSeleccionado();
 
     // Llenar el campo "Vendedor" con el nick del usuario logueado
-    console.log('Llenando campo "Vendedor"...');
+    //console.log('Llenando campo "Vendedor"...');
     await llenarVendedor();
 }
 
