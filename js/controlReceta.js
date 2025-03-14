@@ -32,38 +32,45 @@ export function obtenerElementos() {
 
 // Función para crear los span de advertencia dinámicamente
 export function crearAdvertencias() {
+    console.log('Función crearAdvertencias: Creando contenedor de errores...');
     let contenedorErrores = document.getElementById('contenedor-errores');
 
     // Si el contenedor no existe, crearlo
     if (!contenedorErrores) {
+        console.log('Contenedor de errores no existe. Creando uno nuevo...');
         contenedorErrores = document.createElement('div');
         contenedorErrores.id = 'contenedor-errores';
 
         // Estilos para el contenedor de errores flotante
-        contenedorErrores.style.position = 'fixed'; // Fijo en la pantalla
-        contenedorErrores.style.bottom = '20px'; // 20px desde la parte inferior
-        contenedorErrores.style.right = '20px'; // 20px desde la derecha
-        contenedorErrores.style.backgroundColor = '#ffebee'; // Fondo rojo claro
-        contenedorErrores.style.padding = '10px'; // Espaciado interno
-        contenedorErrores.style.borderRadius = '8px'; // Bordes redondeados
-        contenedorErrores.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'; // Sombra
-        contenedorErrores.style.zIndex = '1000'; // Asegurar que esté por encima de otros elementos
-        contenedorErrores.style.maxWidth = '300px'; // Ancho máximo
-        contenedorErrores.style.overflowY = 'auto'; // Permitir desplazamiento vertical si hay muchos errores
-        contenedorErrores.style.maxHeight = '200px'; // Altura máxima
+        contenedorErrores.style.position = 'fixed';
+        contenedorErrores.style.bottom = '20px';
+        contenedorErrores.style.right = '20px';
+        contenedorErrores.style.backgroundColor = '#ffebee';
+        contenedorErrores.style.padding = '10px';
+        contenedorErrores.style.borderRadius = '8px';
+        contenedorErrores.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+        contenedorErrores.style.zIndex = '1000';
+        contenedorErrores.style.maxWidth = '300px';
+        contenedorErrores.style.overflowY = 'auto';
+        contenedorErrores.style.maxHeight = '200px';
 
         // Insertar el contenedor de errores en el body
         document.body.appendChild(contenedorErrores);
+        console.log('Contenedor de errores creado y añadido al DOM.');
+    } else {
+        console.log('Contenedor de errores ya existe. No se crea uno nuevo.');
     }
 }
 
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
+    console.log('Función actualizarErrores: Actualizando contenedor de errores...');
     const elementos = obtenerElementos(); // Obtener los elementos del DOM
     let contenedorErrores = elementos.contenedorErrores;
 
     // Si el contenedor no existe, crearlo
     if (!contenedorErrores) {
+        console.log('Contenedor de errores no existe. Llamando a crearAdvertencias...');
         crearAdvertencias();
         contenedorErrores = elementos.contenedorErrores;
     }
@@ -74,42 +81,55 @@ export function actualizarErrores() {
     }
 
     // Limpiar el contenedor de errores
+    console.log('Limpiando contenedor de errores...');
     contenedorErrores.innerHTML = '';
 
     // Mostrar cada error en el contenedor
+    console.log('Errores activos:', erroresActivos);
     erroresActivos.forEach(error => {
+        console.log('Agregando error al contenedor:', error);
         const spanError = document.createElement('span');
         spanError.textContent = error;
         spanError.classList.add('advertenciaReceta');
         spanError.style.display = 'block';
         contenedorErrores.appendChild(spanError);
     });
+
+    if (erroresActivos.length === 0) {
+        console.log('No hay errores activos. Contenedor de errores vacío.');
+    }
 }
 
 // Función para validar los inputs
 export function validarInput(event) {
+    console.log('Función validarInput: Validando input:', event.target.id);
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
 
-    // Limpiar el error anterior
+    // Limpiar el error anterior relacionado con este input
+    console.log('Limpiando errores anteriores para:', id);
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+    console.log('Errores activos después de limpiar:', erroresActivos);
 
     // Validación específica para EJE
     if (id.includes('eje')) {
+        console.log('Validando EJE...');
         validarEje(input, value);
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
+        console.log('Validando ADD...');
         validarADD(input, value);
     }
     // Validación para ESF y CIL
     else {
+        console.log('Validando ESF o CIL...');
         validarEsfOCil(input, value, id);
     }
-    
 
     // Revisar errores y actualizar la parte de "cerca"
+    console.log('Llamando a revisarErroresYActualizarCerca...');
     revisarErroresYActualizarCerca();
 }
 
@@ -197,15 +217,16 @@ export function onInputFocus(event) {
 
 // Función para manejar el evento de blur (salir del input)
 export function onInputBlur(event) {
+    console.log('Función onInputBlur: Validando input al salir:', event.target.id);
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
 
     // Validación específica para EJE
     if (id.includes('eje')) {
+        console.log('Validando EJE en onInputBlur...');
         if (value === '') {
-            // No autocompletar con 0 si está vacío
-            input.value = '';
+            input.value = ''; // No autocompletar con 0 si está vacío
         } else {
             const valorNumerico = parseInt(value, 10);
             if (valorNumerico < 0) {
@@ -217,17 +238,16 @@ export function onInputBlur(event) {
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
+        console.log('Validando ADD en onInputBlur...');
         if (value === '') {
             input.value = ''; // Si está vacío, no hacer nada
         } else {
-            // Asegurar que el valor esté en el rango de 0 a MAX_ADD
             const valorNumerico = parseFloat(value);
             if (valorNumerico < 0) {
                 input.value = '0.00';
             } else if (valorNumerico > MAX_ADD) {
                 input.value = MAX_ADD.toFixed(2);
             } else {
-                // Ajustar el valor a pasos de 0.25
                 const valorAjustado = ajustarValorAPasos(value);
                 input.value = valorAjustado;
             }
@@ -235,12 +255,12 @@ export function onInputBlur(event) {
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
+        console.log('Validando ESF o CIL en onInputBlur...');
         if (value === '' || value === '+' || value === '-') {
             input.value = ''; // Si está vacío o solo tiene un signo, dejarlo vacío
             return;
         }
 
-        // Asegurar que el valor tenga un signo
         let valorAjustado = ajustarValorAPasos(value);
         if (!valorAjustado.startsWith('+') && !valorAjustado.startsWith('-')) {
             valorAjustado = `+${valorAjustado}`;
@@ -248,12 +268,12 @@ export function onInputBlur(event) {
 
         input.value = valorAjustado;
 
-        // Mostrar advertencia si el valor es mayor a MAX_ESF o MAX_CIL
         const valorNumerico = parseFloat(valorAjustado);
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
     }
 
     // Revisar errores y actualizar la parte de "cerca"
+    console.log('Llamando a revisarErroresYActualizarCerca en onInputBlur...');
     revisarErroresYActualizarCerca();
 }
 
@@ -273,9 +293,11 @@ function actualizarVisibilidadCerca() {
 
 // Función para revisar errores y actualizar la parte de "cerca"
 export function revisarErroresYActualizarCerca() {
+    console.log('Función revisarErroresYActualizarCerca: Revisando errores y actualizando sección "cerca"...');
     const elementos = obtenerElementos(); // Obtener los elementos del DOM
 
     // Revisar si falta el eje y hay cilindro
+    console.log('Llamando a mostrarAdvertenciaEjeFaltante...');
     mostrarAdvertenciaEjeFaltante();
 
     // Si hay ADD, actualizar la parte de "cerca"
@@ -283,21 +305,27 @@ export function revisarErroresYActualizarCerca() {
     const addOI = parseFloat(elementos.addOI.value) || 0;
 
     if (addOD !== 0) {
+        console.log('Calculando "cerca" para OD...');
         calcularCerca('od');
     } else {
+        console.log('Limpiando "cerca" para OD...');
         limpiarCerca('od'); // Si la ADD está vacía, limpiar la parte de "cerca" del OD
     }
 
     if (addOI !== 0) {
+        console.log('Calculando "cerca" para OI...');
         calcularCerca('oi');
     } else {
+        console.log('Limpiando "cerca" para OI...');
         limpiarCerca('oi'); // Si la ADD está vacía, limpiar la parte de "cerca" del OI
     }
 
     // Actualizar la visibilidad de la sección de "cerca"
+    console.log('Actualizando visibilidad de la sección "cerca"...');
     actualizarVisibilidadCerca();
 
     // Actualizar la lista de errores en la interfaz
+    console.log('Llamando a actualizarErrores...');
     actualizarErrores();
 }
 
@@ -313,6 +341,7 @@ export function limpiarCerca(ojo) {
 
 // Función para mostrar advertencia si falta el EJE y hay CIL
 export function mostrarAdvertenciaEjeFaltante() {
+    console.log('Función mostrarAdvertenciaEjeFaltante: Revisando si falta el eje...');
     const elementos = obtenerElementos(); // Obtener los elementos del DOM
     const cilOD = elementos.odLejosCil.value.trim();
     const ejeOD = elementos.odLejosEje.value.trim();
@@ -324,24 +353,27 @@ export function mostrarAdvertenciaEjeFaltante() {
 
     // Verificar si falta el EJE en OD
     if (cilOD !== '' && ejeOD === '') {
+        console.log('Falta el eje en OD. Agregando error...');
         if (!erroresActivos.includes(mensajeErrorOD)) {
             erroresActivos.push(mensajeErrorOD);
         }
     } else {
+        console.log('No falta el eje en OD. Eliminando error si existe...');
         erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOD);
     }
 
     // Verificar si falta el EJE en OI
     if (cilOI !== '' && ejeOI === '') {
+        console.log('Falta el eje en OI. Agregando error...');
         if (!erroresActivos.includes(mensajeErrorOI)) {
             erroresActivos.push(mensajeErrorOI);
         }
     } else {
+        console.log('No falta el eje en OI. Eliminando error si existe...');
         erroresActivos = erroresActivos.filter(error => error !== mensajeErrorOI);
     }
 
-    // Actualizar la lista de errores en la interfaz
-    actualizarErrores();
+    console.log('Errores activos después de revisar ejes:', erroresActivos);
 }
 
 // Función para mostrar advertencia si las ADD son diferentes
