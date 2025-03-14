@@ -216,11 +216,6 @@ export function sincronizarCambios(event) {
             calcularCerca(ojo);
         }
     }
-
-    // Mostrar advertencia si las ADD son diferentes
-    mostrarAdvertenciaAddDiferente();
-    // Revisar errores y actualizar la parte de "cerca"
-    revisarErroresYActualizarCerca();
 }
 
 // Función para agregar eventos de sincronización
