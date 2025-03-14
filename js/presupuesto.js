@@ -7,10 +7,7 @@ import {
     erroresActivos,
     crearAdvertencias,
     actualizarErrores,
-    validarInput,
-    ajustarValorAPasos,
-    onInputFocus,
-    onInputBlur,
+    agregarEventosDelegacion,
     revisarErroresYActualizarCerca,
     mostrarAdvertenciaEjeFaltante,
     mostrarAdvertenciaAddDiferente,
@@ -183,24 +180,9 @@ export async function initPresupuesto() {
     console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
 
-    // Agregar eventos a los inputs
-    console.log('Agregando eventos a los inputs...');
-    const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
-    inputs.forEach(input => {
-        input.addEventListener('input', validarInput);
-        input.addEventListener('focus', onInputFocus);
-        input.addEventListener('blur', onInputBlur);
-
-        input.addEventListener('focus', function () {
-            if (this.value !== '') {
-                this.value = '';
-            }
-        });
-    });
-
-    // Agregar eventos de sincronización
-    console.log('Agregando eventos de sincronización...');
-    agregarEventosSincronizacion();
+    // Agregar eventos de delegación
+    console.log('Agregando eventos de delegación...');
+    agregarEventosDelegacion();
 
     // Mostrar advertencia si las ADD son diferentes
     console.log('Llamando a mostrarAdvertenciaAddDiferente...');

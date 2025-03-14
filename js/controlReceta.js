@@ -100,52 +100,40 @@ export function actualizarErrores() {
     }
 }
 
-// Función para validar los inputs
-export function validarInput(event) {
-    console.log('Función validarInput: Validando input:', event.target.id); // Depuración
+// Función centralizada para validar todos los inputs
+export function validarInputCentralizado(event) {
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
 
     // Limpiar el error anterior relacionado con este input
-    console.log('Limpiando errores anteriores para:', id); // Depuración
     erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
-    console.log('Errores activos después de limpiar:', erroresActivos); // Depuración
 
     // Validación específica para EJE
     if (id.includes('eje')) {
-        console.log('Validando EJE...'); // Depuración
         validarEje(input, value);
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
-        console.log('Validando ADD...'); // Depuración
         validarADD(input, value);
     }
     // Validación para ESF y CIL
     else {
-        console.log('Validando ESF o CIL...'); // Depuración
         validarEsfOCil(input, value, id);
     }
 
     // Verificar si los errores relacionados con el eje o el cilindro siguen siendo válidos
     if (id.includes('esf') || id.includes('cil')) {
-        console.log('Verificando errores relacionados con el eje o el cilindro...'); // Depuración
         const ojo = id.includes('od') ? 'od' : 'oi';
         const cil = parseFloat(elementos[`${ojo}LejosCil`].value) || 0;
         const eje = elementos[`${ojo}LejosEje`].value.trim();
 
-        console.log(`Cilindro (${ojo}):`, cil, 'Eje:', eje); // Depuración
-
         if (cil === 0 && eje === '') {
-            console.log(`No hay cilindro en ${ojo}. Eliminando error de eje faltante si existe...`); // Depuración
             erroresActivos = erroresActivos.filter(error => !error.includes(`Falta el Eje del ${ojo.toUpperCase()}`));
-            console.log('Errores activos después de eliminar error de eje faltante:', erroresActivos); // Depuración
         }
     }
 
     // Revisar errores y actualizar la parte de "cerca"
-    console.log('Llamando a revisarErroresYActualizarCerca...'); // Depuración
     revisarErroresYActualizarCerca();
 }
 
@@ -233,14 +221,12 @@ export function onInputFocus(event) {
 
 // Función para manejar el evento de blur (salir del input)
 export function onInputBlur(event) {
-    console.log('Función onInputBlur: Validando input al salir:', event.target.id);
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
 
     // Validación específica para EJE
     if (id.includes('eje')) {
-        console.log('Validando EJE en onInputBlur...');
         if (value === '') {
             input.value = ''; // No autocompletar con 0 si está vacío
         } else {
@@ -254,7 +240,6 @@ export function onInputBlur(event) {
     }
     // Validación específica para ADD
     else if (id.includes('add')) {
-        console.log('Validando ADD en onInputBlur...');
         if (value === '') {
             input.value = ''; // Si está vacío, no hacer nada
         } else {
@@ -271,7 +256,6 @@ export function onInputBlur(event) {
     }
     // Validación para ESF y CIL
     else if (esEsfOCil(id)) {
-        console.log('Validando ESF o CIL en onInputBlur...');
         if (value === '' || value === '+' || value === '-') {
             input.value = ''; // Si está vacío o solo tiene un signo, dejarlo vacío
             return;
@@ -289,7 +273,6 @@ export function onInputBlur(event) {
     }
 
     // Revisar errores y actualizar la parte de "cerca"
-    console.log('Llamando a revisarErroresYActualizarCerca en onInputBlur...');
     revisarErroresYActualizarCerca();
 }
 
@@ -624,4 +607,16 @@ export function sincronizarTodo() {
 
     // Mostrar advertencia si las ADD son diferentes
     mostrarAdvertenciaAddDiferente();
+}
+
+// Función para agregar eventos de delegación
+export function agregarEventosDelegacion() {
+    const contenedorRecetas = document.querySelector('.contenedor-recetas');
+    if (contenedorRecetas) {
+        contenedorRecetas.addEventListener('input', validarInputCentralizado);
+        contenedorRecetas.addEventListener('focus', onInputFocus, true);
+        contenedorRecetas.addEventListener('blur', onInputBlur, true);
+    } else {
+        console.error('No se encontró el contenedor de recetas.');
+    }
 }
