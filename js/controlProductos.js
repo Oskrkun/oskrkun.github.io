@@ -125,6 +125,7 @@ export async function cargarLaboratorios() {
             const optionTodos = document.createElement('option');
             optionTodos.value = ''; // Valor vacío para representar "Todos"
             optionTodos.textContent = 'Todos';
+            optionTodos.selected = true; // Seleccionar "Todos" por defecto
             laboratorioSelect.appendChild(optionTodos);
 
             // Agregar los laboratorios
@@ -133,11 +134,6 @@ export async function cargarLaboratorios() {
                 option.value = laboratorio.id;
                 option.textContent = laboratorio.nombre;
                 laboratorioSelect.appendChild(option);
-
-                // Establecer el laboratorio con ID 4 como seleccionado por defecto
-                if (laboratorio.id === 4) {
-                    option.selected = true;
-                }
             });
         } else {
             console.error('Elemento select de laboratorios no encontrado.');
