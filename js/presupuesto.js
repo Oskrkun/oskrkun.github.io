@@ -6,7 +6,6 @@ import {
     revisarErroresYActualizarCerca,
     mostrarAdvertenciaAddDiferente,
     transponerReceta,
-    sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
 
@@ -115,7 +114,6 @@ function agregarEventoBotonRotacion() {
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
             transponerReceta();
-            sincronizarTodo();
 
             const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
             document.dispatchEvent(eventoTranspuesto);
