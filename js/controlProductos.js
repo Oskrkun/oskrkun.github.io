@@ -7,6 +7,7 @@ const h2Productos = document.querySelector('#ProductosSection h2');
 const tratamientosContainer = document.getElementById('tratamientos');
 const laboratorioSelect = document.getElementById('laboratorio-select');
 const tipoLenteSelect = document.getElementById('tipo-lente-select');
+const indiceRefraccionSelect = document.getElementById('indice-refraccion-select'); // Nueva constante
 const inputsReceta = document.querySelectorAll('.vista-previa input');
 const tipoLenteRadios = document.querySelectorAll('input[name="tipoLente"]');
 const tratamientosCheckboxes = document.querySelectorAll('input[name="tratamientos"]');
@@ -177,6 +178,43 @@ export async function cargarTiposLentesSelect() {
         }
     } catch (error) {
         console.error('Error cargando tipos de lentes:', error);
+    }
+}
+
+// Función para cargar los índices de refracción desde Supabase
+export async function cargarIndicesRefraccion() {
+    try {
+        // Obtener datos de Supabase
+        const { data: indicesRefraccion, error } = await supabaseClient.rpc('cargar_indices_refraccion');
+
+        if (error) throw error;
+
+        // Ordenar los índices de refracción por su valor
+        indicesRefraccion.sort((a, b) => a.valor - b.valor);
+
+        // Llenar la lista desplegable de índices de refracción
+        if (indiceRefraccionSelect) {
+            indiceRefraccionSelect.innerHTML = ''; // Limpiar la lista antes de agregar nuevos datos
+
+            // Agregar la opción "Todos" como primer elemento
+            const optionTodos = document.createElement('option');
+            optionTodos.value = ''; // Valor vacío para representar "Todos"
+            optionTodos.textContent = 'Todos';
+            optionTodos.selected = true; // Seleccionada por defecto
+            indiceRefraccionSelect.appendChild(optionTodos);
+
+            // Agregar los índices de refracción
+            indicesRefraccion.forEach(indice => {
+                const option = document.createElement('option');
+                option.value = indice.id;
+                option.textContent = indice.valor; // Mostrar el valor del índice de refracción
+                indiceRefraccionSelect.appendChild(option);
+            });
+        } else {
+            console.error('Elemento select de índices de refracción no encontrado.');
+        }
+    } catch (error) {
+        console.error('Error cargando índices de refracción:', error);
     }
 }
 
