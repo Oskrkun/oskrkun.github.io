@@ -5,7 +5,7 @@ import {
     MAX_ESF,
     MAX_CIL,
     gestorErrores, // Importar el gestor de errores
-    crearAdvertencias,
+    crearAdvertencias, // Importar crearAdvertencias
     validarInput,
     ajustarValorAPasos,
     onInputFocus,

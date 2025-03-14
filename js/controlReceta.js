@@ -1,10 +1,9 @@
+// controlReceta.js
+
 // Variables para establecer los máximos de ADD, ESF y CIL
 export const MAX_ADD = 3.25;
 export const MAX_ESF = 25.00; // Máximo valor para ESF
 export const MAX_CIL = 8.00; // Máximo valor para CIL
-
-// Lista de errores activos
-export let erroresActivos = [];
 
 // Elementos del DOM
 const elementos = {
@@ -27,7 +26,7 @@ const elementos = {
 };
 
 // Gestor de Errores
-const gestorErrores = {
+export const gestorErrores = {
     errores: [],
 
     agregarError: function(id, mensaje) {
@@ -85,6 +84,11 @@ const gestorErrores = {
         }
     }
 };
+
+// Exportar la función crearAdvertencias para compatibilidad
+export function crearAdvertencias() {
+    gestorErrores.crearAdvertencias();
+}
 
 // Función para validar los inputs
 export function validarInput(event) {
