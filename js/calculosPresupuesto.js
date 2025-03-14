@@ -198,7 +198,7 @@ function calcularPrecios() {
 
     // Obtener valores
     const precioBase = parseFloat(elementos.productoPrecioBase.value) || 0;
-    const armado = parseFloat(elementos.productoArmado.value) || 0;
+    const armado = parseFloat(elementos.productoArmado.value) || 0; // Precio del montaje seleccionado
     const iva = parseFloat(elementos.productoIva.value) || 0;
     const multiplicador = parseFloat(elementos.productoMultiplicador.value) || 2.2;
     const precioArmazon = desformatearMoneda(elementos.productoArmazon.value) || 0;
@@ -206,7 +206,7 @@ function calcularPrecios() {
     console.log('Valores obtenidos:', { precioBase, armado, iva, multiplicador, precioArmazon }); // Depuración: Verificar valores
 
     // Calcular precio de los cristales
-    const precioConArmado = precioBase + armado;
+    const precioConArmado = precioBase + armado; // Sumar el precio del montaje
     const precioConIva = precioConArmado * (1 + iva / 100);
     let precioCristales = precioConIva * multiplicador;
 
