@@ -1,6 +1,6 @@
 // dashboard.js
 
-import { verificarAutenticacion, verificarSiEsAdmin } from './usuarios.js';
+import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js';
 import { crearBotones } from './botones.js';
 import { cargarContenido } from './cargarContenido.js';
 
@@ -9,8 +9,8 @@ async function inicializarDashboard() {
     const user = await verificarAutenticacion(); // Verificar autenticación
     if (!user) return; // Si no hay usuario, salir
 
-    const { esAdmin, nick } = await verificarSiEsAdmin(user); // Verificar si es administrador
-    const tipoUsuario = esAdmin ? 'admin' : 'usuario'; // Determinar el tipo de usuario
+    const { rol, nick } = await obtenerRolYNick(user); // Obtener rol y nick del usuario
+    const tipoUsuario = rol === 'admin' ? 'admin' : 'usuario'; // Determinar el tipo de usuario
 
     crearBotones(tipoUsuario, cargarContenido); // Crear botones según el tipo de usuario
     actualizarTextoUsuario(user, nick); // Actualizar la interfaz con el nombre del usuario
