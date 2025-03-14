@@ -14,7 +14,7 @@ import {
     mostrarAdvertenciaMaxEsfCil,
     calcularCerca,
     sincronizarCambios,
-    agregarEventosSincronizacion,
+    agregarEventosDelegacion,
     esEsfOCil,
     transponerReceta,
     sincronizarTodo,
