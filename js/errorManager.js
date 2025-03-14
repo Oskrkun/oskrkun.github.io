@@ -5,7 +5,9 @@ import {
     crearAdvertencias, 
     limpiarCerca, 
     sincronizarCambios, 
-    erroresActivos 
+    erroresActivos,
+    validarEsf,
+    revisarErroresYActualizarCerca
 } from './controlReceta.js';
 
 // Función para mostrar u ocultar el contenedor de errores
@@ -30,8 +32,11 @@ export function agregarError(mensaje) {
 
 // Función para eliminar un error de la lista de errores activos
 export function eliminarError(mensaje) {
-    erroresActivos = erroresActivos.filter(error => error !== mensaje);
-    actualizarErrores();
+    const index = erroresActivos.indexOf(mensaje);
+    if (index !== -1) {
+        erroresActivos.splice(index, 1);
+        actualizarErrores();
+    }
 }
 
 // Función para actualizar el contenido del contenedor de errores
@@ -74,18 +79,18 @@ function manejarEntradaInput(event) {
 function manejarSalidaInput(event) {
     const input = event.target;
     const inputId = input.id;
+    const valor = input.value;
 
     // Verificar si hay errores en el input después de salir
-    // Aquí puedes agregar la lógica de validación específica para cada input
-    // Por ejemplo, si el input es de tipo ESF, CIL, EJE, etc.
-    // Si hay un error, agregarlo a la lista de errores activos
-    // Ejemplo:
-    if (inputId.includes('esf') && !validarEsf(input.value)) {
+    if (inputId.includes('esf') && !validarEsf(valor)) {
         agregarError(`*${inputId}: Valor de ESF no válido.`);
     }
 
     // Sincronizar los cambios en la receta
     sincronizarCambios(event);
+
+    // Actualizar la visibilidad de la sección "cerca"
+    revisarErroresYActualizarCerca();
 }
 
 // Función para agregar eventos a los inputs de la receta

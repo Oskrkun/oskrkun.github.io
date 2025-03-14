@@ -62,6 +62,12 @@ export function crearAdvertencias() {
     }
 }
 
+// Función para validar ESF
+export function validarEsf(valor) {
+    const valorNumerico = parseFloat(valor);
+    return !isNaN(valorNumerico) && valorNumerico >= -MAX_ESF && valorNumerico <= MAX_ESF;
+}
+
 // Función para validar el EJE
 function validarEje(input, value) {
     // Solo permitir números enteros entre 0 y 180
@@ -122,12 +128,15 @@ function validarEsfOCil(input, value, id) {
 
     // Validar que el valor esté dentro del rango permitido
     const valorNumerico = parseFloat(value);
-    mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+    if (valorNumerico > MAX_ESF || valorNumerico < -MAX_ESF) {
+        console.error(`Error: El valor en ${id} debe estar entre -${MAX_ESF} y +${MAX_ESF}.`);
+        erroresActivos.push(`*${id}: El valor debe estar entre -${MAX_ESF} y +${MAX_ESF}.`);
+        input.value = value.slice(0, -1); // Eliminar el último carácter no válido
+        return;
+    }
 
     // Si el valor es válido, eliminar el error si existe
-    if (valorNumerico <= MAX_ESF && valorNumerico >= -MAX_ESF) {
-        erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
-    }
+    erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
 }
 
 // Función para ajustar el valor a pasos de 0.25
@@ -166,7 +175,6 @@ export function limpiarCerca(ojo) {
     elementos[`${ojo}CercaCil`].value = '';
     elementos[`${ojo}CercaEje`].value = '';
 }
-
 
 // Función genérica para calcular y actualizar la parte de "cerca"
 export function calcularCerca(ojo) {

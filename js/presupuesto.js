@@ -1,7 +1,9 @@
 // presupuesto.js
 import {
     transponerReceta,
-    limpiarCerca
+    limpiarCerca,
+    obtenerElementos,
+    revisarErroresYActualizarCerca
 } from './controlReceta.js';
 import { initErrorManager } from './errorManager.js';
 import { cargarProductosFiltrados } from './filtradoProductos.js';
@@ -144,7 +146,6 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
-
     // Deshabilitar los campos de "cerca"
     console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
