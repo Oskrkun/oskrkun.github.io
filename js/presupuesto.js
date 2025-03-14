@@ -1,11 +1,23 @@
 // presupuesto.js
 import { supabaseClient } from './supabaseConfig.js';
 import {
+    MAX_ADD,
+    MAX_ESF,
+    MAX_CIL,
+    erroresActivos,
     crearAdvertencias,
+    actualizarErrores,
     agregarEventosDelegacion,
     revisarErroresYActualizarCerca,
+    mostrarAdvertenciaEjeFaltante,
     mostrarAdvertenciaAddDiferente,
+    mostrarAdvertenciaMaxEsfCil,
+    calcularCerca,
+    sincronizarCambios,
+    agregarEventosSincronizacion,
+    esEsfOCil,
     transponerReceta,
+    sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
 
@@ -13,6 +25,8 @@ import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 import {
     cargarTratamientos,
+    formatearNumero,
+    formatearPrecio,
     agregarEventosFiltrado,
     agregarEventosReceta,
     cargarLaboratorios,
@@ -114,6 +128,7 @@ function agregarEventoBotonRotacion() {
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
             transponerReceta();
+            sincronizarTodo();
 
             const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
             document.dispatchEvent(eventoTranspuesto);
