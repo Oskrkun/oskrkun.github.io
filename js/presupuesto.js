@@ -33,7 +33,8 @@ import {
     agregarEventosFiltrado,
     agregarEventosReceta,
     cargarLaboratorios,
-    cargarTiposLentesSelect
+    cargarTiposLentesSelect,
+    cargarIndicesRefraccion
 } from './controlProductos.js';
 
 import { 
@@ -189,7 +190,7 @@ export async function initPresupuesto() {
 
     // Cargar tratamientos
     await cargarTratamientos();
-
+    await cargarIndicesRefraccion();
     // Cargar laboratorios y tipos de lentes para las listas desplegables
     await cargarLaboratorios();
     await cargarTiposLentesSelect();
