@@ -173,6 +173,13 @@ export function ajustarValorAPasos(valor) {
 export function onInputFocus(event) {
     const input = event.target;
     input.placeholder = ''; // Limpiar el placeholder al entrar
+
+    // Limpiar el error correspondiente al input
+    const id = input.id;
+    erroresActivos = erroresActivos.filter(error => !error.startsWith(`*${id}`));
+
+    // Actualizar la lista de errores en la interfaz
+    actualizarErrores();
 }
 
 // Función para manejar el evento de blur (salir del input)
