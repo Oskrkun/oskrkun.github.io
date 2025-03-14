@@ -2,7 +2,6 @@
 import {
     revisarErroresYActualizarCerca,
     transponerReceta,
-    sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
 
