@@ -1,6 +1,12 @@
 // errorManager.js
 
-import { obtenerElementos, crearAdvertencias, limpiarCerca, sincronizarCambios } from './controlReceta.js';
+import { 
+    obtenerElementos, 
+    crearAdvertencias, 
+    limpiarCerca, 
+    sincronizarCambios, 
+    erroresActivos 
+} from './controlReceta.js';
 
 // Función para mostrar u ocultar el contenedor de errores
 function actualizarVisibilidadErrores() {
