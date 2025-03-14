@@ -337,15 +337,3 @@ function formatearValor(valor) {
         return '0.00'; // Si es cero, devolver "0.00"
     }
 }
-
-// Función para agregar eventos de delegación
-export function agregarEventosDelegacion() {
-    const contenedorRecetas = document.querySelector('.vista-previa'); // Cambiar a .vista-previa
-    if (contenedorRecetas) {
-        contenedorRecetas.addEventListener('input', validarInputCentralizado);
-        contenedorRecetas.addEventListener('focus', onInputFocus, true);
-        contenedorRecetas.addEventListener('blur', onInputBlur, true);
-    } else {
-        console.error('No se encontró el contenedor de recetas.');
-    }
-}
