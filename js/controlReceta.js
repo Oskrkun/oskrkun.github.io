@@ -38,15 +38,22 @@ export function crearAdvertencias() {
     if (!contenedorErrores) {
         contenedorErrores = document.createElement('div');
         contenedorErrores.id = 'contenedor-errores';
-        contenedorErrores.style.marginTop = '10px';
 
-        // Insertar el contenedor de errores debajo de la sección de cerca
-        const seccionCerca = document.getElementById('seccion-cerca');
-        if (seccionCerca) {
-            seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
-        } else {
-            console.error('No se encontró la sección de cerca.');
-        }
+        // Estilos para el contenedor de errores flotante
+        contenedorErrores.style.position = 'fixed'; // Fijo en la pantalla
+        contenedorErrores.style.bottom = '20px'; // 20px desde la parte inferior
+        contenedorErrores.style.right = '20px'; // 20px desde la derecha
+        contenedorErrores.style.backgroundColor = '#ffebee'; // Fondo rojo claro
+        contenedorErrores.style.padding = '10px'; // Espaciado interno
+        contenedorErrores.style.borderRadius = '8px'; // Bordes redondeados
+        contenedorErrores.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'; // Sombra
+        contenedorErrores.style.zIndex = '1000'; // Asegurar que esté por encima de otros elementos
+        contenedorErrores.style.maxWidth = '300px'; // Ancho máximo
+        contenedorErrores.style.overflowY = 'auto'; // Permitir desplazamiento vertical si hay muchos errores
+        contenedorErrores.style.maxHeight = '200px'; // Altura máxima
+
+        // Insertar el contenedor de errores en el body
+        document.body.appendChild(contenedorErrores);
     }
 }
 
