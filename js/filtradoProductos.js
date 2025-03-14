@@ -105,17 +105,19 @@ export async function cargarProductosFiltrados() {
         let productosFiltrados = productos;
 
         if (hayReceta) {
-            // Aplicar controles según el laboratorio seleccionado
-            if (laboratorioSeleccionado === '2') {
-                // Control para Laboratorio 2
-                productosFiltrados = filtrarPorGraduacionVidaltec(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
-            } else if (laboratorioSeleccionado === '4') {
-                // Control para Laboratorio 4
-                productosFiltrados = filterByGraduationRodenstock(productos, odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil);
-            } else {
-                // Sin control de graduación para otros laboratorios
-                productosFiltrados = productos;
-            }
+            // Aplicar controles según el laboratorio de cada producto
+            productosFiltrados = productos.filter(producto => {
+                if (laboratorioSeleccionado === '2' || producto.laboratorio_id === 2) {
+                    // Control para Laboratorio 2 (Vidaltec)
+                    return filtrarPorGraduacionVidaltec([producto], odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil).length > 0;
+                } else if (laboratorioSeleccionado === '4' || producto.laboratorio_id === 4) {
+                    // Control para Laboratorio 4 (Rodenstock)
+                    return filterByGraduationRodenstock([producto], odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil).length > 0;
+                } else {
+                    // Sin control de graduación para otros laboratorios
+                    return true;
+                }
+            });
         } else {
             // Si no hay receta, mostrar todos los productos
             productosFiltrados = productos;
