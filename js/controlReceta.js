@@ -177,6 +177,12 @@ function validarEsfOCil(input, value, id) {
     // Validar el valor numérico
     const valorNumerico = parseFloat(value);
     mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+    // Si el cilindro está vacío, limpiar el error del eje
+    if (value === '') {
+        eliminarErroresPorId('odLejosEje');
+        eliminarErroresPorId('oiLejosEje');
+    }
 }
 
 // Función para ajustar el valor a pasos de 0.25
@@ -259,6 +265,12 @@ export function onInputBlur(event) {
 
         const valorNumerico = parseFloat(valorAjustado);
         mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
+
+        // Si el cilindro está vacío, limpiar el error del eje
+        if (value === '') {
+            eliminarErroresPorId('odLejosEje');
+            eliminarErroresPorId('oiLejosEje');
+        }
     }
 
     revisarErroresYActualizarCerca();
