@@ -28,7 +28,6 @@ const elementos = {
 
 // Función para crear los span de advertencia dinámicamente
 export function crearAdvertencias() {
-    console.log('Creando contenedor de errores...');
     // Crear un contenedor único para las advertencias
     const contenedorErrores = document.createElement('div');
     contenedorErrores.id = 'contenedor-errores';
@@ -45,7 +44,6 @@ export function crearAdvertencias() {
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
     let contenedorErrores = document.getElementById('contenedor-errores');
-    console.log('Actualizando errores... line 48');
 
     if (!contenedorErrores) {
         crearAdvertencias();
@@ -68,15 +66,12 @@ export function actualizarErrores() {
         spanError.classList.add('advertenciaReceta');
         spanError.style.display = 'block';
         contenedorErrores.appendChild(spanError);
-        console.log(`Error mostrado: ${error.id} - ${error.message}`);
     });
-
-    console.log('Errores actualizados:', erroresActivos);
 }
 
 // Función para agregar un error con un ID único
 function agregarError(id, mensaje) {
-    const errorId = `${id}-${Date.now()}`; // ID único basado en el ID del input y la marca de tiempo
+    const errorId = `${id}`; // ID único basado en el ID del input
     const error = { id: errorId, message: mensaje };
     erroresActivos.push(error);
     console.log(`Error agregado: ${errorId} - ${mensaje}`);
@@ -84,42 +79,29 @@ function agregarError(id, mensaje) {
 
 // Función para eliminar errores por ID
 function eliminarErroresPorId(id) {
-    console.log(id);
-    console.log('Errores activos:', erroresActivos);
-    console.log('eliminando errores por id linea 89', id)
-    const erroresEliminados = erroresActivos.filter(error => error.id.startsWith(id));
-    console.log('Errores eliminados:', erroresEliminados);
-    erroresActivos.forEach(error=>{
-        console.log(error.id);
-    })
-    erroresActivos = erroresActivos.filter(error => !error.id.startsWith(id));
-    console.log(`Errores eliminados para ${id}:`, erroresEliminados);
+    console.log(`Eliminando errores para el ID: ${id}`);
+    erroresActivos = erroresActivos.filter(error => error.id !== id);
+    console.log(`Errores restantes:`, erroresActivos);
 }
 
 // Función para validar los inputs
 export function validarInput(event) {
-    console.log(event);
     const input = event.target;
-    console.log(input);
     const value = input.value.trim();
-    console.log(value);
     const id = input.id;
-    console.log(id);
+
     // Limpiar errores anteriores relacionados con este input
     eliminarErroresPorId(id);
 
     // Si el input está vacío, no hay necesidad de validar más
     if (value === '') {
-        actualizarErrores(); // Actualizar la lista de errores en la interfaz
-        console.log('El valor está vacío.');
+        actualizarErrores();
         return;
     }
 
     // Resto de la lógica de validación...
     if (id.includes('eje')) {
         validarEje(input, value);
-        console.log('entre if line 117')
-        console.log(input,value)
     } else if (id.includes('add')) {
         validarADD(input, value);
     } else {
@@ -131,16 +113,14 @@ export function validarInput(event) {
 function validarEje(input, value) {
     // Solo permitir números enteros entre 0 y 180
     if (!/^\d*$/.test(value)) {
-        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números.`);
         agregarError(input.id, `*${input.id}: Solo se permiten números.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
     }
-    console.log('entre validar eje line 135')
+
     // Asegurar que el valor esté en el rango de 0 a 180
     const valorNumerico = parseInt(value, 10);
     if (valorNumerico < 0 || valorNumerico > 180) {
-        console.error(`Error: El valor en ${input.id} debe estar entre 0 y 180.`);
         agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y 180.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
@@ -149,10 +129,8 @@ function validarEje(input, value) {
 
 // Función para validar ADD
 function validarADD(input, value) {
-    console.log('entre validar add line 148')
     // Solo permitir números positivos y punto decimal
     if (!/^\d*\.?\d*$/.test(value)) {
-        console.error(`Error: El valor en ${input.id} no es válido. Solo se permiten números positivos y punto decimal.`);
         agregarError(input.id, `*${input.id}: Solo se permiten números positivos y punto decimal.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
@@ -161,10 +139,6 @@ function validarADD(input, value) {
     // Asegurar que el valor esté en el rango de 0 a MAX_ADD
     const valorNumerico = parseFloat(value);
     if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
-        console.log('entre validar add line 161')
-        console.log(error)
-        console.log(value, 'line162')
-        console.error(`Error: El valor en ${input.id} debe estar entre 0 y ${MAX_ADD}.`);
         agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y ${MAX_ADD}.`);
         input.value = value.slice(0, -1); // Eliminar el último carácter no válido
         return;
@@ -175,21 +149,18 @@ function validarADD(input, value) {
 function validarEsfOCil(input, value, id) {
     // Limpiar errores anteriores relacionados con este input
     eliminarErroresPorId(id);
-    console.log('entre validar esf o cil line 176')
+
     // Validar el formato del valor
     if (!/^[+-]?\d*\.?\d*$/.test(value)) {
-        console.error(`Error: El valor en ${id} no es válido. Solo se permiten números, +, - y punto decimal.`);
         agregarError(id, `*${id}: Solo se permiten números, +, - y punto decimal.`);
         input.value = value.slice(0, -1);
         return;
     }
 
     // Validar que no haya más de 2 cifras enteras
-    console.log('entre validar esf o cil line 186')
     const partes = value.split('.');
     const parteEntera = partes[0].replace(/[+-]/, ''); // Ignorar el signo
     if (parteEntera.length > 2) {
-        console.error(`Error: El valor en ${id} no puede tener más de 2 cifras enteras.`);
         agregarError(id, `*${id}: No puede tener más de 2 cifras enteras.`);
         input.value = value.slice(0, -1);
         return;
@@ -201,7 +172,6 @@ function validarEsfOCil(input, value, id) {
 
     // Si el cilindro está vacío, limpiar el error del eje
     if (value === '') {
-        console.log('entre validar esf o cil line 200')
         eliminarErroresPorId('odLejosEje');
         eliminarErroresPorId('oiLejosEje');
     }
@@ -235,20 +205,14 @@ export function onInputFocus(event) {
 
 // Función para manejar el evento de blur (salir del input)
 export function onInputBlur(event) {
-    console.log(event);
-    console.log('entre onInputBlur line 235')	
     const input = event.target;
-    console.log(input);
     const value = input.value.trim();
     const id = input.id;
-    console.log(id);
 
     // Si el input está vacío, limpiar todos los errores relacionados
     if (value === '') {
-        console.log('entre onInputBlur line 243')
         eliminarErroresPorId(id);
-        console.log('entre onInputBlur line 245', id)
-        actualizarErrores(); // Actualizar la lista de errores en la interfaz
+        actualizarErrores();
         return; // Salir de la función para evitar más validaciones
     }
 
