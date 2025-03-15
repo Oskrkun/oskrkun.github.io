@@ -11,7 +11,6 @@ import {
     ajustarValorAPasos,
     onInputFocus,
     onInputBlur,
-    revisarErroresYActualizarCerca,
     mostrarAdvertenciaEjeFaltante,
     mostrarAdvertenciaAddDiferente,
     mostrarAdvertenciaMaxEsfCil,
@@ -106,10 +105,17 @@ function borrarReceta() {
         input.value = '';
     });
 
-    limpiarCerca('od');
-    limpiarCerca('oi');
+    // Limpiar campos de "cerca" manualmente
+    elementos.odCercaEsf.value = '';
+    elementos.odCercaCil.value = '';
+    elementos.odCercaEje.value = '';
+    elementos.oiCercaEsf.value = '';
+    elementos.oiCercaCil.value = '';
+    elementos.oiCercaEje.value = '';
 
-    revisarErroresYActualizarCerca();
+    // Mostrar advertencias necesarias
+    mostrarAdvertenciaEjeFaltante();
+    mostrarAdvertenciaAddDiferente();
 
     const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
     document.dispatchEvent(eventoRecetaBorrada);
