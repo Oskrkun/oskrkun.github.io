@@ -204,9 +204,19 @@ function agregarEventoLimpiarErrores() {
     const contenedorErrores = document.getElementById('contenedor-errores');
     if (contenedorErrores) {
         contenedorErrores.addEventListener('click', () => {
-            erroresActivos.length = 0; // Limpiar todos los errores
-            actualizarErroresYContenedor(); // Actualizar el estado de los errores
-            contenedorErrores.style.display = 'none'; // Ocultar el contenedor
+            // Limpiar el array de errores
+            erroresActivos.length = 0;
+
+            // Limpiar el contenido del contenedor de errores en el DOM
+            contenedorErrores.innerHTML = '';
+
+            // Ocultar el contenedor de errores
+            contenedorErrores.style.display = 'none';
+
+            // Borrar la receta (igual que el botón de "refresh-erase")
+            borrarReceta();
+
+            console.log('Errores limpiados del array y del DOM, y receta borrada.');
         });
     }
 }
