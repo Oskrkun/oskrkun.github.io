@@ -248,6 +248,7 @@ export function toggleSeccionCerca() {
     console.log('entre a sincronizar cambios de toggleSeccionCerca controlreceta line248');
     const seccionCerca = document.getElementById('seccion-cerca');
     console.log(seccionCerca, 'encontrada')
+    console.logs(seccionCerca.style.display)
     const addOD = elementos.addOD.value.trim();
     const addOI = elementos.addOI.value.trim();
 
