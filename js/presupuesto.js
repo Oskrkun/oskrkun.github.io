@@ -12,7 +12,6 @@ import {
     onInputFocus,
     onInputBlur,
     mostrarAdvertenciaEjeFaltante,
-    mostrarAdvertenciaAddDiferente,
     mostrarAdvertenciaMaxEsfCil,
     calcularCerca,
     sincronizarCambios,
@@ -116,7 +115,6 @@ function borrarReceta() {
 
     // Mostrar advertencias necesarias
     mostrarAdvertenciaEjeFaltante();
-    mostrarAdvertenciaAddDiferente();
 
     const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
     document.dispatchEvent(eventoRecetaBorrada);
@@ -252,9 +250,6 @@ export async function initPresupuesto() {
 
     // Agregar eventos de sincronización
     agregarEventosSincronizacion();
-
-    // Mostrar advertencia si las ADD son diferentes
-    mostrarAdvertenciaAddDiferente();
 
     // Agregar eventos a los botones
     agregarEventoBotonRotacion();

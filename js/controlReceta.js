@@ -231,9 +231,6 @@ export function sincronizarCambios(event) {
             calcularCerca(ojo);
         }
     }
-
-    // Mostrar advertencia si las ADD son diferentes
-    mostrarAdvertenciaAddDiferente();
 }
 
 // Función para agregar eventos de sincronización
@@ -296,23 +293,6 @@ export function mostrarAdvertenciaEjeFaltante() {
     // Verificar si falta el EJE en OI
     if (cilOI !== '' && ejeOI === '') {
         agregarError('oiLejosEje', mensajeErrorOI);
-    }
-}
-
-// Función para mostrar advertencia si las ADD son diferentes
-export function mostrarAdvertenciaAddDiferente() {
-    const addOD = parseFloat(elementos.addOD.value) || 0;
-    const addOI = parseFloat(elementos.addOI.value) || 0;
-
-    const mensajeError = '*Hay una ADD diferente establecida para cada ojo';
-
-    // Verificar si las ADD son diferentes
-    if (addOD !== addOI) {
-        if (!erroresActivos.some(error => error.message === mensajeError)) {
-            agregarError('addDiferente', mensajeError);
-        }
-    } else {
-        eliminarErroresPorId('addDiferente');
     }
 }
 
@@ -452,5 +432,4 @@ function formatearValor(valor) {
 export function sincronizarTodo() {
     // Revisar errores y actualizar la parte de "cerca"
     mostrarAdvertenciaEjeFaltante();
-    mostrarAdvertenciaAddDiferente();
 }
