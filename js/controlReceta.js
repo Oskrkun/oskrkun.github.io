@@ -26,19 +26,53 @@ const elementos = {
     contenedorErrores: document.getElementById('contenedor-errores')
 };
 
-// Función para crear los span de advertencia dinámicamente
+// Función para crear el contenedor de errores con la "X" de FontAwesome
 export function crearAdvertencias() {
-    // Crear un contenedor único para las advertencias
-    const contenedorErrores = document.createElement('div');
-    contenedorErrores.id = 'contenedor-errores';
-    contenedorErrores.style.marginTop = '10px';
-
-    // Insertar el contenedor de errores debajo de la sección de cerca
-    if (elementos.seccionCerca) {
-        elementos.seccionCerca.insertAdjacentElement('afterend', contenedorErrores);
-    } else {
-        console.error('No se encontró la sección de cerca.');
+    // Verificar si el contenedor de errores ya existe
+    let contenedorErrores = document.getElementById('contenedor-errores');
+    if (contenedorErrores) {
+        return; // Si ya existe, no hacer nada
     }
+
+    // Crear un contenedor único para las advertencias
+    contenedorErrores = document.createElement('div');
+    contenedorErrores.id = 'contenedor-errores';
+    contenedorErrores.style.position = 'fixed'; // Posición fija
+    contenedorErrores.style.bottom = '20px'; // Posición en la parte inferior
+    contenedorErrores.style.right = '20px'; // Posición en la parte derecha
+    contenedorErrores.style.backgroundColor = '#ffebee'; // Color de fondo
+    contenedorErrores.style.padding = '20px'; // Espaciado interno
+    contenedorErrores.style.borderRadius = '8px'; // Bordes redondeados
+    contenedorErrores.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'; // Sombra
+    contenedorErrores.style.zIndex = '1000'; // Asegurar que esté por encima de otros elementos
+    contenedorErrores.style.maxWidth = '300px'; // Ancho máximo
+    contenedorErrores.style.width = '100%'; // Ancho completo
+    contenedorErrores.style.overflowY = 'auto'; // Habilitar scroll vertical si es necesario
+    contenedorErrores.style.maxHeight = '200px'; // Altura máxima
+    contenedorErrores.style.display = 'none'; // Ocultar por defecto
+
+    // Agregar el ícono de FontAwesome (X) en la esquina superior derecha
+    const iconoCerrar = document.createElement('i');
+    iconoCerrar.className = 'fas fa-times cerrar-icono'; // Clases de FontAwesome
+    iconoCerrar.style.position = 'absolute';
+    iconoCerrar.style.top = '10px';
+    iconoCerrar.style.right = '10px';
+    iconoCerrar.style.cursor = 'pointer';
+    iconoCerrar.style.color = '#666'; // Color del ícono
+    iconoCerrar.style.fontSize = '16px'; // Tamaño del ícono
+
+    // Agregar evento de clic al ícono para cerrar el contenedor
+    iconoCerrar.addEventListener('click', () => {
+        erroresActivos.length = 0; // Limpiar todos los errores
+        actualizarErrores(); // Actualizar la lista de errores
+        contenedorErrores.style.display = 'none'; // Ocultar el contenedor
+    });
+
+    // Agregar el ícono al contenedor
+    contenedorErrores.appendChild(iconoCerrar);
+
+    // Insertar el contenedor de errores en el cuerpo del documento
+    document.body.appendChild(contenedorErrores);
 }
 
 // Función para actualizar la lista de errores en la interfaz
