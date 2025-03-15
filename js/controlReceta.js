@@ -230,6 +230,7 @@ export function sincronizarCambios(event) {
 
         // Mostrar u ocultar la sección de "cerca"
         toggleSeccionCerca();
+        console.log('entre a sincronizar cambios de toggleSeccionCerca controlreceta line33');
     }
 
     // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
@@ -244,15 +245,21 @@ export function sincronizarCambios(event) {
 
 // Función para mostrar u ocultar la sección de "cerca"
 export function toggleSeccionCerca() {
+    console.log('entre a sincronizar cambios de toggleSeccionCerca controlreceta line248');
     const seccionCerca = document.getElementById('seccion-cerca');
+    console.log(seccionCerca, 'encontrada')
     const addOD = elementos.addOD.value.trim();
     const addOI = elementos.addOI.value.trim();
 
     // Mostrar la sección de "cerca" si hay un valor en ADD de OD o OI
     if (addOD !== '' || addOI !== '') {
         seccionCerca.style.display = ''; // Eliminar solo la propiedad display
+        console.logs(seccionCerca.style.display)
+        console.log('line 256');
     } else {
+        console.log('line 258');
         seccionCerca.style.display = 'none'; // Ocultar la sección agregando display: none
+        console.logs(seccionCerca.style.display)
     }
 }
 
