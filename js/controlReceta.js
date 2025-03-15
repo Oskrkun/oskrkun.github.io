@@ -67,35 +67,11 @@ export function actualizarErrores() {
     });
 }
 
-// Función para agregar un error con un ID único
-function agregarError(id, mensaje) {
-    const errorId = `${id}`; // ID único basado en el ID del input
-    const error = { id: errorId, message: mensaje };
-    erroresActivos.push(error);
-    console.log(`Error agregado: ${errorId} - ${mensaje}`);
-}
-
-// Función para eliminar errores por ID
-function eliminarErroresPorId(id) {
-    console.log(`Eliminando errores para el ID: ${id}`);
-    erroresActivos = erroresActivos.filter(error => error.id !== id);
-    console.log(`Errores restantes después de eliminar:`, erroresActivos);
-}
-
 // Función para validar los inputs
 export function validarInput(event) {
     const input = event.target;
     const value = input.value.trim();
     const id = input.id;
-
-    // Limpiar errores anteriores relacionados con este input
-    eliminarErroresPorId(id);
-
-    // Si el input está vacío, no hay necesidad de validar más
-    if (value === '') {
-        actualizarErrores();
-        return;
-    }
 
     // Resto de la lógica de validación...
     if (id.includes('eje')) {
@@ -110,14 +86,12 @@ export function validarInput(event) {
 // Función para validar el EJE
 function validarEje(input, value) {
     if (!/^\d*$/.test(value)) {
-        agregarError(input.id, `*${input.id}: Solo se permiten números.`);
         input.value = value.slice(0, -1);
         return;
     }
 
     const valorNumerico = parseInt(value, 10);
     if (valorNumerico < 0 || valorNumerico > 180) {
-        agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y 180.`);
         input.value = value.slice(0, -1);
         return;
     }
@@ -126,14 +100,12 @@ function validarEje(input, value) {
 // Función para validar ADD
 function validarADD(input, value) {
     if (!/^\d*\.?\d*$/.test(value)) {
-        agregarError(input.id, `*${input.id}: Solo se permiten números positivos y punto decimal.`);
         input.value = value.slice(0, -1);
         return;
     }
 
     const valorNumerico = parseFloat(value);
     if (valorNumerico < 0 || valorNumerico > MAX_ADD) {
-        agregarError(input.id, `*${input.id}: El valor debe estar entre 0 y ${MAX_ADD}.`);
         input.value = value.slice(0, -1);
         return;
     }
@@ -141,10 +113,8 @@ function validarADD(input, value) {
 
 // Función para validar ESF y CIL
 function validarEsfOCil(input, value, id) {
-    eliminarErroresPorId(id);
 
     if (!/^[+-]?\d*\.?\d*$/.test(value)) {
-        agregarError(id, `*${id}: Solo se permiten números, +, - y punto decimal.`);
         input.value = value.slice(0, -1);
         return;
     }
@@ -152,18 +122,11 @@ function validarEsfOCil(input, value, id) {
     const partes = value.split('.');
     const parteEntera = partes[0].replace(/[+-]/, '');
     if (parteEntera.length > 2) {
-        agregarError(id, `*${id}: No puede tener más de 2 cifras enteras.`);
         input.value = value.slice(0, -1);
         return;
     }
 
     const valorNumerico = parseFloat(value);
-    mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
-
-    if (value === '') {
-        eliminarErroresPorId('odLejosEje');
-        eliminarErroresPorId('oiLejosEje');
-    }
 }
 
 // Función para ajustar el valor a pasos de 0.25
@@ -185,9 +148,6 @@ export function onInputFocus(event) {
     input.placeholder = '';
 
     const id = input.id;
-    eliminarErroresPorId(id);
-
-    actualizarErrores();
 }
 
 // Función para manejar el evento de blur (salir del input)
@@ -197,8 +157,7 @@ export function onInputBlur(event) {
     const id = input.id;
 
     if (value === '') {
-        eliminarErroresPorId(id);
-        actualizarErrores();
+        actualizarVisibilidadCerca();
         return;
     }
 
@@ -241,15 +200,7 @@ export function onInputBlur(event) {
         input.value = valorAjustado;
 
         const valorNumerico = parseFloat(valorAjustado);
-        mostrarAdvertenciaMaxEsfCil(valorNumerico, id);
-
-        if (value === '') {
-            eliminarErroresPorId('odLejosEje');
-            eliminarErroresPorId('oiLejosEje');
-        }
     }
-
-    revisarErroresYActualizarCerca();
 }
 
 // Función para mostrar u ocultar la sección de "cerca" en función de los valores de "ADD"
@@ -264,71 +215,11 @@ function actualizarVisibilidadCerca() {
     }
 }
 
-// Función para revisar errores y actualizar la parte de "cerca"
-export function revisarErroresYActualizarCerca() {
-    mostrarAdvertenciaEjeFaltante();
-    mostrarAdvertenciaAddDiferente();
-    actualizarVisibilidadCerca();
-    actualizarErrores();
-}
-
 // Función para limpiar la parte de "cerca" cuando la ADD está vacía
 export function limpiarCerca(ojo) {
     elementos[`${ojo}CercaEsf`].value = '';
     elementos[`${ojo}CercaCil`].value = '';
     elementos[`${ojo}CercaEje`].value = '';
-}
-
-// Función para mostrar advertencia si falta el EJE y hay CIL
-export function mostrarAdvertenciaEjeFaltante() {
-    const cilOD = elementos.odLejosCil.value.trim();
-    const ejeOD = elementos.odLejosEje.value.trim();
-    const cilOI = elementos.oiLejosCil.value.trim();
-    const ejeOI = elementos.oiLejosEje.value.trim();
-
-    const mensajeErrorOD = '*Falta el Eje del OD';
-    const mensajeErrorOI = '*Falta el Eje del OI';
-
-    eliminarErroresPorId('odLejosEje');
-    eliminarErroresPorId('oiLejosEje');
-
-    if (cilOD !== '' && ejeOD === '') {
-        agregarError('odLejosEje', mensajeErrorOD);
-    }
-
-    if (cilOI !== '' && ejeOI === '') {
-        agregarError('oiLejosEje', mensajeErrorOI);
-    }
-}
-
-// Función para mostrar advertencia si las ADD son diferentes
-export function mostrarAdvertenciaAddDiferente() {
-    const addOD = parseFloat(elementos.addOD.value) || 0;
-    const addOI = parseFloat(elementos.addOI.value) || 0;
-
-    const mensajeError = '*Hay una ADD diferente establecida para cada ojo';
-
-    if (addOD !== addOI) {
-        if (!erroresActivos.some(error => error.message === mensajeError)) {
-            agregarError('addDiferente', mensajeError);
-        }
-    } else {
-        eliminarErroresPorId('addDiferente');
-    }
-}
-
-// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF o MAX_CIL
-export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
-    const esfOCil = id.includes('esf') ? 'ESF' : 'CIL';
-    const maxValor = id.includes('esf') ? MAX_ESF : MAX_CIL;
-    const ojo = id.includes('od') ? 'OD' : 'OI';
-    const mensajeError = `*${esfOCil} demasiado alto en ${ojo}. Consultar con el laboratorio.`;
-
-    eliminarErroresPorId(id);
-
-    if (valorNumerico > maxValor || valorNumerico < -maxValor) {
-        agregarError(id, mensajeError);
-    }
 }
 
 // Función genérica para calcular y actualizar la parte de "cerca"
@@ -367,8 +258,6 @@ export function sincronizarCambios(event) {
             calcularCerca(ojo);
         }
     }
-
-    mostrarAdvertenciaAddDiferente();
 }
 
 // Función para agregar eventos de sincronización
@@ -464,10 +353,4 @@ function formatearValor(valor) {
     } else {
         return '0.00';
     }
-}
-
-// Función para sincronizar todo después de la transposición
-export function sincronizarTodo() {
-    revisarErroresYActualizarCerca();
-    mostrarAdvertenciaAddDiferente();
 }
