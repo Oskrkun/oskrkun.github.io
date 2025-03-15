@@ -4,16 +4,23 @@ import {
     MAX_ADD,
     MAX_ESF,
     MAX_CIL,
+    erroresActivos,
     crearAdvertencias,
+    actualizarErrores,
     validarInput,
     ajustarValorAPasos,
     onInputFocus,
     onInputBlur,
+    revisarErroresYActualizarCerca,
+    mostrarAdvertenciaEjeFaltante,
+    mostrarAdvertenciaAddDiferente,
+    mostrarAdvertenciaMaxEsfCil,
     calcularCerca,
     sincronizarCambios,
     agregarEventosSincronizacion,
     esEsfOCil,
     transponerReceta,
+    sincronizarTodo,
     limpiarCerca
 } from './controlReceta.js';
 
@@ -21,6 +28,10 @@ import { cargarProductosFiltrados } from './filtradoProductos.js';
 
 import {
     cargarTratamientos,
+    formatearNumero,
+    formatearPrecio,
+    agregarEventosFiltrado,
+    agregarEventosReceta,
     cargarLaboratorios,
     cargarTiposLentesSelect,
     cargarIndicesRefraccion
@@ -32,7 +43,7 @@ import {
     inicializarProductoSeleccionado
 } from './calculosPresupuesto.js';
 
-import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js';
+import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js'; // Importar funciones actualizadas
 
 // Función para manejar la contracción/expansión de las secciones
 function toggleSection(event) {
@@ -98,6 +109,8 @@ function borrarReceta() {
     limpiarCerca('od');
     limpiarCerca('oi');
 
+    revisarErroresYActualizarCerca();
+
     const eventoRecetaBorrada = new CustomEvent('recetaBorrada');
     document.dispatchEvent(eventoRecetaBorrada);
 }
@@ -118,6 +131,8 @@ function agregarEventoBotonRotacion() {
     if (botonRotacion) {
         botonRotacion.addEventListener('click', () => {
             transponerReceta();
+            sincronizarTodo();
+
             const eventoTranspuesto = new CustomEvent('recetaTranspuesta');
             document.dispatchEvent(eventoTranspuesto);
         });
@@ -138,10 +153,10 @@ function deshabilitarCamposCerca() {
 async function llenarVendedor() {
     const user = await verificarAutenticacion();
     if (user) {
-        const { nick } = await obtenerRolYNick(user);
+        const { nick } = await obtenerRolYNick(user); // Obtener el nick del usuario
         const vendedorInput = document.getElementById('vendedor');
         if (vendedorInput) {
-            vendedorInput.value = nick || user.email;
+            vendedorInput.value = nick || user.email; // Usar el nick si existe, de lo contrario, el email
         } else {
             console.error('No se encontró el campo de Vendedor.');
         }
@@ -152,16 +167,24 @@ async function llenarVendedor() {
 
 // Función para inicializar el presupuesto
 export async function initPresupuesto() {
+    //console.log('Función initPresupuesto: Inicializando presupuesto...');
+    // Crear el contenedor de errores
+    //console.log('Llamando a crearAdvertencias...');
     crearAdvertencias();
 
+    // Verificar que el contenedor de errores esté presente
     const contenedorErrores = document.getElementById('contenedor-errores');
     if (!contenedorErrores) {
         console.error('El contenedor de errores no se creó correctamente.');
         return;
     }
 
+    // Deshabilitar los campos de "cerca"
+    //console.log('Deshabilitando campos de "cerca"...');
     deshabilitarCamposCerca();
 
+    // Agregar eventos a los inputs
+    //console.log('Agregando eventos a los inputs...');
     const inputs = document.querySelectorAll('.vista-previa input:not(.seccion-cerca input)');
     inputs.forEach(input => {
         input.addEventListener('input', validarInput);
@@ -175,17 +198,30 @@ export async function initPresupuesto() {
         });
     });
 
+    // Agregar eventos de sincronización
+    //console.log('Agregando eventos de sincronización...');
     agregarEventosSincronizacion();
 
+    // Mostrar advertencia si las ADD son diferentes
+    //console.log('Llamando a mostrarAdvertenciaAddDiferente...');
+    mostrarAdvertenciaAddDiferente();
+
+    // Agregar eventos a los botones
+    //console.log('Agregando eventos a los botones...');
     agregarEventoBotonRotacion();
     agregarEventoBotonBorrar();
 
+    // Cargar tratamientos
+    //console.log('Cargando tratamientos...');
     await cargarTratamientos();
     await cargarIndicesRefraccion();
 
+    // Cargar laboratorios y tipos de lentes para las listas desplegables
+    //console.log('Cargando laboratorios y tipos de lentes...');
     await cargarLaboratorios();
     await cargarTiposLentesSelect();
 
+    // Agregar evento de cambio a la lista desplegable de tipos de lentes
     const tipoLenteSelect = document.getElementById('tipo-lente-select');
     if (tipoLenteSelect) {
         tipoLenteSelect.addEventListener('change', cargarProductosFiltrados);
@@ -193,6 +229,7 @@ export async function initPresupuesto() {
         console.error('No se encontró la lista desplegable de tipos de lentes.');
     }
 
+    // Agregar evento de cambio a la lista desplegable de laboratorios
     const laboratorioSelect = document.getElementById('laboratorio-select');
     if (laboratorioSelect) {
         laboratorioSelect.addEventListener('change', cargarProductosFiltrados);
@@ -200,14 +237,24 @@ export async function initPresupuesto() {
         console.error('No se encontró la lista desplegable de laboratorios.');
     }
 
+    // Cargar productos filtrados después de que las listas estén llenas
+    //console.log('Cargando productos filtrados...');
     await cargarProductosFiltrados();
 
+    // Agregar eventos de filtrado y receta
+    //console.log('Agregando eventos de filtrado y receta...');
+    agregarEventosFiltrado();
     agregarEventosToggleSection();
+    agregarEventosReceta();
 
+    // Manejar la selección de productos y cálculos
+    //console.log('Manejando selección de productos y cálculos...');
     manejarSeleccionProducto();
     agregarEventosCalculos();
     inicializarProductoSeleccionado();
 
+    // Llenar el campo "Vendedor" con el nick del usuario logueado
+    //console.log('Llenando campo "Vendedor"...');
     await llenarVendedor();
 }
 
