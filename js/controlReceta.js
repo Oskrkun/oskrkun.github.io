@@ -407,6 +407,36 @@ function cambiarSignoCilindro(ojo) {
     elementos[`${ojo}LejosEje`].value = ejeTranspuesto;
 }
 
+// Función para validar los inputs
+export function validarInput(event) {
+    const input = event.target;
+    const value = input.value.trim();
+    const id = input.id;
+
+    // Limpiar errores anteriores relacionados con este input
+    eliminarErroresPorId(id);
+
+   // Si el input está vacío, no hay necesidad de validar más
+   if (value === '') {
+    // Si el input es CIL, también limpiar el error del EJE asociado
+    if (id.includes('cil')) {
+        const ejeId = id.replace('cil', 'eje'); // Obtener el ID del EJE asociado
+        eliminarErroresPorId(ejeId); // Limpiar el error del EJE
+    }
+    actualizarErrores(); // Actualizar la lista de errores en la interfaz
+    return;
+    }
+
+    // Resto de la lógica de validación...
+    if (id.includes('eje')) {
+        validarEje(input, value);
+    } else if (id.includes('add')) {
+        validarADD(input, value);
+    } else {
+        validarEsfOCil(input, value, id);
+    }
+}
+
 // Función para formatear valores (agregar "+" a valores positivos)
 function formatearValor(valor) {
     if (valor > 0) {
