@@ -251,15 +251,18 @@ export function toggleSeccionCerca() {
     const addOD = elementos.addOD.value.trim();
     const addOI = elementos.addOI.value.trim();
 
+    // Verificar los valores de addOD y addOI
+    console.log('addOD:', addOD, 'addOI:', addOI);
+
     // Mostrar la sección de "cerca" si hay un valor en ADD de OD o OI
     if (addOD !== '' || addOI !== '') {
-        seccionCerca.style.display = ''; // Eliminar solo la propiedad display (restablece al valor por defecto)
-        console.log(seccionCerca.style.display); // Verificar el valor de display
+        seccionCerca.style.display = ''; // Eliminar solo la propiedad display
+        console.log('Sección de "cerca" mostrada:', seccionCerca.style.display);
         console.log('line 256');
     } else {
         console.log('line 258');
         seccionCerca.style.display = 'none'; // Ocultar la sección agregando display: none
-        console.log(seccionCerca.style.display); // Verificar el valor de display
+        console.log('Sección de "cerca" oculta:', seccionCerca.style.display);
     }
 }
 
