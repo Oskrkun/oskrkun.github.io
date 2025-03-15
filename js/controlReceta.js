@@ -135,12 +135,17 @@ export function validarInput(event) {
     // Limpiar errores anteriores relacionados con este input
     eliminarErroresPorId(id);
 
-    // Si el input está vacío, no hay necesidad de validar más
-    if (value === '') {
-        actualizarErrores(); // Actualizar la lista de errores en la interfaz
-        return;
+   // Si el input está vacío, no hay necesidad de validar más
+   if (value === '') {
+    // Si el input es CIL, también limpiar el error del EJE asociado
+    if (id.includes('cil')) {
+        const ejeId = id.replace('cil', 'eje'); // Obtener el ID del EJE asociado
+        eliminarErroresPorId(ejeId); // Limpiar el error del EJE
     }
-
+    actualizarErrores(); // Actualizar la lista de errores en la interfaz
+    return;
+    }
+    
     // Resto de la lógica de validación...
     if (id.includes('eje')) {
         validarEje(input, value);
