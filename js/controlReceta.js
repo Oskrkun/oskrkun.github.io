@@ -26,7 +26,7 @@ const elementos = {
     contenedorErrores: document.getElementById('contenedor-errores')
 };
 
-// Función para crear el contenedor de errores con la "X" de FontAwesome
+// Función para crear el contenedor de errores
 export function crearAdvertencias() {
     // Verificar si el contenedor de errores ya existe
     let contenedorErrores = document.getElementById('contenedor-errores');
@@ -58,7 +58,19 @@ export function crearAdvertencias() {
 
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
-    const contenedorErrores = document.getElementById('contenedor-errores');
+    let contenedorErrores = document.getElementById('contenedor-errores');
+    //-----------
+    if (erroresActivos.length === 0) {
+        contenedorErrores.style.display = 'none'; // Ocultar el contenedor
+    } else {
+        contenedorErrores.style.display = 'block'; // Mostrar el contenedor
+    }
+    //-----------
+    if (!contenedorErrores) {
+        crearAdvertencias();
+        contenedorErrores = document.getElementById('contenedor-errores');
+    }
+
     if (!contenedorErrores) {
         console.error('No se encontró el contenedor de errores.');
         return;
@@ -77,60 +89,48 @@ export function actualizarErrores() {
         contenedorErrores.appendChild(spanError);
     });
 
-    // Mostrar u ocultar el contenedor según si hay errores
-    if (erroresActivos.length > 0) {
-        contenedorErrores.style.display = 'block'; // Mostrar el contenedor
-    } else {
-        contenedorErrores.style.display = 'none'; // Ocultar el contenedor
-    }
-
     console.log('Errores actualizados:', erroresActivos);
 }
 
-// Función para agregar un error con un ID simple
+// Función para agregar un error con un ID único
 function agregarError(id, mensaje) {
-    // Verificar si ya existe un error con el mismo ID
-    const errorExistente = erroresActivos.find(error => error.id === id);
-    if (errorExistente) {
-        return; // Si ya existe, no agregar otro error
-    }
-
-    // Crear el error con un ID simple
-    const error = { id, message: mensaje };
+    const errorId = `${id}-${Date.now()}`; // ID único basado en el ID del input y la marca de tiempo
+    const error = { id: errorId, message: mensaje };
     erroresActivos.push(error);
-    console.log(`Error agregado: ${id} - ${mensaje}`);
+    console.log(`Error agregado: ${errorId} - ${mensaje}`);
 }
 
 // Función para eliminar errores por ID
 function eliminarErroresPorId(id) {
-    erroresActivos = erroresActivos.filter(error => error.id !== id);
-    console.log(`Errores eliminados para ${id}:`, erroresActivos);
+    const erroresEliminados = erroresActivos.filter(error => error.id.startsWith(id));
+    erroresActivos = erroresActivos.filter(error => !error.id.startsWith(id));
+    console.log(`Errores eliminados para ${id}:`, erroresEliminados);
 }
 
 // Función para validar los inputs
 export function validarInput(event) {
     const input = event.target;
     const value = input.value.trim();
-    const id = input.id.replace('-lejos', '').replace('-cerca', ''); // Simplificar el ID
+    const id = input.id;
 
     // Limpiar errores anteriores relacionados con este input
     eliminarErroresPorId(id);
 
-    // Si el input está vacío, no hay necesidad de validar más
-    if (value === '') {
-        // Si el input es CIL, también limpiar el error del EJE asociado
-        if (id.includes('Cil')) {
-            const ejeId = id.replace('Cil', 'Eje'); // Obtener el ID del EJE asociado
-            eliminarErroresPorId(ejeId); // Limpiar el error del EJE
-        }
-        actualizarErrores(); // Actualizar la lista de errores en la interfaz
-        return;
+   // Si el input está vacío, no hay necesidad de validar más
+   if (value === '') {
+    // Si el input es CIL, también limpiar el error del EJE asociado
+    if (id.includes('cil')) {
+        const ejeId = id.replace('cil', 'eje'); // Obtener el ID del EJE asociado
+        eliminarErroresPorId(ejeId); // Limpiar el error del EJE
+    }
+    actualizarErrores(); // Actualizar la lista de errores en la interfaz
+    return;
     }
 
     // Resto de la lógica de validación...
-    if (id.includes('Eje')) {
+    if (id.includes('eje')) {
         validarEje(input, value);
-    } else if (id.includes('Add')) {
+    } else if (id.includes('add')) {
         validarADD(input, value);
     } else {
         validarEsfOCil(input, value, id);
@@ -206,66 +206,8 @@ function validarEsfOCil(input, value, id) {
 
     // Si el cilindro está vacío, limpiar el error del eje
     if (value === '') {
-        const ejeId = id.replace('Cil', 'Eje'); // Obtener el ID del EJE asociado
-        eliminarErroresPorId(ejeId); // Limpiar el error del EJE
-    }
-}
-
-// Función para mostrar advertencia si falta el EJE y hay CIL
-export function mostrarAdvertenciaEjeFaltante() {
-    const cilOD = elementos.odLejosCil.value.trim();
-    const ejeOD = elementos.odLejosEje.value.trim();
-    const cilOI = elementos.oiLejosCil.value.trim();
-    const ejeOI = elementos.oiLejosEje.value.trim();
-
-    const mensajeErrorOD = '*Falta el Eje del OD';
-    const mensajeErrorOI = '*Falta el Eje del OI';
-
-    // Limpiar errores anteriores relacionados con el eje
-    eliminarErroresPorId('odEje');
-    eliminarErroresPorId('oiEje');
-
-    // Verificar si falta el EJE en OD
-    if (cilOD !== '' && ejeOD === '') {
-        agregarError('odEje', mensajeErrorOD);
-    }
-
-    // Verificar si falta el EJE en OI
-    if (cilOI !== '' && ejeOI === '') {
-        agregarError('oiEje', mensajeErrorOI);
-    }
-}
-
-// Función para mostrar advertencia si las ADD son diferentes
-export function mostrarAdvertenciaAddDiferente() {
-    const addOD = parseFloat(elementos.addOD.value) || 0;
-    const addOI = parseFloat(elementos.addOI.value) || 0;
-
-    const mensajeError = '*Hay una ADD diferente establecida para cada ojo';
-
-    // Verificar si las ADD son diferentes
-    if (addOD !== addOI) {
-        if (!erroresActivos.some(error => error.message === mensajeError)) {
-            agregarError('addDiferente', mensajeError);
-        }
-    } else {
-        eliminarErroresPorId('addDiferente');
-    }
-}
-
-// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF o MAX_CIL
-export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
-    const esfOCil = id.includes('esf') ? 'ESF' : 'CIL';
-    const maxValor = id.includes('esf') ? MAX_ESF : MAX_CIL;
-    const ojo = id.includes('od') ? 'OD' : 'OI';
-    const mensajeError = `*${esfOCil} demasiado alto en ${ojo}. Consultar con el laboratorio.`;
-
-    // Limpiar errores anteriores relacionados con este input
-    eliminarErroresPorId(id);
-
-    // Verificar si el valor está fuera de rango
-    if (valorNumerico > maxValor || valorNumerico < -maxValor) {
-        agregarError(id, mensajeError);
+        eliminarErroresPorId('odLejosEje');
+        eliminarErroresPorId('oiLejosEje');
     }
 }
 
@@ -387,6 +329,84 @@ export function limpiarCerca(ojo) {
     elementos[`${ojo}CercaEsf`].value = '';
     elementos[`${ojo}CercaCil`].value = '';
     elementos[`${ojo}CercaEje`].value = '';
+}
+
+// Función para mostrar advertencia si falta el EJE y hay CIL
+export function mostrarAdvertenciaEjeFaltante() {
+    const cilOD = elementos.odLejosCil.value.trim();
+    const ejeOD = elementos.odLejosEje.value.trim();
+    const cilOI = elementos.oiLejosCil.value.trim();
+    const ejeOI = elementos.oiLejosEje.value.trim();
+
+    const mensajeErrorOD = '*Falta el Eje del OD';
+    const mensajeErrorOI = '*Falta el Eje del OI';
+
+    // Limpiar errores anteriores relacionados con el eje
+    eliminarErroresPorId('odLejosEje');
+    eliminarErroresPorId('oiLejosEje');
+
+    // Verificar si falta el EJE en OD
+    if (cilOD !== '' && ejeOD === '') {
+        agregarError('odLejosEje', mensajeErrorOD);
+    }
+
+    // Verificar si falta el EJE en OI
+    if (cilOI !== '' && ejeOI === '') {
+        agregarError('oiLejosEje', mensajeErrorOI);
+    }
+}
+
+// Función para mostrar advertencia si las ADD son diferentes
+export function mostrarAdvertenciaAddDiferente() {
+    const addOD = parseFloat(elementos.addOD.value) || 0;
+    const addOI = parseFloat(elementos.addOI.value) || 0;
+
+    const mensajeError = '*Hay una ADD diferente establecida para cada ojo';
+
+    // Verificar si las ADD son diferentes
+    if (addOD !== addOI) {
+        if (!erroresActivos.some(error => error.message === mensajeError)) {
+            agregarError('addDiferente', mensajeError);
+        }
+    } else {
+        eliminarErroresPorId('addDiferente');
+    }
+}
+
+// Función para mostrar advertencia si el valor de ESF o CIL supera MAX_ESF o MAX_CIL
+export function mostrarAdvertenciaMaxEsfCil(valorNumerico, id) {
+    const esfOCil = id.includes('esf') ? 'ESF' : 'CIL';
+    const maxValor = id.includes('esf') ? MAX_ESF : MAX_CIL;
+    const ojo = id.includes('od') ? 'OD' : 'OI';
+    const mensajeError = `*${esfOCil} demasiado alto en ${ojo}. Consultar con el laboratorio.`;
+
+    // Limpiar errores anteriores relacionados con este input
+    eliminarErroresPorId(id);
+
+    // Verificar si el valor está fuera de rango
+    if (valorNumerico > maxValor || valorNumerico < -maxValor) {
+        agregarError(id, mensajeError);
+    }
+}
+
+// Función genérica para calcular y actualizar la parte de "cerca"
+export function calcularCerca(ojo) {
+    // Obtener los valores de ESF de "lejos" y ADD para el ojo especificado
+    const esfLejos = parseFloat(elementos[`${ojo}LejosEsf`].value) || 0;
+    const add = parseFloat(elementos[`add${ojo.toUpperCase()}`].value) || 0;
+
+    // Calcular el valor de ESF para "cerca"
+    const esfCerca = esfLejos + add;
+
+    // Ajustar el valor a pasos de 0.25
+    const esfCercaAjustado = ajustarValorAPasos(esfCerca.toString());
+
+    // Actualizar el campo de ESF en "cerca" para el ojo especificado
+    elementos[`${ojo}CercaEsf`].value = esfCercaAjustado;
+
+    // Copiar el cilindro y el eje de "lejos" a "cerca" para el ojo especificado
+    elementos[`${ojo}CercaCil`].value = elementos[`${ojo}LejosCil`].value;
+    elementos[`${ojo}CercaEje`].value = elementos[`${ojo}LejosEje`].value;
 }
 
 // Función para sincronizar cambios entre "lejos", "cerca" y ADD
