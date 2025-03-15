@@ -44,7 +44,13 @@ export function crearAdvertencias() {
 // Función para actualizar la lista de errores en la interfaz
 export function actualizarErrores() {
     let contenedorErrores = document.getElementById('contenedor-errores');
-
+    //-----------
+    if (erroresActivos.length === 0) {
+        contenedorErrores.style.display = 'none'; // Ocultar el contenedor
+    } else {
+        contenedorErrores.style.display = 'block'; // Mostrar el contenedor
+    }
+    //-----------
     if (!contenedorErrores) {
         crearAdvertencias();
         contenedorErrores = document.getElementById('contenedor-errores');

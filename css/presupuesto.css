@@ -626,7 +626,10 @@ input[type="text"] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     max-width: 300px;
+    width: 300px;
     overflow-y: auto;
     max-height: 200px;
+    height: auto;
+    display: none; /* Ocultar por defecto */
 }
 /*---------------------------------------------------------------------------------*/
