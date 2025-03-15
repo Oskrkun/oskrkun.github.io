@@ -26,7 +26,7 @@ const elementos = {
     contenedorErrores: document.getElementById('contenedor-errores')
 };
 
-// Función para crear el contenedor de errores con la "X" de FontAwesome
+// Función para crear el contenedor de errores
 export function crearAdvertencias() {
     // Verificar si el contenedor de errores ya existe
     let contenedorErrores = document.getElementById('contenedor-errores');
@@ -37,29 +37,10 @@ export function crearAdvertencias() {
     // Crear un contenedor único para las advertencias
     contenedorErrores = document.createElement('div');
     contenedorErrores.id = 'contenedor-errores';
-    contenedorErrores.style.position = 'fixed'; // Posición fija
-    contenedorErrores.style.bottom = '20px'; // Posición en la parte inferior
-    contenedorErrores.style.right = '20px'; // Posición en la parte derecha
-    contenedorErrores.style.backgroundColor = '#ffebee'; // Color de fondo
-    contenedorErrores.style.padding = '20px'; // Espaciado interno
-    contenedorErrores.style.borderRadius = '8px'; // Bordes redondeados
-    contenedorErrores.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)'; // Sombra
-    contenedorErrores.style.zIndex = '1000'; // Asegurar que esté por encima de otros elementos
-    contenedorErrores.style.maxWidth = '300px'; // Ancho máximo
-    contenedorErrores.style.width = '100%'; // Ancho completo
-    contenedorErrores.style.overflowY = 'auto'; // Habilitar scroll vertical si es necesario
-    contenedorErrores.style.maxHeight = '200px'; // Altura máxima
-    contenedorErrores.style.display = 'none'; // Ocultar por defecto
 
     // Agregar el ícono de FontAwesome (X) en la esquina superior derecha
     const iconoCerrar = document.createElement('i');
     iconoCerrar.className = 'fas fa-times cerrar-icono'; // Clases de FontAwesome
-    iconoCerrar.style.position = 'absolute';
-    iconoCerrar.style.top = '10px';
-    iconoCerrar.style.right = '10px';
-    iconoCerrar.style.cursor = 'pointer';
-    iconoCerrar.style.color = '#666'; // Color del ícono
-    iconoCerrar.style.fontSize = '16px'; // Tamaño del ícono
 
     // Agregar evento de clic al ícono para cerrar el contenedor
     iconoCerrar.addEventListener('click', () => {
@@ -145,7 +126,7 @@ export function validarInput(event) {
     actualizarErrores(); // Actualizar la lista de errores en la interfaz
     return;
     }
-    
+
     // Resto de la lógica de validación...
     if (id.includes('eje')) {
         validarEje(input, value);

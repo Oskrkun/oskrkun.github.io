@@ -616,12 +616,13 @@ input[type="text"] {
     border: none !important; /* Eliminar bordes */
 }
 /*---------------------------------------------------------------------------------*/
+/* Estilos para el contenedor de errores */
 #contenedor-errores {
     position: fixed;
     bottom: 20px;
     right: 20px;
     background-color: #ffebee;
-    padding: 10px;
+    padding: 20px; /* Aumentamos el padding para dar espacio al ícono */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
@@ -631,5 +632,20 @@ input[type="text"] {
     max-height: 200px;
     height: auto;
     display: none; /* Ocultar por defecto */
+}
+
+/* Estilos para el ícono de cerrar (X) */
+.cerrar-icono {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    color: #666; /* Color del ícono */
+    font-size: 16px; /* Tamaño del ícono */
+    transition: color 0.3s ease; /* Transición suave para el hover */
+}
+
+.cerrar-icono:hover {
+    color: #000; /* Cambiar color al pasar el mouse */
 }
 /*---------------------------------------------------------------------------------*/
