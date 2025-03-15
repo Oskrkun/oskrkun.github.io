@@ -211,15 +211,21 @@ export function sincronizarCambios(event) {
     const input = event.target;
     const id = input.id;
 
-    // Si se modifica ADD, actualizar "cerca"
+    // Si se modifica ADD, actualizar "cerca" y copiar al otro ojo
     if (id.includes('add')) {
         const ojo = id.includes('od') ? 'od' : 'oi';
         const add = parseFloat(input.value) || 0;
 
+        // Copiar el valor de ADD al otro ojo
+        const otroOjo = ojo === 'od' ? 'oi' : 'od';
+        elementos[`add${otroOjo.toUpperCase()}`].value = input.value;
+
         if (add !== 0) {
             calcularCerca(ojo); // Si hay ADD, calcular "cerca"
+            calcularCerca(otroOjo); // También calcular "cerca" para el otro ojo
         } else {
             limpiarCerca(ojo); // Si la ADD está vacía, limpiar la parte de "cerca"
+            limpiarCerca(otroOjo); // También limpiar "cerca" para el otro ojo
         }
     }
 
