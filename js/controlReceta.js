@@ -227,6 +227,9 @@ export function sincronizarCambios(event) {
             limpiarCerca(ojo); // Si la ADD está vacía, limpiar la parte de "cerca"
             limpiarCerca(otroOjo); // También limpiar "cerca" para el otro ojo
         }
+
+        // Mostrar u ocultar la sección de "cerca"
+        toggleSeccionCerca();
     }
 
     // Si se modifica "lejos", no hacer nada a menos que ADD esté presente
@@ -236,6 +239,20 @@ export function sincronizarCambios(event) {
         if (add !== 0) {
             calcularCerca(ojo);
         }
+    }
+}
+
+// Función para mostrar u ocultar la sección de "cerca"
+export function toggleSeccionCerca() {
+    const seccionCerca = document.getElementById('seccion-cerca');
+    const addOD = elementos.addOD.value.trim();
+    const addOI = elementos.addOI.value.trim();
+
+    // Mostrar la sección de "cerca" si hay un valor en ADD de OD o OI
+    if (addOD !== '' || addOI !== '') {
+        seccionCerca.style.display = 'block'; // Mostrar la sección
+    } else {
+        seccionCerca.style.display = 'none'; // Ocultar la sección
     }
 }
 
