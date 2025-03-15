@@ -250,9 +250,9 @@ export function toggleSeccionCerca() {
 
     // Mostrar la sección de "cerca" si hay un valor en ADD de OD o OI
     if (addOD !== '' || addOI !== '') {
-        seccionCerca.style.display = 'block'; // Mostrar la sección
+        seccionCerca.style.display = ''; // Eliminar solo la propiedad display
     } else {
-        seccionCerca.style.display = 'none'; // Ocultar la sección
+        seccionCerca.style.display = 'none'; // Ocultar la sección agregando display: none
     }
 }
 
