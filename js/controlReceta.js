@@ -7,7 +7,7 @@ export const MAX_CIL = 8.00; // Máximo valor para CIL
 export let erroresActivos = [];
 
 // Elementos del DOM
-const elementos = {
+export const elementos = {
     addOD: document.getElementById('add-od'),
     addOI: document.getElementById('add-oi'),
     odLejosEsf: document.getElementById('od-lejos-esf'),
@@ -236,6 +236,48 @@ export function sincronizarCambios(event) {
     mostrarAdvertenciaAddDiferente();
 }
 
+// Función para agregar eventos de sincronización
+export function agregarEventosSincronizacion() {
+    const inputsLejos = document.querySelectorAll('.seccion-lejos input');
+    const inputsAdd = document.querySelectorAll('.seccion-add input');
+
+    inputsLejos.forEach(input => {
+        input.addEventListener('input', sincronizarCambios);
+    });
+
+    inputsAdd.forEach(input => {
+        input.addEventListener('input', sincronizarCambios);
+    });
+}
+
+// Función para limpiar la parte de "cerca" cuando la ADD está vacía
+export function limpiarCerca(ojo) {
+    // Limpiar los campos de "cerca" para el ojo especificado
+    elementos[`${ojo}CercaEsf`].value = '';
+    elementos[`${ojo}CercaCil`].value = '';
+    elementos[`${ojo}CercaEje`].value = '';
+}
+
+// Función para calcular y actualizar la parte de "cerca"
+export function calcularCerca(ojo) {
+    // Obtener los valores de ESF de "lejos" y ADD para el ojo especificado
+    const esfLejos = parseFloat(elementos[`${ojo}LejosEsf`].value) || 0;
+    const add = parseFloat(elementos[`add${ojo.toUpperCase()}`].value) || 0;
+
+    // Calcular el valor de ESF para "cerca"
+    const esfCerca = esfLejos + add;
+
+    // Ajustar el valor a pasos de 0.25
+    const esfCercaAjustado = ajustarValorAPasos(esfCerca.toString());
+
+    // Actualizar el campo de ESF en "cerca" para el ojo especificado
+    elementos[`${ojo}CercaEsf`].value = esfCercaAjustado;
+
+    // Copiar el cilindro y el eje de "lejos" a "cerca" para el ojo especificado
+    elementos[`${ojo}CercaCil`].value = elementos[`${ojo}LejosCil`].value;
+    elementos[`${ojo}CercaEje`].value = elementos[`${ojo}LejosEje`].value;
+}
+
 // Función para mostrar advertencia si falta el EJE y hay CIL
 export function mostrarAdvertenciaEjeFaltante() {
     const cilOD = elementos.odLejosCil.value.trim();
@@ -379,8 +421,6 @@ function formatearValor(valor) {
 // Función para sincronizar todo después de la transposición
 export function sincronizarTodo() {
     // Revisar errores y actualizar la parte de "cerca"
-    revisarErroresYActualizarCerca();
-
-    // Mostrar advertencia si las ADD son diferentes
+    mostrarAdvertenciaEjeFaltante();
     mostrarAdvertenciaAddDiferente();
 }

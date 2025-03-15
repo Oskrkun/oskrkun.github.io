@@ -20,7 +20,8 @@ import {
     esEsfOCil,
     transponerReceta,
     sincronizarTodo,
-    limpiarCerca
+    limpiarCerca,
+    elementos
 } from './controlReceta.js';
 
 import { cargarProductosFiltrados } from './filtradoProductos.js';
