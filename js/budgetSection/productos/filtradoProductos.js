@@ -1,11 +1,10 @@
-import { 
-    supabaseClient 
-} from './supabaseConfig.js';
 import {
     formatearNumero,
     formatearPrecio,
     actualizarContadorProductos
-} from './controlProductos.js';
+} from '../resources/auxi.js';
+import { obtenerProductosFiltrados } from '../../budgetSection/resources/supaFunctions.js';
+import { estadoGlobal } from '../estadoGlobal.js'; // Importar el estado global
 
 // Función para realizar la transposición oftalmológica
 function transponerCilindrico(esf, cil) {
@@ -16,13 +15,7 @@ function transponerCilindrico(esf, cil) {
     }
     return { esf, cil };
 }
-// Función para determinar el valor más alto de ESF o CIL
-function obtenerValorMasAlto(valor1, valor2) {
-    if (valor1 === null && valor2 === null) return null;
-    if (valor1 === null) return valor2;
-    if (valor2 === null) return valor1;
-    return Math.min(valor1, valor2); // En ESF y CIL, el valor más alto es el más negativo
-}
+
 // Función para filtrar productos por graduación (Laboratorio 2)
 function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
     // Aplicar transposición si el cilindro es positivo
@@ -43,6 +36,7 @@ function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilVa
         return odCumpleEsf && odCumpleCil && oiCumpleEsf && oiCumpleCil;
     });
 }
+
 // Función para filtrar por graduación (Laboratorio 4)
 function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
     // Convertir CIL a positivo si es negativo
@@ -72,52 +66,32 @@ function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilVal
         return odEsfValid && oiEsfValid && odCilValid && oiCilValid && odSumValid && oiSumValid;
     });
 }
+
 // Función principal para cargar productos filtrados
-// Función principal para cargar productos filtrados
+// filtradoProductos.js
 export async function cargarProductosFiltrados() {
     try {
-        // Obtener el tipo de lente seleccionado desde la lista desplegable
-        const tipoLenteSeleccionado = document.getElementById('tipo-lente-select').value;
-
-        // Obtener el laboratorio seleccionado desde la lista desplegable
-        const laboratorioSeleccionado = document.getElementById('laboratorio-select').value;
-
-        // Obtener los tratamientos seleccionados
-        const tratamientosSeleccionados = Array.from(document.querySelectorAll('input[name="tratamientos"]:checked')).map(checkbox => parseInt(checkbox.value));
-
-        // Obtener el índice de refracción seleccionado
-        const indiceRefraccionSeleccionado = document.getElementById('indice-refraccion-select').value;
-
-        // Obtener los valores de ESF y CIL de la receta
-        const odLejosEsf = parseFloat(document.getElementById('od-lejos-esf').value) || null;
-        const odLejosCil = parseFloat(document.getElementById('od-lejos-cil').value) || null;
-        const oiLejosEsf = parseFloat(document.getElementById('oi-lejos-esf').value) || null;
-        const oiLejosCil = parseFloat(document.getElementById('oi-lejos-cil').value) || null;
+        // Leer los valores de la receta y los filtros desde el estado global
+        const { od_lejos, oi_lejos } = estadoGlobal.receta;
+        const { tipoLente, laboratorio, tratamientos, indiceRefraccion } = estadoGlobal.filtros;
 
         // Verificar si se ingresó una receta
-        const hayReceta = odLejosEsf !== null || odLejosCil !== null || oiLejosEsf !== null || oiLejosCil !== null;
+        const hayReceta = od_lejos.esf !== null || od_lejos.cil !== null || oi_lejos.esf !== null || oi_lejos.cil !== null;
 
         // Obtener los productos desde Supabase
-        const { data: productos, error } = await supabaseClient.rpc('cargar_productos_filtrados', {
-            p_tipo_lente_id: tipoLenteSeleccionado || null,
-            p_laboratorio_id: laboratorioSeleccionado || null,
-            p_tratamientos: tratamientosSeleccionados.length > 0 ? tratamientosSeleccionados : null,
-            p_indice_refraccion_id: indiceRefraccionSeleccionado || null // Nuevo parámetro para filtrar por índice de refracción
-        });
-
-        if (error) throw error;
+        const productos = await obtenerProductosFiltrados(tipoLente, laboratorio, tratamientos, indiceRefraccion);
 
         let productosFiltrados = productos;
 
         if (hayReceta) {
             // Aplicar controles según el laboratorio de cada producto
             productosFiltrados = productos.filter(producto => {
-                if (laboratorioSeleccionado === '2' || producto.laboratorio_id === 2) {
+                if (laboratorio === '2' || producto.laboratorio_id === 2) {
                     // Control para Laboratorio 2 (Vidaltec)
-                    return filtrarPorGraduacionVidaltec([producto], odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil).length > 0;
-                } else if (laboratorioSeleccionado === '4' || producto.laboratorio_id === 4) {
+                    return filtrarPorGraduacionVidaltec([producto], od_lejos.esf, oi_lejos.esf, od_lejos.cil, oi_lejos.cil).length > 0;
+                } else if (laboratorio === '4' || producto.laboratorio_id === 4) {
                     // Control para Laboratorio 4 (Rodenstock)
-                    return filterByGraduationRodenstock([producto], odLejosEsf, oiLejosEsf, odLejosCil, oiLejosCil).length > 0;
+                    return filterByGraduationRodenstock([producto], od_lejos.esf, oi_lejos.esf, od_lejos.cil, oi_lejos.cil).length > 0;
                 } else {
                     // Sin control de graduación para otros laboratorios
                     return true;

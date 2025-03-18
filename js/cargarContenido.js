@@ -1,6 +1,5 @@
 // cargarContenido.js
 
-import { initABM } from './abm.js'; // Importar la función de inicialización del ABM
 
 // Variable de estado para controlar si una carga está en progreso
 let cargaEnProgreso = false;
@@ -35,7 +34,7 @@ export async function cargarContenido(seccion) {
                 await new Promise(resolve => setTimeout(resolve, 0)); // Pequeño retraso para asegurar que el DOM se haya actualizado
 
                 // Inicializar el ABM después de cargar el contenido
-                await initABM(); // Llamar a la función de inicialización del ABM
+                await import('./abm/abm.js').then(module => module.initABM()); // Llamar a la función de inicialización del ABM
                 break;
 
             case 'agenda':
@@ -44,55 +43,52 @@ export async function cargarContenido(seccion) {
                 break;
 
             case 'presupuesto':
-				// Cargar el CSS de Presupuesto
-				const linkPresupuesto = document.createElement('link');
-				linkPresupuesto.rel = 'stylesheet';
-				linkPresupuesto.href = 'css/presupuesto.css';
-				document.head.appendChild(linkPresupuesto);
-
-				// Cargar el HTML de Presupuesto
-				contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
-
-				// Esperar a que el DOM se actualice antes de inicializar el Presupuesto
-				await new Promise(resolve => setTimeout(resolve, 0));
-
-				// Cargar la librería jsPDF
-				const scriptJsPDF = document.createElement('script');
-				//scriptJsPDF.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-				scriptJsPDF.src = './js/jspdf.umd.min.js';
-				scriptJsPDF.onload = () => {
-				};
-				scriptJsPDF.onerror = (error) => {
-					console.error('Error al cargar jsPDF:', error);
-				};
-				document.head.appendChild(scriptJsPDF);
-
-				// Cargar la librería html2canvas
-				const scriptHtml2Canvas = document.createElement('script');
-				scriptHtml2Canvas.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-				scriptHtml2Canvas.onload = () => {
-				};
-				scriptHtml2Canvas.onerror = (error) => {
-					console.error('Error al cargar html2canvas:', error);
-				};
-				document.head.appendChild(scriptHtml2Canvas);
-
-				// Inicializar el Presupuesto después de cargar el contenido
-				await import('./presupuesto.js').then(module => module.initPresupuesto());
-
-				// Cargar el script para generar PDF
-				await import('../js/generarPdf.js').then(module => {
-					// Vincular el evento click al botón
-					const botonGenerarPDF = document.getElementById('generar-pdf');
-					if (botonGenerarPDF) {
-						botonGenerarPDF.addEventListener('click', module.generarPDF);
-					} else {
-						console.error('No se encontró el botón de generar PDF.');
-					}
-				}).catch(error => {
-					console.error('Error al cargar generarPdf.js:', error);
-				});
-				break;
+                // Cargar el CSS de Presupuesto
+                const linkPresupuesto = document.createElement('link');
+                linkPresupuesto.rel = 'stylesheet';
+                linkPresupuesto.href = 'css/presupuesto.css';
+                document.head.appendChild(linkPresupuesto);
+            
+                // Cargar el HTML de Presupuesto
+                contenidoPrincipal.innerHTML = await fetch('presupuesto.html').then(res => res.text());
+            
+                // Esperar a que el DOM se actualice antes de inicializar el Presupuesto
+                await new Promise(resolve => setTimeout(resolve, 0));
+            
+                // Cargar la librería jsPDF
+                const scriptJsPDF = document.createElement('script');
+                scriptJsPDF.src = './js/budgetSection/resources/jspdf.umd.min.js';
+                scriptJsPDF.onload = () => {};
+                scriptJsPDF.onerror = (error) => {
+                    console.error('Error al cargar jsPDF:', error);
+                };
+                document.head.appendChild(scriptJsPDF);
+            
+                // Cargar la librería html2canvas
+                const scriptHtml2Canvas = document.createElement('script');
+                scriptHtml2Canvas.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                scriptHtml2Canvas.onload = () => {};
+                scriptHtml2Canvas.onerror = (error) => {
+                    console.error('Error al cargar html2canvas:', error);
+                };
+                document.head.appendChild(scriptHtml2Canvas);
+            
+                // Inicializar el Presupuesto después de cargar el contenido
+                await import('./budgetSection/presupuesto.js').then(module => module.initPresupuesto());
+               
+                // Cargar el script para generar PDF
+                await import('./budgetSection/resources/generarPdf.js').then(module => {
+                    // Vincular el evento click al botón
+                    const botonGenerarPDF = document.getElementById('generar-pdf');
+                    if (botonGenerarPDF) {
+                        botonGenerarPDF.addEventListener('click', module.generarPDF);
+                    } else {
+                        console.error('No se encontró el botón de generar PDF.');
+                    }
+                }).catch(error => {
+                    console.error('Error al cargar generarPdf.js:', error);
+                });
+                break;
 
             case 'clientes':
                 contenidoPrincipal.innerHTML = await fetch('clientes.html').then(res => res.text());

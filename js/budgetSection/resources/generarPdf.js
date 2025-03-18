@@ -92,6 +92,7 @@ export function generarPDF() {
                             orientation: mmWidth > mmHeight ? 'landscape' : 'portrait', // Orientación basada en las dimensiones
                             unit: 'mm',
                             format: [mmWidth, mmHeight], // Tamaño personalizado
+                            compress: true,
                         });
 
                         // Agregar la imagen al PDF

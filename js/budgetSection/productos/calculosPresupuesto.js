@@ -1,5 +1,6 @@
 // calculosPresupuesto.js
-import { supabaseClient } from './supabaseConfig.js';
+import { obtenerLaboratorioInfo } from '../../budgetSection/resources/supaFunctions.js'; // Importar la función de supaFunctions.js
+import { verificarAutenticacion, obtenerRolYNick } from '../../../js/usuarios.js';
 
 // Objeto para almacenar referencias a los elementos del DOM
 const elementos = {
@@ -139,12 +140,7 @@ async function cargarListaMontaje(laboratorioId) {
 
     try {
         // Llamar a la función de Supabase para obtener los datos
-        const { data, error } = await supabaseClient
-            .rpc('get_laboratorio_info', { lab_id: laboratorioId, serv_id: 1 }); // Usar el laboratorio_id como parámetro
-
-        if (error) {
-            throw error;
-        }
+        const data = await obtenerLaboratorioInfo(laboratorioId, 1); // Usar la función de supaFunctions.js
 
         // Verificar si hay datos
         if (data && data.length > 0) {
@@ -187,7 +183,6 @@ async function cargarListaMontaje(laboratorioId) {
 
 // Función para calcular los precios (cristales y final)
 function calcularPrecios() {
-
     // Obtener valores
     const precioBase = parseFloat(elementos.productoPrecioBase.value) || 0;
     const armado = parseFloat(elementos.productoArmado.value) || 0; // Precio del montaje seleccionado
@@ -249,6 +244,22 @@ export function inicializarProductoSeleccionado() {
 
     // Calcular precios iniciales
     calcularPrecios();
+}
+
+// Función para llenar el campo "Vendedor" con el nick del usuario logueado
+export async function llenarVendedor() {
+    const user = await verificarAutenticacion();
+    if (user) {
+        const { nick } = await obtenerRolYNick(user); // Obtener el nick del usuario
+        const vendedorInput = document.getElementById('vendedor');
+        if (vendedorInput) {
+            vendedorInput.value = nick || user.email; // Usar el nick si existe, de lo contrario, el email
+        } else {
+            console.error('No se encontró el campo de Vendedor.');
+        }
+    } else {
+        console.error('No se pudo obtener el usuario logueado.');
+    }
 }
 
 // Inicializar todo cuando el DOM esté listo

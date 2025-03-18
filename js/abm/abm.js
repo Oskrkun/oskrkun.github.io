@@ -1,4 +1,4 @@
-import { supabaseClient } from './supabaseConfig.js';
+import { supabaseClient } from '../supabaseConfig.js';
 
 // Función para inicializar el ABM (Altas, Bajas y Modificaciones)
 export async function initABM() {
