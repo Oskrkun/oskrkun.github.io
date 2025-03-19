@@ -7,7 +7,7 @@ import { obtenerProductosFiltrados } from '../../budgetSection/resources/supaFun
 import { estadoGlobal } from '../estadoGlobal.js'; // Importar el estado global
 
 // Función para realizar la transposición oftalmológica
-function transponerCilindrico(esf, cil) {
+function transponerCilindricoVidaltec(esf, cil) {
     if (cil > 0) {
         const nuevoCil = -cil;
         const nuevoEsf = esf + cil;
@@ -16,11 +16,17 @@ function transponerCilindrico(esf, cil) {
     return { esf, cil };
 }
 
+function transponerCilindrico(esf, cil) {
+    const nuevoCil = -cil;
+    const nuevoEsf = esf + cil;
+    return { esf: nuevoEsf, cil: nuevoCil };
+}
+
 // Función para filtrar productos por graduación (Laboratorio 2)
 function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
     // Aplicar transposición si el cilindro es positivo
-    const odTranspuesto = transponerCilindrico(odEsfValue, odCilValue);
-    const oiTranspuesto = transponerCilindrico(oiEsfValue, oiCilValue);
+    const odTranspuesto = transponerCilindricoVidaltec(odEsfValue, odCilValue);
+    const oiTranspuesto = transponerCilindricoVidaltec(oiEsfValue, oiCilValue);
 
     // Filtrar los productos
     return productos.filter(producto => {
@@ -39,31 +45,51 @@ function filtrarPorGraduacionVidaltec(productos, odEsfValue, oiEsfValue, odCilVa
 
 // Función para filtrar por graduación (Laboratorio 4)
 function filterByGraduationRodenstock(products, odEsfValue, oiEsfValue, odCilValue, oiCilValue) {
-    // Convertir CIL a positivo si es negativo
-    odCilValue = Math.abs(odCilValue);
-    oiCilValue = Math.abs(oiCilValue);
-
-    return products.filter(product => {
+    // Función para verificar las condiciones de Rodenstock
+    function verificarCondiciones(esf, cil, product) {
         // Filtro para ESF (esférico)
-        const odEsfValid = (odEsfValue >= 0 && odEsfValue >= product.min_esf && odEsfValue <= product.max_esf) || // Para valores positivos
-            (odEsfValue < 0 && odEsfValue >= product.min_esf); // Para valores negativos, debe ser mayor o igual al mínimo
-        const oiEsfValid = (oiEsfValue >= 0 && oiEsfValue >= product.min_esf && oiEsfValue <= product.max_esf) || // Para valores positivos
-            (oiEsfValue < 0 && oiEsfValue >= product.min_esf); // Para valores negativos, debe ser mayor o igual al mínimo
+        const esfValid = (esf >= 0 && esf >= product.min_esf && esf <= product.max_esf) || // Para valores positivos
+            (esf < 0 && esf >= product.min_esf); 
 
         // Filtro para CIL (cilíndrico)
-        const odCilValid = odCilValue <= product.cil; // El CIL de la receta debe ser menor o igual al del producto
-        const oiCilValid = oiCilValue <= product.cil; // El CIL de la receta debe ser menor o igual al del producto
+        const cilValid = Math.abs(cil) <= product.cil; 
 
         // Validación de la suma de ESF y CIL
-        const odSum = Math.abs(odEsfValue) + odCilValue; // Suma de |ESF| y CIL
-        const oiSum = Math.abs(oiEsfValue) + oiCilValue; // Suma de |ESF| y CIL
+        const sum = Math.abs(esf) + Math.abs(cil); // Suma de |ESF| y |CIL|
 
-        const odSumValid = (odEsfValue >= 0 && odSum <= product.max_esf) || // Para valores positivos
-            (odEsfValue < 0 && odSum <= Math.abs(product.min_esf)); // Para valores negativos
-        const oiSumValid = (oiEsfValue >= 0 && oiSum <= product.max_esf) || // Para valores positivos
-            (oiEsfValue < 0 && oiSum <= Math.abs(product.min_esf)); // Para valores negativos
+        const sumValid = (esf >= 0 && sum <= product.max_esf) || // Para valores positivos
+            (esf < 0 && sum <= Math.abs(product.min_esf)); // Para valores negativos
 
-        return odEsfValid && oiEsfValid && odCilValid && oiCilValid && odSumValid && oiSumValid;
+        return esfValid && cilValid && sumValid;
+    }
+
+    // Si el cilindro es negativo, hacer la transposición a positivo
+    if (odCilValue < 0) {
+        const odTranspuesto = transponerCilindrico(odEsfValue, odCilValue);
+        odEsfValue = odTranspuesto.esf;
+        odCilValue = Math.abs(odTranspuesto.cil); // Convertir CIL a positivo
+    } else {
+        odCilValue = Math.abs(odCilValue); // Asegurarse de que el CIL sea positivo
+    }
+
+    if (oiCilValue < 0) {
+        const oiTranspuesto = transponerCilindrico(oiEsfValue, oiCilValue);
+        oiEsfValue = oiTranspuesto.esf;
+        oiCilValue = Math.abs(oiTranspuesto.cil); // Convertir CIL a positivo
+    } else {
+        oiCilValue = Math.abs(oiCilValue); // Asegurarse de que el CIL sea positivo
+    }
+    // Filtrar los productos con los valores correctos (ya transpuestos si era necesario)
+    return products.filter(product => {
+
+        // Verificar condiciones para OD y OI
+        const odValid = verificarCondiciones(odEsfValue, odCilValue, product);
+        const oiValid = verificarCondiciones(oiEsfValue, oiCilValue, product);
+
+        // El producto es válido si ambos ojos cumplen con las condiciones
+        const productoValido = odValid && oiValid;
+
+        return productoValido;
     });
 }
 

@@ -1,0 +1,68 @@
+Listado de rutas de carpetas para el volumen Data
+El n£mero de serie del volumen es 9CC3-8896
+D:.
+|   abm.html
+|   dashboard.html
+|   estructura.txt
+|   favicon.ico
+|   Index.html
+|   presupuesto.html
+|   test.html
+|   
++---.vscode
+|       extensions.json
+|       settings.json
+|       
++---bd
+|       BD.txt
+|       cargar_productos_filtrados.txt
+|       CrearProducto.txt
+|       DATOS.txt
+|       DeleteAllDB.txt
+|       gemini.txt
+|       listapreciosservicios.txt
+|       politicas RLS.txt
+|       SelectFunctions.txt
+|       
++---css
+|       abm.css
+|       dashboard.css
+|       login.css
+|       presupuesto.css
+|       
++---js
+|   |   botones.js
+|   |   cargarContenido.js
+|   |   dashboard.js
+|   |   login.js
+|   |   supabaseConfig.js
+|   |   usuarios.js
+|   |   
+|   +---abm
+|   |       abm.js
+|   |       
+|   \---budgetSection
+|       |   estadoGlobal.js
+|       |   presupuesto.js
+|       |   
+|       +---prescription
+|       |       errorAux.js
+|       |       prescription.js
+|       |       recetaUtils.js
+|       |       
+|       +---productos
+|       |       calculosPresupuesto.js
+|       |       filtradoProductos.js
+|       |       
+|       \---resources
+|               auxi.js
+|               dataLoader.js
+|               generarPdf.js
+|               jspdf.umd.min.js
+|               supaFunctions.js
+|               
+\---res
+        logo.png
+        plantilla-pdf.html
+        styles.css
+        
