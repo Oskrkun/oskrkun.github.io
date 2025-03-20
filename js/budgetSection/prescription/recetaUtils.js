@@ -1,5 +1,6 @@
 // recetaUtils.js
 import { estadoGlobal } from '../estadoGlobal.js';
+import { ajustarValorAPasos } from './errorAux.js';
 
 // Función para actualizar la parte de cerca cuando se ingresa ADD o se modifica lejos
 export function actualizarCercaDesdeLejosOADD() {
@@ -9,7 +10,7 @@ export function actualizarCercaDesdeLejosOADD() {
     // Actualizar OD Cerca solo si hay un ADD válido
     if (addOD !== null && addOD !== 0 && estadoGlobal.receta.od_lejos.esf !== null) {
         const esfCercaOD = estadoGlobal.receta.od_lejos.esf + addOD;
-        document.getElementById('od-cerca-esf').value = esfCercaOD.toFixed(2);
+        document.getElementById('od-cerca-esf').value = esfCercaOD !== null ? ajustarValorAPasos(esfCercaOD.toString()) : '';
         estadoGlobal.receta.od_cerca.esf = esfCercaOD;
     } else {
         // Si no hay ADD, limpiar el campo de cerca
@@ -20,7 +21,7 @@ export function actualizarCercaDesdeLejosOADD() {
     // Actualizar OI Cerca solo si hay un ADD válido
     if (addOI !== null && addOI !== 0 && estadoGlobal.receta.oi_lejos.esf !== null) {
         const esfCercaOI = estadoGlobal.receta.oi_lejos.esf + addOI;
-        document.getElementById('oi-cerca-esf').value = esfCercaOI.toFixed(2);
+        document.getElementById('oi-cerca-esf').value = esfCercaOI !== null ? ajustarValorAPasos(esfCercaOI.toString()) : '';
         estadoGlobal.receta.oi_cerca.esf = esfCercaOI;
     } else {
         // Si no hay ADD, limpiar el campo de cerca
@@ -32,7 +33,7 @@ export function actualizarCercaDesdeLejosOADD() {
     if (addOD !== null && addOD !== 0) {
         estadoGlobal.receta.od_cerca.cil = estadoGlobal.receta.od_lejos.cil;
         estadoGlobal.receta.od_cerca.eje = estadoGlobal.receta.od_lejos.eje;
-        document.getElementById('od-cerca-cil').value = estadoGlobal.receta.od_cerca.cil || '';
+        document.getElementById('od-cerca-cil').value = estadoGlobal.receta.od_cerca.cil !== null ? ajustarValorAPasos(estadoGlobal.receta.od_cerca.cil.toString()) : '';
         document.getElementById('od-cerca-eje').value = estadoGlobal.receta.od_cerca.eje || '';
     } else {
         // Si no hay ADD, limpiar los campos de CIL y EJE
@@ -45,7 +46,7 @@ export function actualizarCercaDesdeLejosOADD() {
     if (addOI !== null && addOI !== 0) {
         estadoGlobal.receta.oi_cerca.cil = estadoGlobal.receta.oi_lejos.cil;
         estadoGlobal.receta.oi_cerca.eje = estadoGlobal.receta.oi_lejos.eje;
-        document.getElementById('oi-cerca-cil').value = estadoGlobal.receta.oi_cerca.cil || '';
+        document.getElementById('oi-cerca-cil').value = estadoGlobal.receta.oi_cerca.cil !== null ? ajustarValorAPasos(estadoGlobal.receta.oi_cerca.cil.toString()) : '';
         document.getElementById('oi-cerca-eje').value = estadoGlobal.receta.oi_cerca.eje || '';
     } else {
         // Si no hay ADD, limpiar los campos de CIL y EJE
@@ -169,13 +170,13 @@ export function trasponerReceta() {
 // Función para actualizar la interfaz de usuario desde el estado global
 function actualizarInterfazDesdeEstadoGlobal() {
     // Actualizar OD Lejos
-    document.getElementById('od-lejos-esf').value = estadoGlobal.receta.od_lejos.esf || '';
-    document.getElementById('od-lejos-cil').value = estadoGlobal.receta.od_lejos.cil || '';
+    document.getElementById('od-lejos-esf').value = estadoGlobal.receta.od_lejos.esf !== null ? ajustarValorAPasos(estadoGlobal.receta.od_lejos.esf.toString()) : '';
+    document.getElementById('od-lejos-cil').value = estadoGlobal.receta.od_lejos.cil !== null ? ajustarValorAPasos(estadoGlobal.receta.od_lejos.cil.toString()) : '';
     document.getElementById('od-lejos-eje').value = estadoGlobal.receta.od_lejos.eje || '';
 
     // Actualizar OI Lejos
-    document.getElementById('oi-lejos-esf').value = estadoGlobal.receta.oi_lejos.esf || '';
-    document.getElementById('oi-lejos-cil').value = estadoGlobal.receta.oi_lejos.cil || '';
+    document.getElementById('oi-lejos-esf').value = estadoGlobal.receta.oi_lejos.esf !== null ? ajustarValorAPasos(estadoGlobal.receta.oi_lejos.esf.toString()) : '';
+    document.getElementById('oi-lejos-cil').value = estadoGlobal.receta.oi_lejos.cil !== null ? ajustarValorAPasos(estadoGlobal.receta.oi_lejos.cil.toString()) : '';
     document.getElementById('oi-lejos-eje').value = estadoGlobal.receta.oi_lejos.eje || '';
 
     // Si hay ADD, recalcular la parte de cerca

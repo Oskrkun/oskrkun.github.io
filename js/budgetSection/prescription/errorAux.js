@@ -94,5 +94,11 @@ export function ajustarValorAPasos(valor) {
     const valorNumerico = parseFloat(valor);
     const multiplicador = 1 / paso;
     const valorAjustado = Math.round(valorNumerico * multiplicador) / multiplicador;
+
+    // Agregar el símbolo '+' si el valor es positivo
+    if (valorNumerico > 0) {
+        return `+${valorAjustado.toFixed(2)}`; // Asegurar que tenga 2 decimales
+    }
+
     return valorAjustado.toFixed(2); // Asegurar que tenga 2 decimales
 }

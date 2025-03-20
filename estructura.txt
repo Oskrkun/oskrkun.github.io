@@ -1,5 +1,3 @@
-Listado de rutas de carpetas para el volumen Data
-El n£mero de serie del volumen es 9CC3-8896
 D:.
 |   abm.html
 |   dashboard.html
@@ -65,4 +63,3 @@ D:.
         logo.png
         plantilla-pdf.html
         styles.css
-        
