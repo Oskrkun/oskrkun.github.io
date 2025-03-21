@@ -4,6 +4,12 @@ import { verificarAutenticacion, obtenerRolYNick } from './usuarios.js';
 import { crearBotones } from './botones.js';
 import { cargarContenido } from './cargarContenido.js';
 
+// Función para obtener el valor de un parámetro de la URL
+function obtenerParametroURL(nombre) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(nombre);
+}
+
 // Función principal para inicializar el dashboard
 async function inicializarDashboard() {
     // Verificar si el usuario está autenticado
@@ -18,11 +24,17 @@ async function inicializarDashboard() {
     const { rol, nick } = await obtenerRolYNick(user);
     const tipoUsuario = rol === 'admin' ? 'admin' : 'usuario'; // Determinar el tipo de usuario
 
-    // Crear botones según el tipo de usuario y cargar el contenido correspondiente
+    // Crear botones según el tipo de usuario
     crearBotones(tipoUsuario, cargarContenido);
 
     // Actualizar la interfaz con los datos del usuario
     actualizarTextoUsuario(user, nick, rol);
+
+    // Verificar si hay un parámetro en la URL y cargar la sección correspondiente
+    const seccion = obtenerParametroURL('seccion');
+    if (seccion) {
+        cargarContenido(seccion);
+    }
 }
 
 // Función para actualizar la interfaz con los datos del usuario

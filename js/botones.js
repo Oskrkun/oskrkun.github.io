@@ -31,8 +31,8 @@ export function crearBotones(tipoUsuario, cargarContenido) {
             li.id = boton.id; // Asignar el ID del botón
             li.innerHTML = `<a href="#"><i class="${boton.icon}"></i><span>${boton.text}</span></a>`; // Asignar el ícono y el texto
             li.addEventListener('click', () => {
-                cargarContenido(boton.seccion); // Cargar el contenido correspondiente al hacer clic
-                cerrarMenu(); // Cerrar el menú de hamburguesa
+                // Recargar la página con el parámetro de la sección
+                window.location.href = window.location.pathname + `?seccion=${boton.seccion}`;
             });
             sidebarMenu.appendChild(li); // Agregar el botón al menú
         });

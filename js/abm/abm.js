@@ -8,6 +8,12 @@ export async function initABM() {
     mostrarVistaPrevia();
     // Cargar productos en la tabla
     await cargarProductos();
+    await agregarEventosToggleSection()
+    envioDatosFormulario();
+    manejarSeleccionFila();    
+}
+
+async function envioDatosFormulario() {
     // Manejar el envío del formulario
     const productForm = document.getElementById('productForm');
     if (productForm) {
@@ -276,4 +282,72 @@ function formatearPrecio(precio) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
     })}`;
+}
+
+// Función para manejar la contracción/expansión de las secciones
+function toggleSection(event) {
+    if (!event || !event.currentTarget) {
+        console.error('Evento no válido');
+        return;
+    }
+
+    const icon = event.currentTarget.querySelector('.toggle-icon');
+    if (!icon) {
+        console.error('No se encontró el ícono .toggle-icon');
+        return;
+    }
+
+    const targetId = icon.getAttribute('data-target');
+    if (!targetId) {
+        console.error('No se encontró el atributo data-target en el ícono');
+        return;
+    }
+
+    const sectionContent = document.getElementById(targetId);
+    if (!sectionContent) {
+        console.error('No se encontró el contenido de la sección con el ID:', targetId);
+        return;
+    }
+
+    const section = sectionContent.parentElement;
+    if (!section) {
+        console.error('No se encontró la sección padre');
+        return;
+    }
+
+    if (section.classList.contains('collapsed')) {
+        section.classList.remove('collapsed');
+    } else {
+        section.classList.add('collapsed');
+    }
+}
+
+// Función para agregar eventos de clic a los títulos de las secciones
+function agregarEventosToggleSection() {
+    const headers = document.querySelectorAll('h2');
+    headers.forEach(header => {
+        if (header.querySelector('.toggle-icon')) {
+            header.addEventListener('click', toggleSection);
+        }
+    });
+}
+
+// Inicializar las secciones contraíbles
+document.addEventListener('DOMContentLoaded', () => {
+    agregarEventosToggleSection();
+});
+
+// Función para manejar la selección de filas
+function manejarSeleccionFila() {
+    const filas = document.querySelectorAll('#productTable tr');
+
+    filas.forEach(fila => {
+        fila.addEventListener('click', () => {
+            // Remover la clase 'selected' de todas las filas
+            filas.forEach(f => f.classList.remove('selected'));
+
+            // Agregar la clase 'selected' a la fila clickeada
+            fila.classList.add('selected');
+        });
+    });
 }
